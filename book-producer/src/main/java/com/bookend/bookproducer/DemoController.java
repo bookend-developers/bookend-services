@@ -17,11 +17,9 @@ public class DemoController {
 	
 	//@CrossOrigin(origins = "http://localhost:8081")
 	@PostMapping("/publish")
-	@PreAuthorize("hasAuthority('create_profile')")
+	@PreAuthorize("hasAnyAuthority('create_profile')")
 	public String publishMessage(@RequestBody Book book) {
-		
 		kafkaTemplate.send(TOPIC,book);
 		return "Published Succesfully";
-		
 	}
 }
