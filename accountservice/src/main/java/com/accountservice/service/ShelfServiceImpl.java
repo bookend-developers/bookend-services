@@ -6,6 +6,8 @@ import com.accountservice.repository.ShelfRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ShelfServiceImpl implements ShelfService {
 
@@ -25,5 +27,10 @@ public class ShelfServiceImpl implements ShelfService {
     @Override
     public Shelf saveOrUpdate(Shelf shelf) {
         return shelfRepository.save(shelf);
+    }
+
+    @Override
+    public List<Shelf> findShelvesByAccountID(Long accountID) {
+        return shelfRepository.findShelvesByAccount_Id(accountID);
     }
 }

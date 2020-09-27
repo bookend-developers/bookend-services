@@ -4,7 +4,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/bookend-authorization-service?useUnicode=true&useLegacyDatetimeCode=false&serverTimezone=Turkey
     username: root
-    password: 1234
+    password: group10
     driver-class-name: com.mysql.jdbc.Driver
     initialization-mode: always
   jpa:

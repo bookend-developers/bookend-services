@@ -55,5 +55,10 @@ public class AccountController {
         return bookIDs;
 
     }
+    @GetMapping("/{userid}/shelves")
+    public List<Shelf> getShelves(@PathVariable("userid") String userID){
+
+        return shelfService.findShelvesByAccountID(Long.valueOf(userID));
+    }
 
 }

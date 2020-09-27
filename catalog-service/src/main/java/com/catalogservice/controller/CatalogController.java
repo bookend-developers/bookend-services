@@ -1,6 +1,8 @@
 package com.catalogservice.controller;
 
+import com.catalogservice.model.Book;
 import com.catalogservice.model.CatalogItem;
+import com.catalogservice.model.Shelf;
 import com.catalogservice.service.CatalogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -28,5 +30,27 @@ public class CatalogController {
         //token
         String accessToken = details.getTokenValue();
         return catalogService.getBooks(Long.valueOf(userID),accessToken);
+    }
+    @GetMapping("user/{userid}/shelves")
+    public List<Shelf> getUserShelves(@PathVariable("userid") String userID, OAuth2Authentication auth){
+        final OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) auth.getDetails();
+        //token
+        String accessToken = details.getTokenValue();
+        return catalogService.getUserShelves(Long.valueOf(userID),accessToken);
+    }
+    @GetMapping("book/{bookid}")
+    public Book getBook(@PathVariable("bookid") String bookID, OAuth2Authentication auth){
+        final OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) auth.getDetails();
+        //token
+
+        String accessToken = details.getTokenValue();
+        return catalogService.getBook(Long.valueOf(bookID),accessToken);
+    }
+    @GetMapping("user/shelf/{shelfid}")
+    public List<Book> getBooksofShelf(@PathVariable("shelfid") String shelfID, OAuth2Authentication auth){
+        final OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) auth.getDetails();
+        //token
+        String accessToken = details.getTokenValue();
+        return catalogService.getBooksofShelf(Long.valueOf(shelfID),accessToken);
     }
 }
