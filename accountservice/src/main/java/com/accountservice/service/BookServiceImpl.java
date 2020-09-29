@@ -13,7 +13,7 @@ public class BookServiceImpl implements BookService {
         this.bookRepository=bookRepository;
     }
     @Override
-    public Book getById(Long id) {
+    public Book getById(String id) {
         return bookRepository.findBookById(id);
     }
 

@@ -34,7 +34,7 @@ public class AccountController {
     public Book addBookToShelf(@PathVariable("shelfid") String shelfID,
                                @PathVariable("bookid") String bookID){
         Shelf shelf = shelfService.getById(Long.valueOf(shelfID));
-        Book book = bookService.saveOrUpdate(new Book(Long.valueOf(bookID), shelf));
+        Book book = bookService.saveOrUpdate(new Book(bookID, shelf));
         return book;
 
 
@@ -47,8 +47,8 @@ public class AccountController {
 
     }
     @GetMapping("/shelf/{shelfid}")
-    public List<Long> getBooks(@PathVariable("shelfid")  String shelfID){
-        List<Long> bookIDs = shelfService.getById(Long.valueOf(shelfID)).getBooks()
+    public List<String> getBooks(@PathVariable("shelfid")  String shelfID){
+        List<String> bookIDs = shelfService.getById(Long.valueOf(shelfID)).getBooks()
                                                 .stream()
                                                         .map(Book::getBookID)
                                                         .collect(Collectors.toList());

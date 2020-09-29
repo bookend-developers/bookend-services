@@ -10,9 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,13 +52,13 @@ public class CatalogServiceImpl implements CatalogService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "Bearer "+accessToken);
         HttpEntity<String> entity = new HttpEntity<>("body", headers);
-        ResponseEntity<Shelf[]> responseEntity =restTemplate.exchange("http://localhost:8081/{userid}/shelves", HttpMethod.GET, entity, Shelf[].class,userID);
+        ResponseEntity<Shelf[]> responseEntity =restTemplate.exchange("http://localhost:8083/{userid}/shelves", HttpMethod.GET, entity, Shelf[].class,userID);
 
         return Arrays.asList(responseEntity.getBody());
     }
 
     @Override
-    public Book getBook(Long bookID, String accessToken) {
+    public Book getBook(String bookID, String accessToken) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -78,12 +76,30 @@ public class CatalogServiceImpl implements CatalogService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "Bearer "+accessToken);
         HttpEntity<String> entity = new HttpEntity<>("body", headers);
-        ResponseEntity<Long[]> responseEntity =restTemplate.exchange("http://localhost:8081/shelf/{shelfid}", HttpMethod.GET, entity, Long[].class,shelfID);
-        List<Long> bookIDs = Arrays.asList(responseEntity.getBody());
+        ResponseEntity<String[]> responseEntity =restTemplate.exchange("http://localhost:8083/shelf/{shelfid}", HttpMethod.GET, entity, String[].class,shelfID);
+        List<String> bookIDs = Arrays.asList(responseEntity.getBody());
         List<Book> books = bookIDs.stream()
                                         .map(id ->restTemplate.exchange("http://localhost:8082/book/{bookId}", HttpMethod.GET, entity,Book.class,id).getBody())
                                         .collect(Collectors.toList());
         return books;
+    }
+
+    @Override
+    public Book addBookstoShelf(Long shelfID, String bookID, String accessToken) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", "Bearer "+accessToken);
+        HttpEntity<String> entity = new HttpEntity<>("body", headers);
+        Map<String, String> params = new HashMap<>();
+        params.put("shelfid", shelfID.toString());
+        params.put("bookid", bookID);
+        Book addedBook=  restTemplate.exchange("http://localhost:8083/{shelfid}/{bookid}"
+                , HttpMethod.POST,
+                entity,Book.class,params).getBody();
+        //TODO make it catalog item
+        return restTemplate.exchange("http://localhost:8082/book/{bookId}", HttpMethod.GET, entity,Book.class,bookID).getBody();
+
     }
 
 }

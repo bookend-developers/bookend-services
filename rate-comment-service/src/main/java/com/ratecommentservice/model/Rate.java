@@ -11,13 +11,13 @@ public class Rate {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long rateId;
-    private Long bookId;
+    private String bookId;
     private Long userId;
 
     private int rate;
 
 
-    public Rate(Long bookId, Long userId, int rate) {
+    public Rate(String bookId, Long userId, int rate) {
         this.bookId = bookId;
         this.userId = userId;
         this.rate = rate;
@@ -29,11 +29,11 @@ public class Rate {
         return rateId;
     }
 
-    public Long getBookId() {
+    public String getBookId() {
         return bookId;
     }
 
-    public void setBookId(Long bookId) {
+    public void setBookId(String bookId) {
         this.bookId = bookId;
     }
 

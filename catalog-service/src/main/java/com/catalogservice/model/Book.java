@@ -3,7 +3,7 @@ package com.catalogservice.model;
 public class Book {
 
 
-    private Long id; // string
+    private String id; // string
 
     private String bookName;
     private String author; //author info service
@@ -11,11 +11,11 @@ public class Book {
     private String genre;
     private String description;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

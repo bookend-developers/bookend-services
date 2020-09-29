@@ -13,7 +13,7 @@ public class RateServiceImpl implements RateService {
     public void setRateRepository(RateRepository rateRepository){this.rateRepository=rateRepository;}
 
     @Override
-    public List<Rate> getBookRates(Long bookID) {
+    public List<Rate> getBookRates(String bookID) {
         return rateRepository.findByBookId(bookID);
     }
 

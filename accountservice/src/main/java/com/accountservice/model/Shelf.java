@@ -17,8 +17,7 @@ public class Shelf {
     private Long id;
     private String shelfname;
     @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "accountId", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Account account;
     @OneToMany(mappedBy = "shelf")
     private List<Book> books;

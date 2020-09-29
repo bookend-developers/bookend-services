@@ -27,14 +27,14 @@ public class RatingController {
     @GetMapping("/{bookId}")
     public List<Rate> getBookRates(@PathVariable("bookId") String  bookId ){
 
-        return rateService.getBookRates(Long.valueOf(bookId));
+        return rateService.getBookRates(bookId);
 
 
     }
 
     @GetMapping("/rate/book/{bookId}")
     public Double getBookRate(@PathVariable("bookId") String  bookId ){
-        List<Integer> rates = rateService.getBookRates(Long.valueOf(bookId)).stream()
+        List<Integer> rates = rateService.getBookRates(bookId).stream()
                 .map(p -> p.getRate())
                 .collect(Collectors.toList());
         return rates.stream().mapToDouble(a -> a)

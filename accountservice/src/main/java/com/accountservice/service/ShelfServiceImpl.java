@@ -31,6 +31,7 @@ public class ShelfServiceImpl implements ShelfService {
 
     @Override
     public List<Shelf> findShelvesByAccountID(Long accountID) {
+        List<Shelf> shelves= shelfRepository.findShelvesByAccount_Id(accountID);
         return shelfRepository.findShelvesByAccount_Id(accountID);
     }
 }

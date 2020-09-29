@@ -5,6 +5,6 @@ import com.ratecommentservice.model.Rate;
 import java.util.List;
 
 public interface RateService {
-    List<Rate> getBookRates(Long bookID);
+    List<Rate> getBookRates(String bookID);
     List<Rate> getUserRates(Long userID);
 }
