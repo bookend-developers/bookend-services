@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Table(name = "book")
 public class ShelfsBook {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
   //  @SequenceGenerator(name= "my_sequence", schema = "account", allocationSize = 30)
     @Column(name = "id")
     private Long id;
