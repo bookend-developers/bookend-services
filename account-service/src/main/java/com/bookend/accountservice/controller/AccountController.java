@@ -20,7 +20,7 @@ public class AccountController {
     @GetMapping("/account/view")
     public Account viewProfile(OAuth2Authentication auth){
 
- 
+
         return accountService.getByUsername(auth.getName());
     }
 }

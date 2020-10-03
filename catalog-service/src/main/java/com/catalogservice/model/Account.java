@@ -3,7 +3,7 @@ package com.catalogservice.model;
 import java.util.List;
 
 public class Account {
-    private Long id;
+    private String id;
     private String firstname;
     private String lastname;
     private String email;
@@ -11,7 +11,7 @@ public class Account {
 
 
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
