@@ -25,19 +25,21 @@ public class CatalogController {
     }
 
 
-    @GetMapping("user/book/{userid}")
-    public List<CatalogItem> getCatalog(@PathVariable("userid") String userID, OAuth2Authentication auth){
+    @GetMapping("user/books/")
+    public List<CatalogItem> getCatalog( OAuth2Authentication auth){
         final OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) auth.getDetails();
         //token
         String accessToken = details.getTokenValue();
-        return catalogService.getBooks(Long.valueOf(userID),accessToken);
+
+        return catalogService.getBooks(auth.getName(),accessToken);
     }
-    @GetMapping("user/{userid}/shelves")
-    public List<Shelf> getUserShelves(@PathVariable("userid") String userID, OAuth2Authentication auth){
+
+    @GetMapping("user/shelves")
+    public List<Shelf> getUserShelves( OAuth2Authentication auth){
         final OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) auth.getDetails();
         //token
         String accessToken = details.getTokenValue();
-        return catalogService.getUserShelves(Long.valueOf(userID),accessToken);
+        return catalogService.getUserShelves(accessToken);
     }
     @GetMapping("book/{bookid}")
     public Book getBook(@PathVariable("bookid") String bookID, OAuth2Authentication auth){

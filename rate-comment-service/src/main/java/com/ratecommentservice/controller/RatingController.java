@@ -4,6 +4,7 @@ package com.ratecommentservice.controller;
 import com.ratecommentservice.model.Rate;
 import com.ratecommentservice.service.RateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,9 +45,9 @@ public class RatingController {
     }
 
 
-    @GetMapping("/rate/user/{userId}")
-    public List<Rate> getUserRates(@PathVariable("userId") int userId ) {
-        return rateService.getUserRates(Long.valueOf(userId));
+    @GetMapping("/rate/user")
+    public List<Rate> getUserRates( OAuth2Authentication auth) {
+        return rateService.getUserRates(auth.getName());
 
 
     }

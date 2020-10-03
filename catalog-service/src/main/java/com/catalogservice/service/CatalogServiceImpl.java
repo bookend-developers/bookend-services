@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Service
 public class CatalogServiceImpl implements CatalogService {
     @Override
-    public List<CatalogItem> getBooks(Long userID,String accessToken) {
+    public List<CatalogItem> getBooks(String username,String accessToken) {
         RestTemplate restTemplate = new RestTemplate();
 
 
@@ -25,7 +25,7 @@ public class CatalogServiceImpl implements CatalogService {
         headers.set("Authorization", "Bearer "+accessToken);
         HttpEntity<String> entity = new HttpEntity<>("body", headers);
 
-        ResponseEntity<Rate[]> responseEntity =restTemplate.exchange("http://localhost:8081/rate/user/{userId}", HttpMethod.GET, entity, Rate[].class,userID);
+        ResponseEntity<Rate[]> responseEntity =restTemplate.exchange("http://localhost:8081/rate/user/{userId}", HttpMethod.GET, entity, Rate[].class,username);
 
 
         List<Rate> ratelist = Arrays.asList(responseEntity.getBody());
@@ -46,13 +46,13 @@ public class CatalogServiceImpl implements CatalogService {
     }
 
     @Override
-    public List<Shelf> getUserShelves(Long userID, String accessToken) {
+    public List<Shelf> getUserShelves(String accessToken) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "Bearer "+accessToken);
         HttpEntity<String> entity = new HttpEntity<>("body", headers);
-        ResponseEntity<Shelf[]> responseEntity =restTemplate.exchange("http://localhost:8083/{userid}/shelves", HttpMethod.GET, entity, Shelf[].class,userID);
+        ResponseEntity<Shelf[]> responseEntity =restTemplate.exchange("http://localhost:8083/shelves", HttpMethod.GET, entity, Shelf[].class);
 
         return Arrays.asList(responseEntity.getBody());
     }

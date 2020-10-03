@@ -2,8 +2,8 @@ package com.catalogservice.model;
 
 public class Rate {
     private Long rateId;
-    private Long bookId;
-    private Long userId;
+    private String bookId;
+    private String username;
 
     private int rate;
 
@@ -11,10 +11,10 @@ public class Rate {
     public Rate() {
     }
 
-    public Rate(Long rateId, Long bookId, Long userId, int rate) {
+    public Rate(Long rateId, String bookId, String username, int rate) {
         this.rateId = rateId;
         this.bookId = bookId;
-        this.userId = userId;
+        this.username = username;
         this.rate = rate;
 
     }
@@ -27,20 +27,20 @@ public class Rate {
         this.rateId = rateId;
     }
 
-    public Long getBookId() {
+    public String getBookId() {
         return bookId;
     }
 
-    public void setBookId(Long bookId) {
+    public void setBookId(String bookId) {
         this.bookId = bookId;
     }
 
-    public Long getUserId() {
-        return userId;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public int getRate() {

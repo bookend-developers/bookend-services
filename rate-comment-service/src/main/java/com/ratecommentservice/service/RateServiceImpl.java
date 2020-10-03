@@ -18,7 +18,7 @@ public class RateServiceImpl implements RateService {
     }
 
     @Override
-    public List<Rate> getUserRates(Long userID) {
-        return rateRepository.findByUserId(userID);
+    public List<Rate> getUserRates(String username) {
+        return rateRepository.findByUsername(username);
     }
 }

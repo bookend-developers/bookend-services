@@ -24,7 +24,10 @@ public class BookController {
     public List<Book> getAllBook(){
         return bookService.getAll();
     }
-    @PostMapping("/book/new")
+
+
+
+    @PostMapping("/admin/book/new")
     public Book newBook(@RequestBody Book book){
 
         return bookService.saveOrUpdate(new Book(book.getPage()

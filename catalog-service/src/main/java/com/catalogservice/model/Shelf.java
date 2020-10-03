@@ -8,14 +8,14 @@ import java.util.List;
 public class Shelf {
     private Long id;
     private String shelfname;
-    private Account account;
-    private List<Book> books;
+    private String username;
+    private List<ShelfsBook> books;
 
-    public List<Book> getBooks() {
+    public List<ShelfsBook> getBooks() {
         return books;
     }
 
-    public void setBooks(List<Book> books) {
+    public void setBooks(List<ShelfsBook> books) {
         this.books = books;
     }
 
@@ -31,21 +31,21 @@ public class Shelf {
         this.shelfname = shelfname;
     }
 
-    public Account getAccount() {
-        return account;
+    public String getUsername() {
+        return username;
     }
 
-    public void setAccount(Account account) {
-        this.account = account;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Shelf() {
     }
 
-    public Shelf(String shelfname, Account account) {
+    public Shelf(String shelfname, String username){
         this.shelfname = shelfname;
-        this.account = account;
-        this.books = new ArrayList<Book>();
+        this.username=username;
+        this.books = new ArrayList<ShelfsBook>();
 
     }
 }

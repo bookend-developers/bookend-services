@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 @Repository
 public interface RateRepository extends JpaRepository<Rate,Long> {
-    List<Rate> findByUserId(Long userId);
+    List<Rate> findByUsername(String userId);
     List<Rate> findByBookId(String bookId);
 }

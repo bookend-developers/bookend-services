@@ -7,8 +7,8 @@ import com.catalogservice.model.Shelf;
 import java.util.List;
 
 public interface CatalogService {
-    public List<CatalogItem> getBooks(Long userID,String accessToken);
-    public List<Shelf> getUserShelves(Long userID, String accessToken);
+    public List<CatalogItem> getBooks(String username,String accessToken);
+    public List<Shelf> getUserShelves(String accessToken);
     public Book getBook(String bookID,String accessToken);
     //TODO make it full book data(catalog item)
     public List<Book> getBooksofShelf(Long shelfID,String accessToken);

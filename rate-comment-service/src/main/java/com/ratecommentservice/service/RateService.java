@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface RateService {
     List<Rate> getBookRates(String bookID);
-    List<Rate> getUserRates(Long userID);
+    List<Rate> getUserRates(String username);
 }
