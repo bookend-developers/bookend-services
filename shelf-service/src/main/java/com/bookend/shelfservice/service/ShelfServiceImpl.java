@@ -25,6 +25,11 @@ public class ShelfServiceImpl implements ShelfService {
 
     @Override
     public Shelf saveOrUpdate(Shelf shelf) {
+        List<Shelf> shelves = shelfRepository.findShelvesByUsername(shelf.getUsername());
+
+        if(shelves.stream().anyMatch(s -> s.getShelfname().matches(shelf.getShelfname()))){
+            return null;
+        }
         return shelfRepository.save(shelf);
     }
 

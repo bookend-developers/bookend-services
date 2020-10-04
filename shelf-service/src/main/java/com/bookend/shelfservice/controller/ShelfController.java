@@ -5,8 +5,10 @@ import com.bookend.shelfservice.model.Shelf;
 import com.bookend.shelfservice.service.BookService;
 import com.bookend.shelfservice.service.ShelfService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 
 import java.util.List;
@@ -32,6 +34,9 @@ public class ShelfController {
                                      @PathVariable("bookid") String bookID){
         Shelf shelf = shelfService.getById(Long.valueOf(shelfID));
         ShelfsBook shelfsBook = bookService.saveOrUpdate(new ShelfsBook(bookID, shelf));
+        if(shelfsBook== null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Book is already added to the Shelf.");
+        }
         return shelfsBook;
 
 
@@ -39,8 +44,12 @@ public class ShelfController {
     @PostMapping("/shelf/new")
     public Shelf newShelf(@RequestParam(name = "name") String shelfname,
                           OAuth2Authentication auth){
+        Shelf newShelf =shelfService.saveOrUpdate(new Shelf(shelfname,auth.getName()));
+        if(newShelf== null){
 
-        return shelfService.saveOrUpdate(new Shelf(shelfname,auth.getName())) ;
+           throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Shelfname is already in use.");
+        }
+        return newShelf ;
 
     }
     @GetMapping("/shelf/{shelfid}")
