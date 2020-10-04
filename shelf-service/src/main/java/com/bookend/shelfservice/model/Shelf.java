@@ -1,5 +1,7 @@
 package com.bookend.shelfservice.model;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +18,9 @@ public class Shelf {
 
     private String username;
     @OneToMany(mappedBy = "shelf")
-    private List<ShelfsBook> shelfsBooks;
 
+    private List<ShelfsBook> shelfsBooks;
+    @JsonGetter("shelfsBook")
     public List<ShelfsBook> getShelfsBooks() {
         return shelfsBooks;
     }
