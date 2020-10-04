@@ -8,6 +8,7 @@ import com.catalogservice.model.Shelf;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 
 import java.util.*;
@@ -94,9 +95,17 @@ public class CatalogServiceImpl implements CatalogService {
         Map<String, String> params = new HashMap<>();
         params.put("shelfid", shelfID.toString());
         params.put("bookid", bookID);
-        Book addedBook=  restTemplate.exchange("http://localhost:8083/{shelfid}/{bookid}"
-                , HttpMethod.POST,
-                entity,Book.class,params).getBody();
+        ResponseEntity<Book> responseBook = null;
+        try{
+            responseBook = restTemplate.exchange("http://localhost:8083/{shelfid}/{bookid}"
+                    , HttpMethod.POST,
+                    entity,Book.class,params);
+        }catch (Exception e ){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Book is already added to the Shelf.");
+
+        }
+
+       // Book addedBook=  responseBook.getBody();
         //TODO make it catalog item
         return restTemplate.exchange("http://localhost:8082/book/{bookId}", HttpMethod.GET, entity,Book.class,bookID).getBody();
 

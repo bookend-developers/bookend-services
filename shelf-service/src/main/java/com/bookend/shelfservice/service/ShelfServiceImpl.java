@@ -38,4 +38,9 @@ public class ShelfServiceImpl implements ShelfService {
 
         return shelfRepository.findShelvesByUsername(username);
     }
+
+    @Override
+    public void deleteShelf(Shelf shelf) {
+         shelfRepository.delete(shelf);
+    }
 }

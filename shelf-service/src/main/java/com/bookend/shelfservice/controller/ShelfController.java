@@ -66,5 +66,9 @@ public class ShelfController {
 
         return shelfService.findShelvesByUsername(auth.getUserAuthentication().getName());
     }
+    @DeleteMapping("/shelf/delete/{shelfid}")
+    public void deleteShelf(@PathVariable("shelfid")  String shelfID){
+         shelfService.deleteShelf(shelfService.getById(Long.valueOf(shelfID)));
+    }
 
 }

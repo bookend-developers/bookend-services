@@ -9,4 +9,5 @@ public interface ShelfService {
 
     Shelf saveOrUpdate(Shelf shelf);
     List<Shelf> findShelvesByUsername(String username);
+    void deleteShelf(Shelf shelfID);
 }

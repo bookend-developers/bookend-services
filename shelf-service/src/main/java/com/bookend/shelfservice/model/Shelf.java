@@ -17,7 +17,7 @@ public class Shelf {
     private String shelfname;
 
     private String username;
-    @OneToMany(mappedBy = "shelf")
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "shelf")
 
     private List<ShelfsBook> shelfsBooks;
     @JsonGetter("shelfsBook")
