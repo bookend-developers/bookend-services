@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.bookend</groupId>
-	<artifactId>shelfsBook-service</artifactId>
+	<artifactId>Book-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>shelfsBook-service</name>
+	<name>Book-service</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
