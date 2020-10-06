@@ -19,9 +19,10 @@ public class AuthController {
         return ResponseEntity.ok("user registered. need confirmation");
     }
 
-    @PostMapping("confirm/{token}")
+    @GetMapping("confirm/{token}")
     public ResponseEntity confirm(@PathVariable("token") String token){
         userService.confirm(token);
         return ResponseEntity.ok("Confirmation completed");
     }
+
 }
