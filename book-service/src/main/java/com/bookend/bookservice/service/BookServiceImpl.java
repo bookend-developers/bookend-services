@@ -39,4 +39,9 @@ public class BookServiceImpl implements BookService {
     public List<Book> getAll() {
         return bookRepository.findAll();
     }
+
+    @Override
+    public List<Book> search(String title) {
+        return bookRepository.findByBookNameContainingIgnoreCase(title);
+    }
 }

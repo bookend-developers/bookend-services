@@ -9,5 +9,6 @@ public interface BookService {
 
     Book saveOrUpdate(Book book);
     List<Book> getAll();
+    List<Book> search(String title);
 
 }
