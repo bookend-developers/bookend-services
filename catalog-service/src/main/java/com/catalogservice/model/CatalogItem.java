@@ -5,7 +5,7 @@ public class CatalogItem {
 
     private int rating;
     private String Author;
-    private String genre;
+    private BookGenre genre;
     private String description;
 
     public String getBookName() {
@@ -33,11 +33,11 @@ public class CatalogItem {
         Author = author;
     }
 
-    public String getGenre() {
+    public BookGenre getGenre() {
         return genre;
     }
 
-    public void setGenre(String genre) {
+    public void setGenre(BookGenre genre) {
         this.genre = genre;
     }
 

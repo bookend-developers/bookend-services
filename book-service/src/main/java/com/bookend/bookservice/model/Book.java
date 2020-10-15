@@ -10,8 +10,8 @@ public class Book {
 
     private String id;
     private Integer page;
-    //TODO make it enum
-    private String genre;
+
+    private BookGenre genre;
 
     private String description;
 
@@ -47,11 +47,11 @@ public class Book {
         this.page = page;
     }
 
-    public String getGenre() {
+    public BookGenre getGenre() {
         return genre;
     }
 
-    public void setGenre(String genre) {
+    public void setGenre(BookGenre genre) {
         this.genre = genre;
     }
 
@@ -68,7 +68,7 @@ public class Book {
     public Book() {
     }
 
-    public Book(Integer page, String genre, String description, String bookName, String author) {
+    public Book(Integer page, BookGenre genre, String description, String bookName, String author) {
         this.page = page;
         this.genre = genre;
         this.description = description;
