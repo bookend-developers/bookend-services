@@ -42,6 +42,22 @@ public class AuthUserDetail extends User implements UserDetails {
     }
 
     @Override
+    public String getFirstname() {
+        return super.getFirstname();
+    }
+
+
+    @Override
+    public String getLastname() {
+        return super.getLastname();
+    }
+
+    @Override
+    public String getEmail() {
+        return super.getEmail();
+    }
+
+    @Override
     public boolean isAccountNonExpired() {
         return super.isAccountNonExpired();
     }

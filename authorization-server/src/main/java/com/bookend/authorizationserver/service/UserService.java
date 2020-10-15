@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class UserService {
@@ -25,8 +26,14 @@ public class UserService {
 
     public void addUser(SignUpRequest signUpRequest){
         User user = new User();
+        if(userDetailRepository.existsByEmail(signUpRequest.getEmail())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Entered email is already in use please enter another email.");
+        }
         user.setEmail(signUpRequest.getEmail());
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
+        if(userDetailRepository.existsByUsername(signUpRequest.getUsername())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Entered username is already in use please enter another one.");
+        }
         user.setUsername(signUpRequest.getUsername());
         user.setEnabled(false);
         user.setAccountNonExpired(true);
