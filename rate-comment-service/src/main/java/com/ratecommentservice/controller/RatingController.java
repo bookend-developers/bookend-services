@@ -5,16 +5,14 @@ import com.ratecommentservice.model.Rate;
 import com.ratecommentservice.service.RateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 
 @RestController
+@RequestMapping("/api/rate")
 public class RatingController {
 
     private RateService rateService;
@@ -33,23 +31,30 @@ public class RatingController {
 
     }
 
-    @GetMapping("/rate/book/{bookId}")
+    @GetMapping("/book/{bookId}")
     public Double getBookRate(@PathVariable("bookId") String  bookId ){
-        List<Integer> rates = rateService.getBookRates(bookId).stream()
-                .map(p -> p.getRate())
-                .collect(Collectors.toList());
-        return rates.stream().mapToDouble(a -> a)
-                .average().getAsDouble();
+        return rateService.getBookAverageRate(bookId);
 
 
     }
 
-
-    @GetMapping("/rate/user")
+    @GetMapping("/user")
     public List<Rate> getUserRates( OAuth2Authentication auth) {
         return rateService.getUserRates(auth.getName());
 
 
+    }
+    @PostMapping("/new/{bookid}")
+    public Rate rateBook(OAuth2Authentication auth
+            ,@PathVariable("bookid") String  bookId
+            ,@RequestParam("rate") Double rate){
+        //Rate newRate = new Rate(bookId,auth.getName(),rate);
+        return rateService.save( new Rate(bookId,auth.getName(),rate));
+
+    }
+    @DeleteMapping("/delete/{rateid}")
+    public void deleteRate(@PathVariable("rateid") String rateId){
+        rateService.deleteRate(Long.valueOf(rateId));
     }
 }
 
