@@ -1,5 +1,6 @@
 package com.catalogservice.model;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
@@ -35,12 +36,4 @@ public class ShelfsBook {
     }
 
 
-
-    public ShelfsBook() {
-    }
-
-    public ShelfsBook(String bookID, Shelf shelf) {
-        this.bookID = bookID;
-        this.shelf = shelf;
-    }
 }

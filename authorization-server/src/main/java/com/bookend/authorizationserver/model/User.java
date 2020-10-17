@@ -22,6 +22,8 @@ public class User implements Serializable {
         this.credentialsNonExpired = user.isCredentialsNonExpired();
         this.accountNonLocked = user.isAccountNonLocked();
         this.roles = user.getRoles();
+        this.firstname= user.getFirstname();
+        this.lastname = user.getLastname();
     }
 
     @Id
@@ -42,6 +44,10 @@ public class User implements Serializable {
     private boolean credentialsNonExpired;
     @Column(name = "accountNonLocked")
     private boolean accountNonLocked;
+    @Column(name= "firstname")
+    private String firstname;
+    @Column(name= "lastname")
+    private String lastname;
 
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -98,6 +104,22 @@ public class User implements Serializable {
         this.credentialsNonExpired = credentialsNonExpired;
     }
 
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
     public boolean isAccountNonLocked() {
         return accountNonLocked;
     }
@@ -112,5 +134,9 @@ public class User implements Serializable {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public Integer getId() {
+        return id;
     }
 }

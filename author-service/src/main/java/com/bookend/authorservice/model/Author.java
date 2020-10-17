@@ -1,6 +1,7 @@
 package com.bookend.authorservice.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ public class Author {
 
     private String id;
     private String name;
+    @DBRef
     private List<Book> bookList;
     private String biography;
     private String birthDate;

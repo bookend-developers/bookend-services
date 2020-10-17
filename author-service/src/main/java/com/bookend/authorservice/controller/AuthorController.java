@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class AuthorController {
 
     private AuthorService authorService;
@@ -15,6 +16,7 @@ public class AuthorController {
     public void setAuthorService(AuthorService authorService){
         this.authorService=authorService;
     }
+
     @GetMapping("/author/{authorid}")
     public Author getAuthorInfo(@PathVariable("authorid") String authorId) {
         return authorService.getById(authorId);

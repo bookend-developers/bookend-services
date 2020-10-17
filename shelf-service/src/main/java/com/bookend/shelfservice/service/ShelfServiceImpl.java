@@ -25,6 +25,11 @@ public class ShelfServiceImpl implements ShelfService {
 
     @Override
     public Shelf saveOrUpdate(Shelf shelf) {
+        List<Shelf> shelves = shelfRepository.findShelvesByUsername(shelf.getUsername());
+
+        if(shelves.stream().anyMatch(s -> s.getShelfname().matches(shelf.getShelfname()))){
+            return null;
+        }
         return shelfRepository.save(shelf);
     }
 
@@ -32,5 +37,10 @@ public class ShelfServiceImpl implements ShelfService {
     public List<Shelf> findShelvesByUsername(String username) {
 
         return shelfRepository.findShelvesByUsername(username);
+    }
+
+    @Override
+    public void deleteShelf(Shelf shelf) {
+         shelfRepository.delete(shelf);
     }
 }

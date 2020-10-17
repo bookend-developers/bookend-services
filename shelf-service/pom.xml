@@ -8,10 +8,10 @@
 		<version>2.3.3.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.account</groupId>
-	<artifactId>accountservice</artifactId>
+	<groupId>com.bookend.shelfservice</groupId>
+	<artifactId>shelf-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>accountservice</name>
+	<name>shelf-service</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>

@@ -5,6 +5,7 @@ import com.bookend.bookservice.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -20,9 +21,17 @@ public class BookController {
         return bookService.getById(bookId);
 
     }
-    @GetMapping("/book/all")
-    public List<Book> getAllBook(){
-        return bookService.getAll();
+    @GetMapping("/book")
+    public List<Book> search(@RequestParam(required = false) String title){
+        List<Book> books = new ArrayList<Book>();
+        if(title == null){
+            bookService.getAll().forEach(books::add);
+        }
+        else {
+            bookService.search(title).forEach(books::add);
+        }
+
+        return books;
     }
 
 

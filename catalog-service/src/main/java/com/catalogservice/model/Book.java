@@ -8,7 +8,7 @@ public class Book {
     private String bookName;
     private String author; //author info service
     private Integer page;
-    private String genre;
+    private BookGenre genre;
     private String description;
 
     public String getId() {
@@ -43,11 +43,11 @@ public class Book {
         this.page = page;
     }
 
-    public String getGenre() {
+    public BookGenre getGenre() {
         return genre;
     }
 
-    public void setGenre(String genre) {
+    public void setGenre(BookGenre genre) {
         this.genre = genre;
     }
 

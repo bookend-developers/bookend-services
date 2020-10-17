@@ -1,5 +1,6 @@
 package com.catalogservice.model;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ public class Shelf {
     private String shelfname;
     private String username;
     private List<ShelfsBook> books;
-
+    @JsonGetter("shelfsBook")
     public List<ShelfsBook> getBooks() {
         return books;
     }

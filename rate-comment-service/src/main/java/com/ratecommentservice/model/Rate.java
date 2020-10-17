@@ -11,13 +11,15 @@ public class Rate {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long rateId;
+    @Column(name = "bookId")
     private String bookId;
+    @Column(name = "username")
     private String username;
+    @Column(name = "rate")
+    private Double rate;
 
-    private int rate;
 
-
-    public Rate(String bookId, String username, int rate) {
+    public Rate(String bookId, String username, Double rate) {
         this.bookId = bookId;
         this.username = username;
         this.rate = rate;
@@ -45,11 +47,11 @@ public class Rate {
         this.username = userId;
     }
 
-    public int getRate() {
+    public Double getRate() {
         return rate;
     }
 
-    public void setRate(int rate) {
+    public void setRate(Double rate) {
         this.rate = rate;
     }
 }

@@ -4,6 +4,7 @@ import com.bookend.authorizationserver.payload.SignUpRequest;
 import com.bookend.authorizationserver.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,6 +26,7 @@ public class AuthController {
 
     @GetMapping("confirm/{token}")
     public ResponseEntity confirm(@PathVariable("token") String token){
+
         userService.confirm(token);
         return ResponseEntity.ok("Confirmation completed");
     }
