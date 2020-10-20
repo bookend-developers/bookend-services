@@ -1,4 +1,5 @@
 package com.bookend.authorservice.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -9,6 +10,7 @@ public class Book {
 
     private String id;
     private String bookId;
+    @JsonIgnore
     @DBRef
     private Author author;
 

@@ -1,22 +1,23 @@
 package com.bookend.authorservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Document(collection = "authors")
 public class Author {
     @Id
-
     private String id;
     private String name;
     @DBRef
     private List<Book> bookList;
     private String biography;
-    private String birthDate;
+    private String  birthDate;
     private String dateOfDeath;
 
     public Author() {

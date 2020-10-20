@@ -9,5 +9,6 @@ public interface AuthorService {
 
     Author saveOrUpdate(Author author);
     List<Author> getAll();
+    List<Author> search(String title);
 
 }
