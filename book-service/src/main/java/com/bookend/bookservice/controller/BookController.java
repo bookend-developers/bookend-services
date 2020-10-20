@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/book")
 public class BookController {
 
     private BookService bookService;
@@ -16,12 +17,12 @@ public class BookController {
     public void setBookService(BookService bookService){
         this.bookService=bookService;
     }
-    @GetMapping("/book/{bookid}")
+    @GetMapping("/{bookid}")
     public Book getBookInfo(@PathVariable("bookid") String bookId) {
         return bookService.getById(bookId);
 
     }
-    @GetMapping("/book")
+    @GetMapping("")
     public List<Book> search(@RequestParam(required = false) String title){
         List<Book> books = new ArrayList<Book>();
         if(title == null){
@@ -36,7 +37,7 @@ public class BookController {
 
 
 
-    @PostMapping("/admin/book/new")
+    @PostMapping("/admin/new")
     public Book newBook(@RequestBody Book book){
 
         return bookService.saveOrUpdate(new Book(book.getPage()
