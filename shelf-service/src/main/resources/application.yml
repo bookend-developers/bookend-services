@@ -4,9 +4,9 @@ server:
     include-message: always
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/bookend-shelfservice?useUnicode=true&useLegacyDatetimeCode=false&serverTimezone=Turkey
+    url: jdbc:mysql://localhost:3307/bookend-shelfservice?useUnicode=true&useLegacyDatetimeCode=false&serverTimezone=Turkey
     username: root
-    password: group10
+    password: 1234
     driver-class-name: com.mysql.jdbc.Driver
     initialization-mode: always
   jpa:

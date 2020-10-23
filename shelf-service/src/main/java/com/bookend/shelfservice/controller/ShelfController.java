@@ -7,6 +7,7 @@ import com.bookend.shelfservice.service.ShelfService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -61,6 +62,7 @@ public class ShelfController {
         return bookIDs;
 
     }
+
     @GetMapping("/shelves")
     public List<Shelf> getShelves(OAuth2Authentication auth){
 

@@ -3,6 +3,8 @@ package com.bookend.bookservice.controller;
 import com.bookend.bookservice.model.Book;
 import com.bookend.bookservice.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -34,7 +36,13 @@ public class BookController {
         return books;
     }
 
-
+    @GetMapping("/user/shelf/{shelfid}")
+    public List<Book> getBooksofShelf(@PathVariable("shelfid") String shelfID, OAuth2Authentication auth){
+        final OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) auth.getDetails();
+        //token
+        String accessToken = details.getTokenValue();
+        return bookService.getBooksofShelf(Long.valueOf(shelfID),accessToken);
+    }
 
     @PostMapping("/admin/book/new")
     public Book newBook(@RequestBody Book book){
