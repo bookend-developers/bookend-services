@@ -11,4 +11,5 @@ public interface MessageService {
 	 List<Message> findMessageBySender(String userName);
 	 Message saveOrUpdate(Message message);
 	 void deleteMessage(Message messageId);
+	 List<Message> findChatByUserName(String userName,String userName2);
 }

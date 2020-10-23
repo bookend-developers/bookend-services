@@ -60,5 +60,10 @@ public class MessageController {
     public void deleteShelf(@PathVariable("messageid")  String messageId){
         messageService.deleteMessage(messageService.getById(messageId));
     }
+    
+    @GetMapping("/chat/{userName}")
+    public List<Message> getChat(OAuth2Authentication auth,@PathVariable("userName") String userName){
+    	return messageService.findChatByUserName(auth.getName(),userName);
+    }
 
 }

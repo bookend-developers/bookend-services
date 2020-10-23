@@ -1,5 +1,7 @@
 package com.bookend.messageservice.service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.bookend.messageservice.model.Message;
@@ -39,6 +41,34 @@ public class MessageServiceImp implements MessageService{
 	public void deleteMessage(Message message) {
 		messageRepository.delete(message);
 	}
+	
+	public List<Message> findChatByUserName(String userName1,String userName2){
+		
+		 List<Message> sent =  this.findMessageBySender(userName1);
+		 List<Message> chat = new ArrayList<Message>();
+		 
+		 for (int i = 0; i < sent.size(); i++) {
+			Message msg = sent.get(i);
+			if (msg.getReceiver().equalsIgnoreCase(userName2)) {
+				
+				chat.add(msg);
+			}
+		}
+		 
+		List<Message> recieved = this.findMessageBySender(userName2);
+		 for (int i = 0; i < recieved.size(); i++) {
+			Message msg = recieved.get(i);
+			if (msg.getReceiver().equalsIgnoreCase(userName1)) {
+				
+				chat.add(msg);
+			}
+		}
+		
+		Collections.sort(chat, (o1, o2) -> o1.getSendDate().compareTo(o2.getSendDate()));
+		return chat;
+		
+	}
+
 
 
 }
