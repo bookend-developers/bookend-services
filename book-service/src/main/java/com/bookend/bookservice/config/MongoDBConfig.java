@@ -8,11 +8,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-@EnableMongoRepositories(basePackageClasses = BookRepository.class)
-@Configuration
+//@EnableMongoRepositories(basePackageClasses = BookRepository.class)
+//@Configuration
 public class MongoDBConfig {
 
-    //after running one time make the method as comment
+  /*  //after running one time make the method as comment
     @Bean
     CommandLineRunner commandLineRunner(BookRepository bookRepository) {
         bookRepository.deleteAll();
@@ -22,6 +22,6 @@ public class MongoDBConfig {
 
 
         };
-    }
+    }*/
 
 }

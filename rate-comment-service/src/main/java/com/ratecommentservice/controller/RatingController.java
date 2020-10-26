@@ -29,14 +29,22 @@ public class RatingController {
 
 
     @ApiOperation(value = "Get book's average rate value ", response = Double.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved rate"),
+            @ApiResponse(code = 401, message = "You are not authorized to view the resource")
+    }
+    )
     @GetMapping("/book/{bookId}")
     public Double getBookRate(@PathVariable("bookId") String  bookId ){
-
-        return rateService.getBookAverageRate(bookId);
+        Double rate= rateService.getBookAverageRate(bookId);
+        if(rate == null){
+            return 0.0;
+        }
+        return rate;
 
 
     }
-    @ApiOperation(value = "Get current user's rates ", response = Rate.class)
+    @ApiOperation(value = "View user's rates ", response = Rate.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved list"),
             @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
@@ -51,7 +59,7 @@ public class RatingController {
     }
     @ApiOperation(value = "Rate a specific book", response = Rate.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully retrieved rate"),
+            @ApiResponse(code = 200, message = "Successfully rating the book"),
             @ApiResponse(code = 401, message = "You are not authorized to rate the boook"),
             @ApiResponse(code = 400, message = "The way you are trying to rate is not accepted.")
     }
@@ -67,6 +75,11 @@ public class RatingController {
 
     }
     @ApiOperation(value = "Delete a specific rate")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully deleted rate"),
+            @ApiResponse(code = 401, message = "You are not authorized to delete the resource")
+    }
+    )
     @DeleteMapping("/delete/{rateid}")
     public void deleteRate(@PathVariable("rateid") String rateId){
         rateService.deleteRate(Long.valueOf(rateId));

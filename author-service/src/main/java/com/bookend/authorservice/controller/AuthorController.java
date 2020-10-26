@@ -49,43 +49,12 @@ public class AuthorController {
 
         return authors;
     }
-    @PostMapping("/admin/new")
-    public Author newAuthor(@RequestBody AuthorRequest author) throws ParseException {
-        Author newAuthor = new Author();
-        newAuthor.setName(author.getName());
-        newAuthor.setBiography(author.getBiography());
-        newAuthor.setBirthDate(author.getBirthDate());
-        if(author.getDateOfDeath()==null){
-            newAuthor.setDateOfDeath(null);
-        }else{
-            newAuthor.setDateOfDeath(author.getDateOfDeath());
-        }
 
-        return authorService.saveOrUpdate(newAuthor);
-
-    }
-    @PostMapping("/admin/newbook")
-    public Book newBook(@RequestParam String bookid,
-                        @RequestParam String authorid){
-        Author author = authorService.getById(authorid);
-        if(author== null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"The author does not found.");
-        }
-
-        Book book = new Book(bookid,author);
-        Book savedBook = bookService.save(book);
-        author.getBookList().add(book);
-
-
-        authorService.saveOrUpdate(author);
-        return savedBook;
-
-    }
     @GetMapping("/books")
     public List<Book> getAuthorBooks(@RequestParam String authorid){
         Author author = authorService.getById(authorid);
         if(author== null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"The author does not found.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"The author does not exist.");
         }
         return author.getBookList();
     }
