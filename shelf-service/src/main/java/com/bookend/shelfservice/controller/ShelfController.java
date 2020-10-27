@@ -92,6 +92,7 @@ public class ShelfController {
             @ApiResponse(code = 200, message = "Successfully retrieved list"),
             @ApiResponse(code = 401, message = "You are not authorized to view the resource")
     }
+
     )
     @GetMapping("/user/{username}")
     public List<Shelf> getShelves(@PathVariable("username") String username){

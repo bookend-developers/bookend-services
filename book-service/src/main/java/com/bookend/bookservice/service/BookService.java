@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface BookService {
     Book getById(String id);
-
     Book saveOrUpdate(Book book);
+    List<Book> getBooksofShelf(Long shelfID,String accessToken);
     List<Book> getAll();
     List<Book> search(String title);
     void delete(String bookId);
