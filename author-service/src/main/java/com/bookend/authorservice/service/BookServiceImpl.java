@@ -20,9 +20,7 @@ public class BookServiceImpl  implements BookService{
 
     @Override
     public Book save(Book book) {
-        if(findByBookid(book.getBookId())!=null){
-            return null;
-        }
+
         return bookRepository.save(book);
     }
 }

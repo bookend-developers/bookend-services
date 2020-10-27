@@ -1,11 +1,17 @@
 package com.bookend.shelfservice.service;
 
+import com.bookend.shelfservice.model.Book;
 import com.bookend.shelfservice.model.Shelf;
+import com.bookend.shelfservice.model.ShelfsBook;
 import com.bookend.shelfservice.repository.ShelfRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ShelfServiceImpl implements ShelfService {
@@ -42,5 +48,22 @@ public class ShelfServiceImpl implements ShelfService {
     @Override
     public void deleteShelf(Shelf shelf) {
          shelfRepository.delete(shelf);
+    }
+
+    @Override
+    public List<Book> getBooks(Long id, String accessToken) {
+        List<String> bookIDs = getById(id).getShelfsBooks()
+                                            .stream()
+                                            .map(ShelfsBook::getBookID)
+                                            .collect(Collectors.toList());
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", "Bearer "+accessToken);
+        HttpEntity<String> entity = new HttpEntity<>("body", headers);
+        List<Book> books = bookIDs.stream()
+                .map(bookID ->restTemplate.exchange("http://localhost:8082/api/book/{bookId}", HttpMethod.GET, entity,Book.class,bookID).getBody())
+                .collect(Collectors.toList());
+        return books;
     }
 }

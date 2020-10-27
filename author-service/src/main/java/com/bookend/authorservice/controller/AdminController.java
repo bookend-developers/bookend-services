@@ -16,7 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.text.ParseException;
 
 @RestController
-@RequestMapping("/api/admin/author")
+@RequestMapping("/api/author/admin")
 public class AdminController {
     private AuthorService authorService;
     private BookService bookService;
@@ -35,14 +35,14 @@ public class AdminController {
             @ApiResponse(code = 401, message = "You are not authorized to add the resource")
     }
     )
-    @PostMapping("/new/author")
-    public Author newAuthor(@RequestBody AuthorRequest author) throws ParseException {
+    @PostMapping("/new")
+    public Author newAuthor(@RequestBody AuthorRequest author)  {
         Author newAuthor = new Author();
         newAuthor.setName(author.getName());
         newAuthor.setBiography(author.getBiography());
         newAuthor.setBirthDate(author.getBirthDate());
         if(author.getDateOfDeath()==null){
-            newAuthor.setDateOfDeath(null);
+            newAuthor.setDateOfDeath("-");
         }else{
             newAuthor.setDateOfDeath(author.getDateOfDeath());
         }
@@ -50,7 +50,7 @@ public class AdminController {
         return authorService.saveOrUpdate(newAuthor);
 
     }
-    @ApiOperation(value = "Add new book to shelf", response = Book.class)
+    @ApiOperation(value = "Add new book to author's shelf", response = Book.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully added book"),
             @ApiResponse(code = 401, message = "You are not authorized to add the resource"),
