@@ -1,6 +1,8 @@
 package com.bookclupservice.bookclubservice.service;
 
+import com.bookclupservice.bookclubservice.kafka.MessageProducer;
 import com.bookclupservice.bookclubservice.model.*;
+import com.bookclupservice.bookclubservice.payload.MailRequest;
 import com.bookclupservice.bookclubservice.payload.request.*;
 import com.bookclupservice.bookclubservice.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,8 @@ public class ClubService {
     private PostRepository postRepository;
     @Autowired
     private ClubMemberRequestRepository clubMemberRequestRepository;
+    @Autowired
+    private MessageProducer messageProducer;
 
     public List<Club> getAll(){
         return clubRepository.findAll();
@@ -65,6 +69,9 @@ public class ClubService {
         clubMemberRequest.setClubOwner(club.getOwner());
         clubMemberRequest.setRequestingMember(member);
         clubMemberRequestRepository.save(clubMemberRequest);
+
+        MailRequest mailRequest = new MailRequest(club.getOwner().getId(),"Membership Request",member.getUserName()+" wants to join your "+club.getClubName() + " club");
+        messageProducer.sendMailRequest(mailRequest);
     }
 
     public void requestPermission(SharePostRequestRequest sharePostRequestRequest){
@@ -76,6 +83,9 @@ public class ClubService {
         sharePostRequest.setRequestingMember(requestingMember);
         sharePostRequest.setText(sharePostRequestRequest.getText());
         sharePostRequestRepository.save(sharePostRequest);
+
+        MailRequest mailRequest = new MailRequest(club.getOwner().getId(),"Share Post Request",requestingMember.getUserName()+" wants to post writings in your "+club.getClubName() + " club");
+        messageProducer.sendMailRequest(mailRequest);
     }
 
 
@@ -86,6 +96,9 @@ public class ClubService {
         club.getPostMembers().add(member);
         clubRepository.save(club);
         memberRepository.save(member);
+
+        MailRequest mailRequest = new MailRequest(member.getId(),"Post Permission","From now on you can share posts in "+club.getClubName() + " club");
+        messageProducer.sendMailRequest(mailRequest);
     }
 
     public void savePost(NewPostRequest newPostRequest){

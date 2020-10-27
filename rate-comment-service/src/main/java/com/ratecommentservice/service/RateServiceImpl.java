@@ -14,15 +14,11 @@ public class RateServiceImpl implements RateService {
     @Autowired
     public void setRateRepository(RateRepository rateRepository){this.rateRepository=rateRepository;}
 
-    @Override
-    public List<Rate> getBookRates(String bookID) {
-
-        return rateRepository.findByBookId(bookID);
-    }
 
 
     @Override
     public List<Rate> getUserRates(String username) {
+
         return rateRepository.findByUsername(username);
     }
 

@@ -1,9 +1,13 @@
 package com.bookend.shelfservice.controller;
 
+import com.bookend.shelfservice.model.Book;
 import com.bookend.shelfservice.model.ShelfsBook;
 import com.bookend.shelfservice.model.Shelf;
 import com.bookend.shelfservice.service.BookService;
 import com.bookend.shelfservice.service.ShelfService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -16,6 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping("/api/shelf")
 public class ShelfController {
 
     private BookService bookService;
@@ -30,6 +35,13 @@ public class ShelfController {
     @Autowired
     public void setShelfService(ShelfService shelfService){ this.shelfService=shelfService;}
 
+    @ApiOperation(value = "Add new book to shelf", response = ShelfsBook.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully added book"),
+            @ApiResponse(code = 401, message = "You are not authorized to add the resource"),
+            @ApiResponse(code = 400, message = "The book is already added this shelf.")
+    }
+    )
     @PostMapping("/{shelfid}/{bookid}")
     public ShelfsBook addBookToShelf(@PathVariable("shelfid") String shelfID,
                                      @PathVariable("bookid") String bookID){
@@ -42,7 +54,14 @@ public class ShelfController {
 
 
     }
-    @PostMapping("/shelf/new")
+    @ApiOperation(value = "Create new shelf", response = Shelf.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully added shelf"),
+            @ApiResponse(code = 401, message = "You are not authorized to create the resource"),
+            @ApiResponse(code = 400, message = "The shelf name is already in use.")
+    }
+    )
+    @PostMapping("/new")
     public Shelf newShelf(@RequestParam(name = "name") String shelfname,
                           OAuth2Authentication auth){
         Shelf newShelf =shelfService.saveOrUpdate(new Shelf(shelfname,auth.getName()));
@@ -53,22 +72,40 @@ public class ShelfController {
         return newShelf ;
 
     }
-    @GetMapping("/shelf/{shelfid}")
-    public List<String> getBooks(@PathVariable("shelfid")  String shelfID){
-        List<String> bookIDs = shelfService.getById(Long.valueOf(shelfID)).getShelfsBooks()
-                                                .stream()
-                                                        .map(ShelfsBook::getBookID)
-                                                        .collect(Collectors.toList());
-        return bookIDs;
+    @ApiOperation(value = "Get books in the shelf", response = Book.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved list"),
+            @ApiResponse(code = 401, message = "You are not authorized to view the resource")
+    }
+    )
+    @GetMapping("/{shelfid}")
+    public List<Book> getBooks(@PathVariable("shelfid")  String shelfID, OAuth2Authentication auth){
+        final OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) auth.getDetails();
+        //token
+        String accessToken = details.getTokenValue();
+
+        return shelfService.getBooks(Long.valueOf(shelfID),accessToken);
 
     }
-
-    @GetMapping("/shelves")
-    public List<Shelf> getShelves(OAuth2Authentication auth){
-
-        return shelfService.findShelvesByUsername(auth.getUserAuthentication().getName());
+    @ApiOperation(value = "Get user's shelves", response = Shelf.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved list"),
+            @ApiResponse(code = 401, message = "You are not authorized to view the resource")
     }
-    @DeleteMapping("/shelf/delete/{shelfid}")
+
+    )
+    @GetMapping("/user/{username}")
+    public List<Shelf> getShelves(@PathVariable("username") String username){
+
+        return shelfService.findShelvesByUsername(username);
+    }
+    @ApiOperation(value = "Delete the shelf")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully deleted shelf"),
+            @ApiResponse(code = 401, message = "You are not authorized to delete the resource")
+    }
+    )
+    @DeleteMapping("/delete/{shelfid}")
     public void deleteShelf(@PathVariable("shelfid")  String shelfID){
          shelfService.deleteShelf(shelfService.getById(Long.valueOf(shelfID)));
     }

@@ -25,13 +25,18 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public Author saveOrUpdate(Author author) {
-        authorRepository.save(author);
-        return author;
+
+        return authorRepository.save(author);
     }
 
     @Override
     public List<Author> getAll() {
-        List<Author> a = authorRepository.findAll();
+
         return authorRepository.findAll();
+    }
+
+    @Override
+    public List<Author> search(String title) {
+        return authorRepository.findByNameContainingIgnoreCase(title);
     }
 }

@@ -66,4 +66,9 @@ public class BookServiceImpl implements BookService {
     public List<Book> search(String title) {
         return bookRepository.findByBookNameContainingIgnoreCase(title);
     }
+
+    @Override
+    public void delete(String bookId) {
+        bookRepository.delete(getById(bookId));
+    }
 }

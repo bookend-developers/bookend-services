@@ -10,5 +10,6 @@ public interface BookService {
     List<Book> getBooksofShelf(Long shelfID,String accessToken);
     List<Book> getAll();
     List<Book> search(String title);
+    void delete(String bookId);
 
 }
