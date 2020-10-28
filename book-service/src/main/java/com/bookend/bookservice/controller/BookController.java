@@ -80,6 +80,10 @@ public class BookController {
         String accessToken = details.getTokenValue();
         return bookService.getBooksofShelf(Long.valueOf(shelfID),accessToken);
     }
+    @GetMapping("/author/{authorid}")
+    public List<Book> getBookOfAuthor(@PathVariable("authorid") String authorId){
+        return bookService.findByAuthor(authorId);
+    }
 
 
 }

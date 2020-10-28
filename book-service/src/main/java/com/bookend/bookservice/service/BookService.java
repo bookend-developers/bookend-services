@@ -11,6 +11,7 @@ public interface BookService {
     Book saveOrUpdate(Book book);
     List<Book> getBooksofShelf(Long shelfID,String accessToken);
     List<Book> getAll();
+    List<Book> findByAuthor(String author);
     List<Book> search(String title);
     void delete(String bookId);
 
