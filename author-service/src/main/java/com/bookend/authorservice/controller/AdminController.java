@@ -32,12 +32,16 @@ public class AdminController {
     @ApiOperation(value = "Add new author", response = Author.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully added author"),
-            @ApiResponse(code = 401, message = "You are not authorized to add the resource")
+            @ApiResponse(code = 401, message = "You are not authorized to add the resource"),
+            @ApiResponse(code = 400, message = "The way you are trying to add author is not accepted.")
     }
     )
     @PostMapping("/new")
     public Author newAuthor(@RequestBody AuthorRequest author)  {
         Author newAuthor = new Author();
+        if(author.getName()==null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Author name field cannot be empty.");
+        }
         newAuthor.setName(author.getName());
         newAuthor.setBiography(author.getBiography());
         newAuthor.setBirthDate(author.getBirthDate());
@@ -50,7 +54,7 @@ public class AdminController {
         return authorService.saveOrUpdate(newAuthor);
 
     }
-    @ApiOperation(value = "Add new book to author's shelf", response = Book.class)
+ /*   @ApiOperation(value = "Add new book to author's shelf", response = Book.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully added book"),
             @ApiResponse(code = 401, message = "You are not authorized to add the resource"),
@@ -77,6 +81,6 @@ public class AdminController {
         authorService.saveOrUpdate(author);
         return savedBook;
 
-    }
+    }*/
    //TODO kafka listener will delete book info if the book service deletes book
 }

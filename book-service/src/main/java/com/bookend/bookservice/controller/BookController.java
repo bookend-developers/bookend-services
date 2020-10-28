@@ -64,7 +64,11 @@ public class BookController {
 
         return books;
     }
-
+    @ApiOperation(value = "Get books in the shelf", response = Book.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved book list"),
+            @ApiResponse(code = 401, message = "You are not authorized to view books.")
+    })
     @GetMapping("/user/shelf/{shelfid}")
     public List<Book> getBooksofShelf(@PathVariable("shelfid") String shelfID, OAuth2Authentication auth){
         final OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) auth.getDetails();

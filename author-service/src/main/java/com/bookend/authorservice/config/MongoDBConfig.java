@@ -12,14 +12,5 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 public class MongoDBConfig {
 
 
-    @Bean
-    CommandLineRunner commandLineRunner(AuthorRepository authorRepository) {
-        authorRepository.deleteAll();
-        return strings -> {
-            authorRepository.save(new Author("df","dssf","fdfg","fdg"));
-            authorRepository.save(new Author("dşfş","dsldflsf","fdldfg","fdldg"));
-
-        };
-    }
 
 }

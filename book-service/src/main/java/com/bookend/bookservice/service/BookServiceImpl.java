@@ -2,20 +2,19 @@ package com.bookend.bookservice.service;
 
 import com.bookend.bookservice.kafka.Producer;
 import com.bookend.bookservice.model.Book;
+import com.bookend.bookservice.model.KafkaMessage;
 import com.bookend.bookservice.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class BookServiceImpl implements BookService {
-    private static final String BOOK_TOPIC = "add-book";
+    private static final String BOOK_TOPIC = "adding-book";
     private static final String SHELF_TOPIC = "to-shelf";
 
     private BookRepository bookRepository;
@@ -36,8 +35,13 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book saveOrUpdate(Book book) {
-        bookRepository.save(book);
-        return book;
+        Map<String, String> message= new HashMap<String, String>();
+        Book savedBook = bookRepository.save(book);
+        message.put("author",book.getAuthor());
+        message.put("book",savedBook.getId());
+        KafkaMessage kafkaMessage = new KafkaMessage(BOOK_TOPIC,message);
+        producer.publishBook(kafkaMessage);
+        return savedBook;
     }
 
     @Override
@@ -47,7 +51,7 @@ public class BookServiceImpl implements BookService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "Bearer "+accessToken);
         HttpEntity<String> entity = new HttpEntity<>("body", headers);
-        ResponseEntity<String[]> responseEntity =restTemplate.exchange("http://localhost:8083/shelf/{shelfid}", HttpMethod.GET, entity, String[].class,shelfID);
+        ResponseEntity<String[]> responseEntity =restTemplate.exchange("http://localhost:8083/api/shelf/{shelfid}", HttpMethod.GET, entity, String[].class,shelfID);
         List<String> bookIDs = Arrays.asList(responseEntity.getBody());
         List<Book> books=new ArrayList<>(bookIDs.size());
         for(int i=0;i<bookIDs.size();i++){

@@ -1,4 +1,4 @@
-package com.bookend.bookservice.config;
+package com.bookend.authorservice.config;
 
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +12,6 @@ class KafkaTopicConfig {
     public NewTopic book() {
         return TopicBuilder.name("adding-book").build();
     }
-
 
 
 }
