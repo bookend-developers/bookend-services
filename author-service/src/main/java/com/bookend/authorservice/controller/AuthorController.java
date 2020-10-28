@@ -34,7 +34,11 @@ public class AuthorController {
 
     @GetMapping("/{authorid}")
     public Author getAuthorInfo(@PathVariable("authorid") String authorId) {
-        return authorService.getById(authorId);
+        Author author= authorService.getById(authorId);
+        if(author==null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Author is not found");
+        }
+        return author;
 
     }
     @GetMapping("")

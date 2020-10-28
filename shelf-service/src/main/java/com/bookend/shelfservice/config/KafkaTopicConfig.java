@@ -5,13 +5,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.TopicBuilder;
 
-//@Configuration
+@Configuration
 class KafkaTopicConfig {
 
-  /*  @Bean
-    public NewTopic book() {
-        return TopicBuilder.name("add-book").build();
+    @Bean
+    public NewTopic deletebook() {
+        return TopicBuilder.name("deleting-book").build();
     }
-*/
+
+
+
 
 }

@@ -9,6 +9,8 @@ import java.util.List;
 
 @Repository
 public interface BookRepository  extends JpaRepository<ShelfsBook,Long> {
-    ShelfsBook findBookById(String id);
+    ShelfsBook findBookById(Long id);
+    List<ShelfsBook> findShelfsBookByBookID(String id);
     List<ShelfsBook> findShelfsBookByShelf(Shelf shelf);
+    void deleteShelfsBookByBookIDAndShelf_Id(String bookID,Long shelfId);
 }

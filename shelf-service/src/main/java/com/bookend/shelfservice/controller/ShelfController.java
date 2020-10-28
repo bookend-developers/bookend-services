@@ -94,6 +94,18 @@ public class ShelfController {
 
         return shelfService.findShelvesByUsername(username);
     }
+    @ApiOperation(value = "Get current user's shelves", response = Shelf.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved list"),
+            @ApiResponse(code = 401, message = "You are not authorized to view the resource")
+    }
+
+    )
+    @GetMapping("/user")
+    public List<Shelf> getUserShelves( OAuth2Authentication auth){
+
+        return shelfService.findShelvesByUsername(auth.getName());
+    }
     @ApiOperation(value = "Delete the shelf")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully deleted shelf"),
@@ -103,6 +115,17 @@ public class ShelfController {
     @DeleteMapping("/delete/{shelfid}")
     public void deleteShelf(@PathVariable("shelfid")  String shelfID){
          shelfService.deleteShelf(shelfService.getById(Long.valueOf(shelfID)));
+    }
+    @ApiOperation(value = "Delete the book from shelves")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully deleted book"),
+            @ApiResponse(code = 401, message = "You are not authorized to delete the resource")
+    }
+    )
+    @DeleteMapping("/delete/{shelfid}/{bookid}")
+    public void deleteBook(@PathVariable("bookid") String bookId,
+                           @PathVariable("shelfid")  String shelfID){
+        bookService.delete(bookId,shelfID);
     }
 
 }

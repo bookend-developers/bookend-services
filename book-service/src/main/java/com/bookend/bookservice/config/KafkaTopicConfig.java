@@ -9,10 +9,13 @@ import org.springframework.kafka.config.TopicBuilder;
 class KafkaTopicConfig {
 
     @Bean
-    public NewTopic book() {
+    public NewTopic addbook() {
         return TopicBuilder.name("adding-book").build();
     }
 
-
+    @Bean
+    public NewTopic deletebook() {
+        return TopicBuilder.name("deleting-book").build();
+    }
 
 }

@@ -17,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/book")
@@ -35,12 +36,15 @@ public class BookController {
             @ApiResponse(code = 404, message = "Book is not found.")
     })
     @GetMapping("/{bookid}")
-    public Book getBookInfo(@PathVariable("bookid") String bookId) {
-        Book book = bookService.getById(bookId);
-        if(book==null){
-            throw  new ResponseStatusException(HttpStatus.NOT_FOUND,"The book is not found.");
+    public Map<String,String> getBookInfo(@PathVariable("bookid") String bookId,OAuth2Authentication auth ) {
+        final OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) auth.getDetails();
+        //token
+        String accessToken = details.getTokenValue();
+        Map<String,String> fullBook = bookService.getFullBookById(bookId,accessToken);
+        if(fullBook==null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"The book does not exist.");
         }
-        return book;
+        return fullBook;
 
     }
     @ApiOperation(value = "Search book or get all books", response = Book.class)
