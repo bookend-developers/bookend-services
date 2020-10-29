@@ -10,4 +10,5 @@ public interface RateService {
     Double getBookAverageRate(String bookID);
     Rate save(Rate newRate);
     void deleteRate(Long rateId);
+    void deleteRateByBookId(String bookId);
 }

@@ -26,7 +26,7 @@ public class Listener {
         this.authorService = authorService;
     }
     @KafkaListener(topics = "adding-book",
-            groupId ="add-book")
+            groupId ="bookend-authorservice")
     public void consumeBook(String message) {
         System.out.println(message);
         ObjectMapper mapper = new ObjectMapper();
@@ -45,5 +45,14 @@ public class Listener {
         }
 
     }
+    @KafkaListener(topics = "deleting-book",
+            groupId ="bookend-authorservice")
+    public void deleteBook(String message){
+
+        System.out.println(message);
+        String[] splited = message.split("\"");
+        bookService.deleteByBookId(splited[1]);
+    }
+
 
 }

@@ -40,4 +40,9 @@ public class RateServiceImpl implements RateService {
     public void deleteRate(Long rateId) {
         rateRepository.deleteById(rateId);
     }
+
+    @Override
+    public void deleteRateByBookId(String bookId) {
+        rateRepository.deleteByBookId(bookId);
+    }
 }
