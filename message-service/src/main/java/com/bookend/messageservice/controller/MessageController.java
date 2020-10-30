@@ -3,6 +3,10 @@ package com.bookend.messageservice.controller;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,11 +25,23 @@ public class MessageController {
         this.messageService=messageService;
     }
 
+    @ApiOperation(value = "Get message by id ", response = Message.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved message"),
+            @ApiResponse(code = 401, message = "You are not authorized to view the resource")
+    }
+    )
     @GetMapping("/{messageid}")
     public Message getMessage(@PathVariable("messageid") String messageId) {
         return messageService.getById(messageId);
     }
 
+    @ApiOperation(value = "View user's inbox message ", response = Message.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved message list"),
+            @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+    }
+    )
     @GetMapping("/inbox")
     public List<Message> getInbox(OAuth2Authentication auth){
 
@@ -35,7 +51,12 @@ public class MessageController {
         return chat;
         
     }
-    
+    @ApiOperation(value = "View user's sent message ", response = Message.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved message list"),
+            @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+    }
+    )
     @GetMapping("/sent")
     public List<Message> getSent(OAuth2Authentication auth){
 
@@ -44,7 +65,14 @@ public class MessageController {
         
         return chat;
     }
-    
+    @ApiOperation(value = "Send a message for a specific user", response = ResponseEntity.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully sending the message"),
+            @ApiResponse(code = 401, message = "You are not authorized to send a message"),
+            @ApiResponse(code = 400, message = "The way you are trying to send is not accepted.")
+    }
+    )
+
     @PostMapping("/new/{receiverUser}")
     public ResponseEntity<String> sendMessage(@PathVariable("receiverUser") String receiver, @RequestBody Message message, OAuth2Authentication auth ){
         message.setReceiver(receiver);
@@ -55,12 +83,23 @@ public class MessageController {
     	messageService.saveOrUpdate(message);
         return ResponseEntity.ok("Message is sent");
     }
-
+    @ApiOperation(value = "Delete a specific message")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully deleted message"),
+            @ApiResponse(code = 401, message = "You are not authorized to delete the resource")
+    }
+    )
     @DeleteMapping("/delete/{messageid}")
     public void deleteShelf(@PathVariable("messageid")  String messageId){
         messageService.deleteMessage(messageService.getById(messageId));
     }
-    
+    @ApiOperation(value = "View user's messages with another user ", response = Message.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved message list"),
+            @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+    }
+    )
+
     @GetMapping("/chat/{userName}")
     public List<Message> getChat(OAuth2Authentication auth,@PathVariable("userName") String userName){
     	return messageService.findChatByUserName(auth.getName(),userName);
