@@ -38,7 +38,6 @@ public class BookController {
     @GetMapping("/{bookid}")
     public Map<String,String> getBookInfo(@PathVariable("bookid") String bookId,OAuth2Authentication auth ) {
         final OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) auth.getDetails();
-        //token
         String accessToken = details.getTokenValue();
         Map<String,String> fullBook = bookService.getFullBookById(bookId,accessToken);
         if(fullBook==null){
@@ -76,10 +75,15 @@ public class BookController {
     @GetMapping("/user/shelf/{shelfid}")
     public List<Book> getBooksofShelf(@PathVariable("shelfid") String shelfID, OAuth2Authentication auth){
         final OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) auth.getDetails();
-        //token
+
         String accessToken = details.getTokenValue();
         return bookService.getBooksofShelf(Long.valueOf(shelfID),accessToken);
     }
+    @ApiOperation(value = "Get books of a specific author", response = Book.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved book list"),
+            @ApiResponse(code = 401, message = "You are not authorized to view books.")
+    })
     @GetMapping("/author/{authorid}")
     public List<Book> getBookOfAuthor(@PathVariable("authorid") String authorId){
         return bookService.findByAuthor(authorId);

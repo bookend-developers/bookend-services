@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 public class MongoDBConfig {
 
   //after running one time make the method as comment
-    @Bean
+   /* @Bean
     CommandLineRunner commandLineRunner(BookRepository bookRepository) {
         bookRepository.deleteAll();
         return strings -> {
@@ -30,6 +30,6 @@ public class MongoDBConfig {
 
 
         };
-    }
+    }*/
 
 }
