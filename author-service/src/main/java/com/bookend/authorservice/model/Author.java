@@ -1,28 +1,33 @@
 package com.bookend.authorservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.thymeleaf.util.DateUtils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Document(collection = "authors")
 public class Author {
     @Id
-
     private String id;
     private String name;
     @DBRef
     private List<Book> bookList;
     private String biography;
-    private String birthDate;
-    private String dateOfDeath;
+    private LocalDate  birthDate;
+    private LocalDate dateOfDeath;
 
     public Author() {
     }
 
-    public Author(String name, String biography, String birthDate, String dateOfDeath) {
+    public Author(String name, String biography, LocalDate birthDate, LocalDate dateOfDeath) {
         this.name = name;
         this.biography=biography;
         this.birthDate=birthDate;
@@ -51,17 +56,20 @@ public class Author {
         this.biography = biography;
     }
 
-    public String getBirthDate() {
+
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(String birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 
-    public String getDateOfDeath() { return dateOfDeath; }
+    public LocalDate getDateOfDeath() {
+        return dateOfDeath;
+    }
 
-    public void setDateOfDeath(String dateOfDeath) {
+    public void setDateOfDeath(LocalDate dateOfDeath) {
         this.dateOfDeath = dateOfDeath;
     }
 

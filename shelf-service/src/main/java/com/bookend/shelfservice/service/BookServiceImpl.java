@@ -17,7 +17,7 @@ public class BookServiceImpl implements BookService {
     }
     @Override
     public ShelfsBook getById(String id) {
-        return bookRepository.findBookById(id);
+        return bookRepository.findBookById(Long.valueOf(id));
     }
 
 
@@ -28,6 +28,18 @@ public class BookServiceImpl implements BookService {
             return null;
         }
         return bookRepository.save(shelfsBook);
+    }
+
+    @Override
+    public void delete(String bookId,String shelfID) {
+
+        bookRepository.deleteShelfsBookByBookIDAndShelf_Id(bookId,Long.valueOf(shelfID));
+    }
+
+    @Override
+    public void deleteFromShelves(String bookid) {
+        List<ShelfsBook> shelfsBooks = bookRepository.findShelfsBookByBookID(bookid);
+        shelfsBooks.forEach(shelfsBook -> bookRepository.delete(shelfsBook));
     }
 }
 //5f7a1001caa59177cb3cd96e
