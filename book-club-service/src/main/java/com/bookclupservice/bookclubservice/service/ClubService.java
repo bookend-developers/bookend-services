@@ -30,8 +30,12 @@ public class ClubService {
         return clubRepository.findAll();
     }
 
-    public List<SharePostRequest> getRequests(Long clubId){
+    public List<SharePostRequest> getPostRequests(Long clubId){
         List<SharePostRequest> requests = sharePostRequestRepository.findByClubId(clubId);
+        return requests;
+    }
+    public List<ClubMemberRequest> getMembershipRequests(Long clubId){
+        List<ClubMemberRequest> requests = clubMemberRequestRepository.findByClubId(clubId);
         return requests;
     }
 
@@ -39,7 +43,7 @@ public class ClubService {
         return postRepository.findByWriterId(writerId);
     }
     public List<Post> getClubPosts(Long clubId){
-        return postRepository.findByWriterId(clubId);
+        return postRepository.findByClubId(clubId);
     }
 
     public Club saveClub(NewClubRequest newClubRequest){

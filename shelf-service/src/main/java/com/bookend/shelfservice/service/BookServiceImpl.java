@@ -20,7 +20,6 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findBookById(Long.valueOf(id));
     }
 
-
     @Override
     public ShelfsBook saveOrUpdate(ShelfsBook shelfsBook) {
         List<ShelfsBook> books = bookRepository.findShelfsBookByShelf(shelfsBook.getShelf());

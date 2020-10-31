@@ -1,7 +1,10 @@
 package com.bookend.authorizationserver.service;
 
+import com.bookend.authorizationserver.kafka.MessageProducer;
 import com.bookend.authorizationserver.model.Token;
 import com.bookend.authorizationserver.model.User;
+import com.bookend.authorizationserver.payload.KafkaUserRegistered;
+import com.bookend.authorizationserver.payload.MailRequest;
 import com.bookend.authorizationserver.payload.SignUpRequest;
 import com.bookend.authorizationserver.repository.TokenRepository;
 import com.bookend.authorizationserver.repository.UserDetailRepository;
@@ -23,6 +26,9 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private TokenRepository tokenRepository;
+    @Autowired
+    private MessageProducer messageProducer;
+
 
     public void addUser(SignUpRequest signUpRequest){
         User user = new User();
@@ -42,8 +48,12 @@ public class UserService {
         Token token = new Token(user);
         userDetailRepository.save(user);
         tokenRepository.save(token);
-        addToMailService(String.valueOf(user.getId()),user.getEmail());
-        sendMail(user.getEmail(),token.getConfirmationToken());
+        messageProducer.sendConfirmationMailRequest(new MailRequest(user.getEmail(),"Confirmation Mail",
+                "Kayıt olduğunuz için teşekkürler.\nKullanıcı adınız: " + user.getUsername() + "\n Aktivasyon linki: " +
+                        "" + "localhost:9191/api/oauth/confirm/"  + token.getConfirmationToken() +
+                        "\n\n" +
+                        "Thank you for registering.\nYour username: "+ user.getUsername()+ "\n Activation link: " +
+                        "" + "localhost:9191/api/oauth/confirm/"+ token.getConfirmationToken()));
     }
 
     public void confirm(String token){
@@ -51,6 +61,7 @@ public class UserService {
         User user = confirmationToken.getUser();
         user.setEnabled(true);
         tokenRepository.delete(confirmationToken);
+        messageProducer.sendUserInformation(new KafkaUserRegistered(user.getId(),user.getUsername(),user.getEmail()));
     }
     public void addToMailService(String id, String email){
         RestTemplate restTemplate = new RestTemplate();

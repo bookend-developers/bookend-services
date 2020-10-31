@@ -2,8 +2,10 @@ package com.mailservice.mailservice.kafka;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mailservice.mailservice.payload.KafkaUserRegistered;
 import com.mailservice.mailservice.payload.MailRequest;
 import com.mailservice.mailservice.service.EmailMailSender;
+import com.mailservice.mailservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -15,9 +17,26 @@ public class MailListener {
 
     @Autowired
     EmailMailSender emailMailSender;
+    @Autowired
+    UserService userService;
+
+    @KafkaListener(topics = "confirmation-mail",
+            groupId ="confirm-mail")
+    public void consumeConfirmMail(String message) {
+        System.out.println(message);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            MailRequest mailRequest = mapper.readValue(message, MailRequest.class);
+            emailMailSender.sendConfirmationMailRequestsMail(mailRequest);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @KafkaListener(topics = "Mail",
-            groupId ="add-book-to-shelf")
+            groupId ="mail")
     public void consumeBook(String message) {
         System.out.println(message);
         ObjectMapper mapper = new ObjectMapper();
@@ -30,4 +49,21 @@ public class MailListener {
             e.printStackTrace();
         }
     }
+
+    @KafkaListener(topics = "user-registered",
+            groupId ="confirm-mail")
+    public void saveUser(String message) {
+        System.out.println(message);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            KafkaUserRegistered kafkaUserRegistered = mapper.readValue(message, KafkaUserRegistered.class);
+            userService.save(kafkaUserRegistered.getId(),kafkaUserRegistered.getMail());
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
