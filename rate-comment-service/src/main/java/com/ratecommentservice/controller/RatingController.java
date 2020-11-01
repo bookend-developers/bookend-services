@@ -77,13 +77,13 @@ public class RatingController {
     public Rate rateBook(OAuth2Authentication auth
             ,@RequestBody RateRequest rateRequest){
         if(rateRequest.getRate()== null){
-            throw  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Please fill all necessary places1");
+            throw  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Please fill all necessary places");
         }
         if(rateRequest.getBookId()== null){
-            throw  new ResponseStatusException(HttpStatus.BAD_REQUEST,"The way you are trying to rate is not accepted2.");
+            throw  new ResponseStatusException(HttpStatus.BAD_REQUEST,"The way you are trying to rate is not accepted.");
         }
         if(rateRequest.getBookname()== null){
-            throw  new ResponseStatusException(HttpStatus.BAD_REQUEST,"The way you are trying to rate is not accepted3.");
+            throw  new ResponseStatusException(HttpStatus.BAD_REQUEST,"The way you are trying to rate is not accepted.");
         }
 
         Rate rate = rateService.findRateByBookIdandUsername(rateRequest.getBookId(),auth.getName());

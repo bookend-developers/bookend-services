@@ -3,6 +3,8 @@ package com.bookend.messageservice.controller;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+
+import com.bookend.messageservice.payload.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,12 +61,13 @@ public class MessageController {
     }
 
     @DeleteMapping("/delete/{messageid}")
-    public void deleteMessage(@PathVariable("messageid")  String messageId){
+    public ResponseEntity<?> deleteMessage(@PathVariable("messageid")  String messageId){
         Message message = messageService.getById(messageId);
         if(message== null){
             throw  new ResponseStatusException(HttpStatus.NOT_FOUND,"Message is not found.");
         }
         messageService.deleteMessage(message);
+        return ResponseEntity.ok(new MessageResponse("Successfully deleted."));
     }
     
     @GetMapping("/chat/{userName}")
