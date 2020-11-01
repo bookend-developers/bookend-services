@@ -16,12 +16,12 @@ public class Book {
     private String bookId;
     @Column(name="bookname")
     private String bookname;
-
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true,
             fetch = FetchType.LAZY,mappedBy = "book")
     private List<Rate> rates;
     @Column
-
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "book")
     private List<Comment> comments;
 

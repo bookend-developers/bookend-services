@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment,Long> {
     List<Comment> findByBook(Book bookId);
-    List<Comment> findByUsername(String username);
+    List<Comment> findCommentByUsername(String username);
     Comment findByCommentId(Long commentId);
 }

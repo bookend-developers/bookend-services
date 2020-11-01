@@ -17,7 +17,7 @@ public class Rate {
     private Long rateId;
     @ApiModelProperty(notes = "The specific book that rate belongs to")
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "book_id")
     private Book book;
     @Column(name = "username")

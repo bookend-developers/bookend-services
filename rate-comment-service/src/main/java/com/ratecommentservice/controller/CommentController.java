@@ -4,6 +4,7 @@ import com.ratecommentservice.model.Book;
 import com.ratecommentservice.model.Comment;
 import com.ratecommentservice.model.Rate;
 import com.ratecommentservice.payload.CommentRequest;
+import com.ratecommentservice.payload.MessageResponse;
 import com.ratecommentservice.service.BookService;
 import com.ratecommentservice.service.CommentService;
 import io.swagger.annotations.ApiOperation;
@@ -11,6 +12,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -90,12 +92,16 @@ public class CommentController {
     }
     )
     @DeleteMapping("/delete/{commentid}")
-    public void deleteComment(@PathVariable("commentid") String commentId,OAuth2Authentication auth){
+    public ResponseEntity<?> deleteComment(@PathVariable("commentid") String commentId, OAuth2Authentication auth){
         Comment comment = commentService.findCommentId(Long.valueOf(commentId));
-        if(comment.getUsername()!=auth.getName()){
+        if(comment==null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Comment not found.");
+        }
+        if(!comment.getUsername().equals(auth.getName())){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,"The operation is forbidden.");
         }
         commentService.deleteComment(comment);
+        return   ResponseEntity.ok(new MessageResponse("Comment deleted successfully."));
     }
     @GetMapping("/book/{bookid}")
     public Book getBook(@PathVariable("bookid") String bookId){

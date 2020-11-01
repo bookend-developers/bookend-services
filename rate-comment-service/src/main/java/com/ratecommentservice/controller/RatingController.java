@@ -3,6 +3,7 @@ package com.ratecommentservice.controller;
 
 import com.ratecommentservice.model.Book;
 import com.ratecommentservice.model.Rate;
+import com.ratecommentservice.payload.MessageResponse;
 import com.ratecommentservice.payload.RateRequest;
 import com.ratecommentservice.service.BookService;
 import com.ratecommentservice.service.RateService;
@@ -11,6 +12,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -107,12 +109,16 @@ public class RatingController {
     }
     )
     @DeleteMapping("/delete/{rateid}")
-    public void deleteRate(@PathVariable("rateid") String rateId,OAuth2Authentication auth){
+    public ResponseEntity<?> deleteRate(@PathVariable("rateid") String rateId, OAuth2Authentication auth){
         Rate rate =rateService.findByRateID(Long.valueOf(rateId));
-        if(rate.getUsername()!=auth.getName()){
+        if(rate==null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Comment not found.");
+        }
+        if(!rate.getUsername().equals(auth.getName())){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,"The operation you trying to do is forbidden.");
         }
         rateService.deleteRate(rate);
+        return ResponseEntity.ok(new MessageResponse("Rate deleted successfully."));
     }
 }
 
