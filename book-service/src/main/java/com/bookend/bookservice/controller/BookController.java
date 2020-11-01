@@ -18,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/book")
@@ -53,16 +54,24 @@ public class BookController {
             @ApiResponse(code = 404, message = "Book is not found for given title.")
     })
     @GetMapping("")
-    public List<Book> search(@RequestParam(required = false) String title){
+    public List<Book> search(@RequestParam(required = false) String title
+            ,@RequestParam(required = false) String genre){
         List<Book> books = new ArrayList<Book>();
+
         if(title == null){
             bookService.getAll().forEach(books::add);
+
+        }
+        else {
+            bookService.search(title).forEach(books::add);
             if(books==null){
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND,"There is no match for title.");
             }
         }
-        else {
-            bookService.search(title).forEach(books::add);
+        if(genre!=null){
+            books = books.stream().filter(book ->
+                    book.getGenre().toString().equals(genre))
+                    .collect(Collectors.toList());
         }
 
         return books;

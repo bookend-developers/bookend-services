@@ -45,7 +45,12 @@ public class UserService {
         addToMailService(String.valueOf(user.getId()),user.getEmail());
         sendMail(user.getEmail(),token.getConfirmationToken());
     }
-
+    public User save(User user){
+        return userDetailRepository.save(user);
+    }
+    public User findByUsername(String username){
+        return userDetailRepository.findUserByUsername(username);
+    }
     public void confirm(String token){
         Token confirmationToken = tokenRepository.findByConfirmationToken(token);
         User user = confirmationToken.getUser();

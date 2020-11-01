@@ -1,22 +1,27 @@
 package com.bookend.authorizationserver.controller;
 
 import com.bookend.authorizationserver.model.AuthUserDetail;
+import com.bookend.authorizationserver.model.User;
 import com.bookend.authorizationserver.payload.Profile;
 import com.bookend.authorizationserver.service.UserDetailServiceImpl;
+import com.bookend.authorizationserver.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/profile")
 public class ProfileController {
     private UserDetailServiceImpl userDetailService;
+    private UserService userService;
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
     @Autowired
     public void setUserDetailService(UserDetailServiceImpl userDetailService) {
         this.userDetailService = userDetailService;
@@ -28,8 +33,24 @@ public class ProfileController {
     })
     @GetMapping("/{username}")
     public Profile getProfile(@PathVariable("username") String username){
-        AuthUserDetail details = (AuthUserDetail) userDetailService.loadUserByUsername(username);
-        return new Profile(details.getFirstname(),details.getLastname(),details.getUsername(),details.getEmail());
+        User user = userService.findByUsername(username);
+        return new Profile(user.getFirstname(),user.getLastname(),user.getUsername(),user.getAboutMe(),user.getEmail());
+    }
+    @PostMapping("/{username}")
+    public User setProfile(@PathVariable("username") String username,@RequestBody Profile profileRequest){
+        User user = userService.findByUsername(username);
+        if(profileRequest.getAboutMe()!=null){
+            user.setAboutMe(profileRequest.getAboutMe());
+        }
+        if(profileRequest.getFirstname()!=null){
+            user.setFirstname(profileRequest.getFirstname());
+        }
+        if(profileRequest.getLastname()!=null){
+            user.setLastname(profileRequest.getLastname());
+        }
+        return userService.save(user);
+
+
     }
 
 }

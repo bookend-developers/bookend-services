@@ -8,4 +8,5 @@ public interface BookService {
     ShelfsBook saveOrUpdate(ShelfsBook shelfsBook);
     void delete(String bookId,String shelfID);
     void deleteFromShelves(String bookid);
+
 }

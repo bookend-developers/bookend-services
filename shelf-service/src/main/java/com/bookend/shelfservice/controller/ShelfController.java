@@ -109,22 +109,32 @@ public class ShelfController {
     @ApiOperation(value = "Delete the shelf")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully deleted shelf"),
-            @ApiResponse(code = 401, message = "You are not authorized to delete the resource")
+            @ApiResponse(code = 401, message = "You are not authorized to delete the resource"),
+            @ApiResponse(code = 403, message = "The action is forbidden.")
     }
     )
     @DeleteMapping("/delete/{shelfid}")
-    public void deleteShelf(@PathVariable("shelfid")  String shelfID){
-         shelfService.deleteShelf(shelfService.getById(Long.valueOf(shelfID)));
+    public void deleteShelf(@PathVariable("shelfid")  String shelfID,OAuth2Authentication auth){
+        Shelf shelf = shelfService.getById(Long.valueOf(shelfID));
+        if(shelf.getUsername()!=auth.getName()){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,"The action is forbidden.");
+        }
+        shelfService.deleteShelf(shelfService.getById(Long.valueOf(shelfID)));
     }
     @ApiOperation(value = "Delete the book from shelves")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully deleted book"),
-            @ApiResponse(code = 401, message = "You are not authorized to delete the resource")
+            @ApiResponse(code = 401, message = "You are not authorized to delete the resource"),
+            @ApiResponse(code = 403, message = "The action is forbidden.")
     }
     )
     @DeleteMapping("/delete/{shelfid}/{bookid}")
     public void deleteBook(@PathVariable("bookid") String bookId,
-                           @PathVariable("shelfid")  String shelfID){
+                           @PathVariable("shelfid")  String shelfID,OAuth2Authentication auth){
+        Shelf shelf = shelfService.getById(Long.valueOf(shelfID));
+        if(shelf.getUsername()!=auth.getName()){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,"The action is forbidden.");
+        }
         bookService.delete(bookId,shelfID);
     }
 

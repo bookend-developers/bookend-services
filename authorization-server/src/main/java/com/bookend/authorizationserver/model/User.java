@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -48,6 +49,9 @@ public class User implements Serializable {
     private String firstname;
     @Column(name= "lastname")
     private String lastname;
+
+    @Column(name= "aboutme",columnDefinition = "varchar(999)")
+    private String aboutMe;
 
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -102,6 +106,14 @@ public class User implements Serializable {
 
     public void setCredentialsNonExpired(boolean credentialsNonExpired) {
         this.credentialsNonExpired = credentialsNonExpired;
+    }
+
+    public String getAboutMe() {
+        return aboutMe;
+    }
+
+    public void setAboutMe(String aboutMe) {
+        this.aboutMe = aboutMe;
     }
 
     public String getFirstname() {

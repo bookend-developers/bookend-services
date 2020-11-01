@@ -3,6 +3,7 @@ package com.bookend.shelfservice.service;
 import com.bookend.shelfservice.model.Shelf;
 import com.bookend.shelfservice.model.ShelfsBook;
 import com.bookend.shelfservice.repository.BookRepository;
+import com.bookend.shelfservice.repository.ShelfRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,12 @@ import java.util.List;
 @Service
 public class BookServiceImpl implements BookService {
     private BookRepository bookRepository;
+    private ShelfRepository shelfRepository;
+    @Autowired
+    public void setShelfRepository(ShelfRepository shelfRepository) {
+        this.shelfRepository = shelfRepository;
+    }
+
     @Autowired
     public void setBookRepository(BookRepository bookRepository){
         this.bookRepository=bookRepository;
@@ -19,6 +26,8 @@ public class BookServiceImpl implements BookService {
     public ShelfsBook getById(String id) {
         return bookRepository.findBookById(Long.valueOf(id));
     }
+
+
 
 
     @Override
@@ -32,8 +41,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void delete(String bookId,String shelfID) {
-
-        bookRepository.deleteShelfsBookByBookIDAndShelf_Id(bookId,Long.valueOf(shelfID));
+        Shelf shelf = shelfRepository.findShelfById(Long.valueOf(shelfID));
+        ShelfsBook shelfsBook = bookRepository.findByBookIDAndShelf(bookId,shelf);
+        bookRepository.delete(shelfsBook);
     }
 
     @Override

@@ -46,6 +46,25 @@ public class AuthUserDetail extends User implements UserDetails {
         return super.getFirstname();
     }
 
+    @Override
+    public String getAboutMe() {
+        return super.getAboutMe();
+    }
+
+    @Override
+    public void setAboutMe(String aboutMe) {
+        super.setAboutMe(aboutMe);
+    }
+
+    @Override
+    public void setFirstname(String firstname) {
+        super.setFirstname(firstname);
+    }
+
+    @Override
+    public void setLastname(String lastname) {
+        super.setLastname(lastname);
+    }
 
     @Override
     public String getLastname() {

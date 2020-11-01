@@ -1,7 +1,10 @@
 package com.ratecommentservice.controller;
 
 
+import com.ratecommentservice.model.Book;
 import com.ratecommentservice.model.Rate;
+import com.ratecommentservice.payload.RateRequest;
+import com.ratecommentservice.service.BookService;
 import com.ratecommentservice.service.RateService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -25,7 +28,11 @@ public class RatingController {
     public void setRateService(RateService rateService) {
         this.rateService = rateService;
     }
-
+    private BookService bookService;
+    @Autowired
+    public void setBookService(BookService bookService) {
+        this.bookService = bookService;
+    }
 
 
     @ApiOperation(value = "Get book's average rate value ", response = Double.class)
@@ -64,25 +71,48 @@ public class RatingController {
             @ApiResponse(code = 400, message = "The way you are trying to rate is not accepted.")
     }
     )
-    @PostMapping("/new/{bookid}")
+    @PostMapping("/new")
     public Rate rateBook(OAuth2Authentication auth
-            ,@PathVariable("bookid") String  bookId
-            ,@RequestParam("rate") Double rate){
-        if(rate== null){
-            throw  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Please fill all necessary places");
+            ,@RequestBody RateRequest rateRequest){
+        if(rateRequest.getRate()== null){
+            throw  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Please fill all necessary places1");
         }
-        return rateService.save( new Rate(bookId,auth.getName(),rate));
+        if(rateRequest.getBookId()== null){
+            throw  new ResponseStatusException(HttpStatus.BAD_REQUEST,"The way you are trying to rate is not accepted2.");
+        }
+        if(rateRequest.getBookname()== null){
+            throw  new ResponseStatusException(HttpStatus.BAD_REQUEST,"The way you are trying to rate is not accepted3.");
+        }
+
+        Rate rate = rateService.findRateByBookIdandUsername(rateRequest.getBookId(),auth.getName());
+        if(rate==null){
+            Book book = bookService.findBookByBookID(rateRequest.getBookId());
+            if(book == null){
+                Book newBook = new Book(rateRequest.getBookId(),rateRequest.getBookname());
+                bookService.save(newBook);
+                return rateService.save( new Rate(newBook,auth.getName(),rateRequest.getRate()));
+            }
+
+            return rateService.save( new Rate(book,auth.getName(),rateRequest.getRate()));
+        }
+        rate.setRate(rateRequest.getRate());
+        return rateService.save(rate);
 
     }
     @ApiOperation(value = "Delete a specific rate")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully deleted rate"),
-            @ApiResponse(code = 401, message = "You are not authorized to delete the resource")
+            @ApiResponse(code = 401, message = "You are not authorized to delete the resource"),
+            @ApiResponse(code = 403, message = "The operation forbidden.")
     }
     )
     @DeleteMapping("/delete/{rateid}")
-    public void deleteRate(@PathVariable("rateid") String rateId){
-        rateService.deleteRate(Long.valueOf(rateId));
+    public void deleteRate(@PathVariable("rateid") String rateId,OAuth2Authentication auth){
+        Rate rate =rateService.findByRateID(Long.valueOf(rateId));
+        if(rate.getUsername()!=auth.getName()){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,"The operation you trying to do is forbidden.");
+        }
+        rateService.deleteRate(rate);
     }
 }
 

@@ -1,5 +1,7 @@
 package com.ratecommentservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -9,13 +11,16 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long commentId;
-    private String bookId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_id")
+    private Book book;
     private String username;
-    @Column(name = "comment",columnDefinition = "varchar(1000)")
+    @Column(name = "comment",columnDefinition = "varchar(5465)")
     private String comment;
 
-    public Comment(String bookId, String username, String comment) {
-        this.bookId = bookId;
+    public Comment(Book book, String username, String comment) {
+        this.book = book;
         this.username = username;
         this.comment = comment;
     }
@@ -29,12 +34,12 @@ public class Comment {
 
 
 
-    public String getBookId() {
-        return bookId;
+    public Book getBook() {
+        return book;
     }
 
-    public void setBookId(String bookId) {
-        this.bookId = bookId;
+    public void setBook(Book book) {
+        this.book = book;
     }
 
     public String getUsername() {

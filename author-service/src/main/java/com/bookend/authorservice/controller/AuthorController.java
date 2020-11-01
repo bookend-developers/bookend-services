@@ -62,6 +62,9 @@ public class AuthorController {
         }
         else{
             authorService.search(title).forEach(authors::add);
+            if(authors==null){
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND,"There is no match for title.");
+            }
         }
 
         return authors;

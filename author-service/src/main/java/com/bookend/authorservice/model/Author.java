@@ -25,6 +25,7 @@ public class Author {
     private LocalDate dateOfDeath;
 
     public Author() {
+        this.bookList=new ArrayList<Book>();
     }
 
     public Author(String name, String biography, LocalDate birthDate, LocalDate dateOfDeath) {
