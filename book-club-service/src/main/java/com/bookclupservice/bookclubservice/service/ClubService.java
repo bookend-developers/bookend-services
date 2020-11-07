@@ -18,25 +18,21 @@ public class ClubService {
     @Autowired
     private MemberRepository memberRepository;
     @Autowired
-    private SharePostRequestRepository sharePostRequestRepository;
-    @Autowired
     private PostRepository postRepository;
     @Autowired
-    private ClubMemberRequestRepository clubMemberRequestRepository;
-    @Autowired
     private MessageProducer messageProducer;
+    @Autowired
+    private InvitationRepository invitationRepository;
 
     public List<Club> getAll(){
         return clubRepository.findAll();
     }
 
-    public List<SharePostRequest> getPostRequests(Long clubId){
-        List<SharePostRequest> requests = sharePostRequestRepository.findByClubId(clubId);
-        return requests;
+    public List<Club> getMyClubs(Long ownerId){
+        return clubRepository.findByOwnerId(ownerId);
     }
-    public List<ClubMemberRequest> getMembershipRequests(Long clubId){
-        List<ClubMemberRequest> requests = clubMemberRequestRepository.findByClubId(clubId);
-        return requests;
+    public List<Invitation> getMemberInvitations(Long memberId){
+        return invitationRepository.findByInvitedPersonId(memberId);
     }
 
     public List<Post> getWriterPosts(Long writerId){
@@ -65,44 +61,33 @@ public class ClubService {
         memberRepository.save(member);
     }
 
-    public void requestMembership(ClubMemberRequestRequest clubMemberRequestRequest){
-        Member member = memberRepository.findById(clubMemberRequestRequest.getRequestingMemberId()).get();
-        Club club = clubRepository.findById(clubMemberRequestRequest.getClubId()).get();
-        ClubMemberRequest clubMemberRequest = new ClubMemberRequest();
-        clubMemberRequest.setClub(club);
-        clubMemberRequest.setClubOwner(club.getOwner());
-        clubMemberRequest.setRequestingMember(member);
-        clubMemberRequestRepository.save(clubMemberRequest);
-
-        MailRequest mailRequest = new MailRequest(club.getOwner().getId(),"Membership Request",member.getUserName()+" wants to join your "+club.getClubName() + " club");
+    public void invitePerson(InvitationRequest invitationRequest){
+        Member invitedPerson = memberRepository.findByUserName(invitationRequest.getInvitedPersonUserName());
+        Club club = clubRepository.findById(invitationRequest.getClubId()).get();
+        Invitation invitation = new Invitation();
+        invitation.setClub(club);
+        invitation.setInvitedPerson(invitedPerson);
+        invitationRepository.save(invitation);
+        MailRequest mailRequest = new MailRequest(invitedPerson.getId(),"Invitation",club.getOwner().getUserName()+" invites you to "+club.getClubName() + " club");
         messageProducer.sendMailRequest(mailRequest);
     }
-
-    public void requestPermission(SharePostRequestRequest sharePostRequestRequest){
-        Club club = clubRepository.findById(sharePostRequestRequest.getClubId()).get();
-        Member requestingMember = memberRepository.findById(sharePostRequestRequest.getRequestingMember()).get();
-        SharePostRequest sharePostRequest = new SharePostRequest();
-        sharePostRequest.setClub(club);
-        sharePostRequest.setClubOwner(club.getOwner());
-        sharePostRequest.setRequestingMember(requestingMember);
-        sharePostRequest.setText(sharePostRequestRequest.getText());
-        sharePostRequestRepository.save(sharePostRequest);
-
-        MailRequest mailRequest = new MailRequest(club.getOwner().getId(),"Share Post Request",requestingMember.getUserName()+" wants to post writings in your "+club.getClubName() + " club");
+    public void replyInvitation(InvitationReply invitationReply){
+        Invitation invitation = invitationRepository.findById(invitationReply.getInvitationId()).get();
+        Club club = invitation.getClub();
+        MailRequest mailRequest;
+        if(invitationReply.geteInvitationReply().equals(EInvitationReply.ACCEPT)){
+            mailRequest = new MailRequest(club.getOwner().getId(),"Invitation Accepted",invitation.getInvitedPerson().getUserName() +"accepted your invite.");
+            Member member = invitation.getInvitedPerson();
+            member.getClubs().add(club);
+            club.getMembers().add(invitation.getInvitedPerson());
+            clubRepository.save(club);
+            memberRepository.save(member);
+        }
+        else{
+            mailRequest = new MailRequest(club.getOwner().getId(),"Invitation Rejected",invitation.getInvitedPerson().getUserName() +"rejected your invite.");
+        }
         messageProducer.sendMailRequest(mailRequest);
-    }
-
-
-    public void allowMemberForPost(NewPostAllowedMemberRequest newPostAllowedMemberRequest){
-        Member member = memberRepository.findById(newPostAllowedMemberRequest.getMemberId()).get();
-        Club club = clubRepository.findById(newPostAllowedMemberRequest.getClubId()).get();
-        member.getAllowedClubs().add(club);
-        club.getPostMembers().add(member);
-        clubRepository.save(club);
-        memberRepository.save(member);
-
-        MailRequest mailRequest = new MailRequest(member.getId(),"Post Permission","From now on you can share posts in "+club.getClubName() + " club");
-        messageProducer.sendMailRequest(mailRequest);
+        invitationRepository.delete(invitation);
     }
 
     public void savePost(NewPostRequest newPostRequest){

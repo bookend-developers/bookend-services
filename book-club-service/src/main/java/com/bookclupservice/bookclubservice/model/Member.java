@@ -21,9 +21,6 @@ public class Member {
     @JsonIgnore
     private List<Club> clubs;
 
-    @ManyToMany(mappedBy = "postMembers")
-    @JsonIgnore
-    private List<Club> allowedClubs;
 
     public Long getId() {
         return id;
@@ -49,11 +46,4 @@ public class Member {
         this.clubs = clubs;
     }
 
-    public List<Club> getAllowedClubs() {
-        return allowedClubs;
-    }
-
-    public void setAllowedClubs(List<Club> allowedClubs) {
-        this.allowedClubs = allowedClubs;
-    }
 }

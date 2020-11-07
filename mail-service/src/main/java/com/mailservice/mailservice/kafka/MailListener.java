@@ -51,7 +51,7 @@ public class MailListener {
     }
 
     @KafkaListener(topics = "user-registered",
-            groupId ="confirm-mail")
+            groupId ="mailservice")
     public void saveUser(String message) {
         System.out.println(message);
         ObjectMapper mapper = new ObjectMapper();

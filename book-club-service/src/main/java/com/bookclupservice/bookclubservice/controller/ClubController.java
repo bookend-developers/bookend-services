@@ -1,8 +1,6 @@
 package com.bookclupservice.bookclubservice.controller;
 
-import com.bookclupservice.bookclubservice.model.Club;
-import com.bookclupservice.bookclubservice.model.Post;
-import com.bookclupservice.bookclubservice.model.SharePostRequest;
+import com.bookclupservice.bookclubservice.model.*;
 import com.bookclupservice.bookclubservice.payload.MessageResponse;
 import com.bookclupservice.bookclubservice.payload.request.*;
 import com.bookclupservice.bookclubservice.service.ClubService;
@@ -25,15 +23,21 @@ public class ClubController {
         return clubService.getAll();
     }
 
-    @GetMapping("/requests/{club-id}")
-    public List<SharePostRequest> getRequests(@PathVariable("club-id") Long clubId){
-        return clubService.getPostRequests(clubId);
+    @GetMapping("/{owner-id}")
+    public List<Club> getMyClubs(@PathVariable("owner-id")Long ownerId){
+        return clubService.getMyClubs(ownerId);
     }
-    @GetMapping("/post/{club-id}")
+
+    @GetMapping("{club-id}/posts")
     public List<Post> getClubPosts(@PathVariable("club-id") Long clubId){
         return clubService.getClubPosts(clubId);
     }
-    @GetMapping("/post/{writer-id}")
+    @GetMapping("{user-id}/invitations")
+    public List<Invitation> getMemberInvitations(@PathVariable("user-id") Long userId){
+        return clubService.getMemberInvitations(userId);
+    }
+
+    @GetMapping("/{writer-id}/posts")
     public List<Post> getWriterPosts(@PathVariable("writer-id") Long writerId){
         return clubService.getClubPosts(writerId);
     }
@@ -41,8 +45,8 @@ public class ClubController {
     @PostMapping("/")
     public ResponseEntity<?> addClub(@RequestBody  NewClubRequest newClubRequest){
 
-        clubService.saveClub(newClubRequest);
-        return ResponseEntity.ok(new MessageResponse("club added succesfully"));
+        Club club = clubService.saveClub(newClubRequest);
+        return ResponseEntity.ok(club);
     }
 
     @PostMapping("/new-member")
@@ -51,24 +55,16 @@ public class ClubController {
         return ResponseEntity.ok(new MessageResponse("member added succesfully"));
 
     }
-    @PostMapping("/request-membership")
-    public ResponseEntity<?> requestMembership(@RequestBody ClubMemberRequestRequest clubMemberRequestRequest){
-        clubService.requestMembership(clubMemberRequestRequest);
+
+    @PostMapping("/invite-person")
+    public ResponseEntity<?> invitePerson(@RequestBody InvitationRequest invitationRequest){
+        clubService.invitePerson(invitationRequest);
         return ResponseEntity.ok(new MessageResponse("request sended successfully"));
     }
-
-    @PostMapping("/request-post-permission")
-    public ResponseEntity<?> requestPermission(@RequestBody SharePostRequestRequest sharePostRequestRequest){
-        clubService.requestPermission(sharePostRequestRequest);
-        return ResponseEntity.ok(new MessageResponse("Permission request sended."));
-
-    }
-
-    @PostMapping("/allow-member")
-    public ResponseEntity<?> givePermission(@RequestBody NewPostAllowedMemberRequest newPostAllowedMemberRequest){
-        clubService.allowMemberForPost(newPostAllowedMemberRequest);
-        return ResponseEntity.ok(new MessageResponse("member now has post permission"));
-
+    @PostMapping("/reply-invitation")
+    public ResponseEntity<?> invitePerson(@RequestBody InvitationReply invitationReply){
+        clubService.replyInvitation(invitationReply);
+        return ResponseEntity.ok(new MessageResponse("request sended successfully"));
     }
 
     @PostMapping("/new-post")
@@ -76,4 +72,5 @@ public class ClubController {
         clubService.savePost(newPostRequest);
         return ResponseEntity.ok(new MessageResponse("new post shared"));
     }
+
 }

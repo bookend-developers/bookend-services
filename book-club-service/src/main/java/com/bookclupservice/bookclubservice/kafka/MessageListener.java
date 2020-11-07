@@ -18,13 +18,13 @@ public class MessageListener {
     MemberService memberService;
 
     @KafkaListener(topics = "user-registered",
-            groupId ="confirm-mail")
+            groupId ="bookclub")
     public void saveUser(String message) {
         System.out.println(message);
         ObjectMapper mapper = new ObjectMapper();
         try {
             KafkaUserRegistered kafkaUserRegistered = mapper.readValue(message, KafkaUserRegistered.class);
-            memberService.save(kafkaUserRegistered.getId(),kafkaUserRegistered.getMail());
+            memberService.save(kafkaUserRegistered.getId(),kafkaUserRegistered.getUserName());
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         } catch (IOException e) {
