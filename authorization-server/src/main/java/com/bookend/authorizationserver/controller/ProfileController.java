@@ -1,7 +1,9 @@
 package com.bookend.authorizationserver.controller;
 
 import com.bookend.authorizationserver.model.AuthUserDetail;
+import com.bookend.authorizationserver.model.User;
 import com.bookend.authorizationserver.payload.Profile;
+import com.bookend.authorizationserver.repository.UserDetailRepository;
 import com.bookend.authorizationserver.service.UserDetailServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -13,10 +15,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/profile")
 public class ProfileController {
     private UserDetailServiceImpl userDetailService;
+    @Autowired
+    private UserDetailRepository userDetailRepository;
     @Autowired
     public void setUserDetailService(UserDetailServiceImpl userDetailService) {
         this.userDetailService = userDetailService;
@@ -28,8 +34,8 @@ public class ProfileController {
     })
     @GetMapping("/{username}")
     public Profile getProfile(@PathVariable("username") String username){
-        AuthUserDetail details = (AuthUserDetail) userDetailService.loadUserByUsername(username);
-        return new Profile(details.getFirstname(),details.getLastname(),details.getUsername(),details.getEmail());
+        User user =userDetailRepository.findByUsername(username).get();
+        return new Profile(user.getId(),user.getUsername(),user.getEmail());
     }
 
 }
