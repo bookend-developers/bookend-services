@@ -34,7 +34,7 @@ public class ProfileController {
     @GetMapping("/{username}")
     public Profile getProfile(@PathVariable("username") String username){
         User user = userService.findByUsername(username);
-        return new Profile(user.getFirstname(),user.getLastname(),user.getUsername(),user.getAboutMe(),user.getEmail());
+        return new Profile(user.getId().longValue(),user.getFirstname(),user.getLastname(),user.getUsername(),user.getAboutMe(),user.getEmail());
     }
     @PostMapping("/{username}")
     public User setProfile(@PathVariable("username") String username,@RequestBody Profile profileRequest){
