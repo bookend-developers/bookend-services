@@ -55,7 +55,14 @@ public class UserService {
         return new SignUpResponse("user registered. need confirmation",token.getConfirmationToken());
     }
 
+    public User save(User user){
+        return userDetailRepository.save(user);
+    }
+    public User findByUsername(String username){
+        return userDetailRepository.findUserByUsername(username);
+    }
     public ConfirmResponse confirm(String token){
+
         Token confirmationToken = tokenRepository.findByConfirmationToken(token);
         if(confirmationToken==null){
             return new ConfirmResponse("not valid token",null);

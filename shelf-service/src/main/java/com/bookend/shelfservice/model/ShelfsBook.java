@@ -1,6 +1,6 @@
 package com.bookend.shelfservice.model;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -10,7 +10,6 @@ import javax.persistence.*;
 public class ShelfsBook {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-  //  @SequenceGenerator(name= "my_sequence", schema = "account", allocationSize = 30)
     @Column(name = "id")
     private Long id;
     @Column(name = "bookId")

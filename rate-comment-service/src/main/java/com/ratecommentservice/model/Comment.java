@@ -1,6 +1,10 @@
 package com.ratecommentservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name ="comments")
@@ -9,15 +13,20 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long commentId;
-    private String bookId;
-    private String username;
-    @Column(name = "comment",columnDefinition = "varchar(1000)")
-    private String comment;
 
-    public Comment(String bookId, String username, String comment) {
-        this.bookId = bookId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "book_id")
+    private Book book;
+    private String username;
+    @Column(name = "comment",columnDefinition = "varchar(5465)")
+    private String comment;
+    private LocalDateTime date;
+
+    public Comment(Book book, String username, String comment) {
+        this.book = book;
         this.username = username;
         this.comment = comment;
+        this.date = LocalDateTime.now();
     }
 
     public Comment() {
@@ -29,12 +38,12 @@ public class Comment {
 
 
 
-    public String getBookId() {
-        return bookId;
+    public Book getBook() {
+        return book;
     }
 
-    public void setBookId(String bookId) {
-        this.bookId = bookId;
+    public void setBook(Book book) {
+        this.book = book;
     }
 
     public String getUsername() {

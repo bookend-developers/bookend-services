@@ -1,10 +1,6 @@
 package com.bookend.bookservice.config;
 
-import com.bookend.bookservice.model.Book;
-import com.bookend.bookservice.model.BookGenre;
 import com.bookend.bookservice.repository.BookRepository;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 

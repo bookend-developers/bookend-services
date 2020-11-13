@@ -36,6 +36,7 @@ create table if not exists  user (
   email varchar(1024) not null,
   firstname varchar(25) ,
   lastname varchar(25),
+  aboutme varchar(999),
   enabled tinyint(4) not null,
   accountNonExpired tinyint(4) not null,
   credentialsNonExpired tinyint(4) not null,

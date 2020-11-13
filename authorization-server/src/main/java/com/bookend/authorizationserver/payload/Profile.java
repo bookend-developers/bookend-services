@@ -1,10 +1,12 @@
 package com.bookend.authorizationserver.payload;
 
+import java.time.LocalDate;
+
 public class Profile {
     private Long id;
     private String username;
-    //TODO profile photo
 
+    private String aboutMe;
     private String email;
 
 
@@ -32,8 +34,19 @@ public class Profile {
         this.username = username;
     }
 
+
+
+    public String getAboutMe() {
+        return aboutMe;
+    }
+
+    public void setAboutMe(String aboutMe) {
+        this.aboutMe = aboutMe;
+    }
+
     public Profile() {
     }
+
 
     public Profile(Long id, String username, String email) {
         this.id=id;
@@ -41,5 +54,12 @@ public class Profile {
         this.email = email;
     }
 
+    public Profile(String firstname, String lastname, String username, String aboutMe, String email) {
+        this.firstname = firstname;
+        this.lastname = lastname;
 
+        this.username = username;
+        this.aboutMe = aboutMe;
+        this.email = email;
+    }
 }

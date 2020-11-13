@@ -18,7 +18,7 @@ public class Message implements Comparable<Message> {
 
 	public Message() {
 		super();
-		// TODO Auto-generated constructor stub
+
 	}
 
 	public Message(String sender, String receiver, String subject, String text, Date sendDate) {

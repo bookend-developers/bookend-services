@@ -18,4 +18,8 @@ class KafkaTopicConfig {
         return TopicBuilder.name("deleting-book").build();
     }
 
+    @Bean
+    public NewTopic addgenre() {
+        return TopicBuilder.name("adding-genre").build();
+    }
 }
