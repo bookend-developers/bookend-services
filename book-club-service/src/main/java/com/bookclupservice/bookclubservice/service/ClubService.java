@@ -31,8 +31,9 @@ public class ClubService {
     public List<Club> getMyClubs(Long ownerId){
         return clubRepository.findByOwnerId(ownerId);
     }
-    public List<Invitation> getMemberInvitations(Long memberId){
-        return invitationRepository.findByInvitedPersonId(memberId);
+    public List<Invitation> getMemberInvitations(String username){
+        Member member = memberRepository.findByUserName(username);
+        return invitationRepository.findInvitationsByInvitedPerson(member);
     }
 
     public List<Post> getWriterPosts(Long writerId){
@@ -61,15 +62,19 @@ public class ClubService {
         memberRepository.save(member);
     }
 
-    public void invitePerson(InvitationRequest invitationRequest){
+    public Invitation invitePerson(InvitationRequest invitationRequest){
         Member invitedPerson = memberRepository.findByUserName(invitationRequest.getInvitedPersonUserName());
         Club club = clubRepository.findById(invitationRequest.getClubId()).get();
+        if(invitationRepository.findByClubAndInvitedPerson(club,invitedPerson)!=null){
+            return null;
+        }
         Invitation invitation = new Invitation();
         invitation.setClub(club);
         invitation.setInvitedPerson(invitedPerson);
-        invitationRepository.save(invitation);
+        Invitation newInvitation = invitationRepository.save(invitation);
         MailRequest mailRequest = new MailRequest(invitedPerson.getId(),"Invitation",club.getOwner().getUserName()+" invites you to "+club.getClubName() + " club");
         messageProducer.sendMailRequest(mailRequest);
+        return newInvitation;
     }
     public void replyInvitation(InvitationReply invitationReply){
         Invitation invitation = invitationRepository.findById(invitationReply.getInvitationId()).get();

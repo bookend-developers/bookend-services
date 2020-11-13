@@ -4,12 +4,16 @@ import com.bookclupservice.bookclubservice.model.*;
 import com.bookclupservice.bookclubservice.payload.MessageResponse;
 import com.bookclupservice.bookclubservice.payload.request.*;
 import com.bookclupservice.bookclubservice.service.ClubService;
+import com.bookclupservice.bookclubservice.service.MemberService;
 import org.bouncycastle.cert.ocsp.Req;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/club")
@@ -17,10 +21,15 @@ public class ClubController {
 
     @Autowired
     private ClubService clubService;
-
+    @Autowired
+    private MemberService memberService;
     @GetMapping("/")
     public List<Club> getClubs(){
-        return clubService.getAll();
+
+        List<Club> publicClubs = clubService.getAll().stream()
+                .filter(club -> club.isPrivate()!=true)
+                .collect(Collectors.toList());
+        return publicClubs;
     }
 
     @GetMapping("/{owner-id}")
@@ -32,17 +41,22 @@ public class ClubController {
     public List<Post> getClubPosts(@PathVariable("club-id") Long clubId){
         return clubService.getClubPosts(clubId);
     }
-    @GetMapping("{user-id}/invitations")
-    public List<Invitation> getMemberInvitations(@PathVariable("user-id") Long userId){
-        return clubService.getMemberInvitations(userId);
+    @GetMapping("{username}/invitations")
+    public List<Invitation> getMemberInvitations(@PathVariable("username") String username){
+        return clubService.getMemberInvitations(username);
     }
 
     @GetMapping("/{writer-id}/posts")
     public List<Post> getWriterPosts(@PathVariable("writer-id") Long writerId){
         return clubService.getClubPosts(writerId);
     }
+    @GetMapping("/{username}/posts")
+    public List<Club> getUserClubs(@PathVariable("username") String username){
 
-    @PostMapping("/")
+        return memberService.find(username).getClubs();
+    }
+
+    @PostMapping("/add")
     public ResponseEntity<?> addClub(@RequestBody  NewClubRequest newClubRequest){
 
         Club club = clubService.saveClub(newClubRequest);
@@ -56,13 +70,18 @@ public class ClubController {
 
     }
 
+
     @PostMapping("/invite-person")
     public ResponseEntity<?> invitePerson(@RequestBody InvitationRequest invitationRequest){
-        clubService.invitePerson(invitationRequest);
+
+        Invitation invitation =clubService.invitePerson(invitationRequest);
+        if(invitation==null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"You already invite this person.");
+        }
         return ResponseEntity.ok(new MessageResponse("request sended successfully"));
     }
     @PostMapping("/reply-invitation")
-    public ResponseEntity<?> invitePerson(@RequestBody InvitationReply invitationReply){
+    public ResponseEntity<?> acceptPerson(@RequestBody InvitationReply invitationReply){
         clubService.replyInvitation(invitationReply);
         return ResponseEntity.ok(new MessageResponse("request sended successfully"));
     }
