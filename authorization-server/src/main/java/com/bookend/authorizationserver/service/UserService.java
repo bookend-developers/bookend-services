@@ -1,8 +1,9 @@
 package com.bookend.authorizationserver.service;
 
+import com.bookend.authorizationserver.kafka.MessageProducer;
 import com.bookend.authorizationserver.model.Token;
 import com.bookend.authorizationserver.model.User;
-import com.bookend.authorizationserver.payload.SignUpRequest;
+import com.bookend.authorizationserver.payload.*;
 import com.bookend.authorizationserver.repository.TokenRepository;
 import com.bookend.authorizationserver.repository.UserDetailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,11 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private TokenRepository tokenRepository;
+    @Autowired
+    private MessageProducer messageProducer;
 
-    public void addUser(SignUpRequest signUpRequest){
+
+    public SignUpResponse addUser(SignUpRequest signUpRequest){
         User user = new User();
         if(userDetailRepository.existsByEmail(signUpRequest.getEmail())){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Entered email is already in use please enter another email.");
@@ -42,20 +46,32 @@ public class UserService {
         Token token = new Token(user);
         userDetailRepository.save(user);
         tokenRepository.save(token);
-        addToMailService(String.valueOf(user.getId()),user.getEmail());
-        sendMail(user.getEmail(),token.getConfirmationToken());
+        messageProducer.sendConfirmationMailRequest(new MailRequest(user.getEmail(),"Confirmation Mail",
+                "Kayıt olduğunuz için teşekkürler.\nKullanıcı adınız: " + user.getUsername() + "\n Aktivasyon linki: " +
+                        "" + "localhost:9191/api/oauth/confirm/"  + token.getConfirmationToken() +
+                        "\n\n" +
+                        "Thank you for registering.\nYour username: "+ user.getUsername()+ "\n Activation link: " +
+                        "" + "localhost:9191/api/oauth/confirm/"+ token.getConfirmationToken()));
+        return new SignUpResponse("user registered. need confirmation",token.getConfirmationToken());
     }
+
     public User save(User user){
         return userDetailRepository.save(user);
     }
     public User findByUsername(String username){
         return userDetailRepository.findUserByUsername(username);
     }
-    public void confirm(String token){
+    public ConfirmResponse confirm(String token){
+
         Token confirmationToken = tokenRepository.findByConfirmationToken(token);
+        if(confirmationToken==null){
+            return new ConfirmResponse("not valid token",null);
+        }
         User user = confirmationToken.getUser();
         user.setEnabled(true);
         tokenRepository.delete(confirmationToken);
+        messageProducer.sendUserInformation(new KafkaUserRegistered(user.getId(),user.getUsername(),user.getEmail()));
+        return  new ConfirmResponse("confirmed successfully",user.getUsername());
     }
     public void addToMailService(String id, String email){
         RestTemplate restTemplate = new RestTemplate();

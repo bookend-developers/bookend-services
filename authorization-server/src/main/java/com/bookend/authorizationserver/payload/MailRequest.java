@@ -1,21 +1,25 @@
-package com.mailservice.mailservice.payload;
+package com.bookend.authorizationserver.payload;
 
 public class MailRequest {
 
-    private Long id;
-
-    String email;
+    private String email;
 
     private String subject;
 
     private String text;
 
-    public Long getId() {
-        return id;
+    public MailRequest( String email, String subject, String text) {
+        this.email = email;
+        this.subject = subject;
+        this.text = text;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getText() {
@@ -32,13 +36,5 @@ public class MailRequest {
 
     public void setSubject(String subject) {
         this.subject = subject;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 }

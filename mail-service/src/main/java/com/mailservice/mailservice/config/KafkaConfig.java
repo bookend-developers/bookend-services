@@ -1,4 +1,4 @@
-package com.bookclupservice.bookclubservice.config;
+package com.mailservice.mailservice.config;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -27,6 +27,7 @@ public class KafkaConfig {
 
         return  new DefaultKafkaProducerFactory<>(config);
     }
+
     @Bean
     public ConsumerFactory<String, String> consumerFactory()
     {
