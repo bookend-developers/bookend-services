@@ -39,7 +39,7 @@ public class ProfileController {
     @GetMapping("/full/{username}")
     public Profile getFullProfile(@PathVariable("username") String username){
         User user = userService.findByUsername(username);
-        return new Profile(user.getFirstname(),user.getLastname(),user.getUsername(),user.getAboutMe(),user.getEmail());
+        return new Profile(user.getId().longValue(),user.getFirstname(),user.getLastname(),user.getUsername(),user.getAboutMe(),user.getEmail());
     }
     @GetMapping("/{username}")
     public Profile getProfile(@PathVariable("username") String username){

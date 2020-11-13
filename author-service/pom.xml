@@ -80,10 +80,6 @@
 			<artifactId>spring-security-oauth2</artifactId>
 			<version>2.3.3.RELEASE</version>
 		</dependency>
-        <dependency>
-            <groupId>org.thymeleaf</groupId>
-            <artifactId>thymeleaf</artifactId>
-        </dependency>
 
 
     </dependencies>
