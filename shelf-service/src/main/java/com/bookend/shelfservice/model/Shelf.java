@@ -3,6 +3,7 @@ package com.bookend.shelfservice.model;
 import com.fasterxml.jackson.annotation.JsonGetter;
 
 import javax.persistence.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,15 +16,19 @@ public class Shelf {
     @Column(name = "shelfId")
     private Long id;
     private String shelfname;
-
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable
+    private List<Tag> tags;
     private String username;
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "shelf")
 
     private List<ShelfsBook> shelfsBooks;
+
     @JsonGetter("shelfsBook")
     public List<ShelfsBook> getShelfsBooks() {
         return shelfsBooks;
     }
+
 
     public void setShelfsBooks(List<ShelfsBook> shelfsBooks) {
         this.shelfsBooks = shelfsBooks;
@@ -49,13 +54,27 @@ public class Shelf {
         this.username = account;
     }
 
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+
     public Shelf() {
+    }
+
+    public Shelf(String shelfname, String username, List<Tag> tags) {
+        this.shelfname = shelfname;
+        this.username = username;
+        this.shelfsBooks = new ArrayList<>();
+        this.tags = tags;
     }
 
     public Shelf(String shelfname, String username) {
         this.shelfname = shelfname;
+        this.tags = new ArrayList<>();
         this.username = username;
-        this.shelfsBooks = new ArrayList<ShelfsBook>();
-
     }
 }

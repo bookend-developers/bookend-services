@@ -24,6 +24,10 @@ public class Producer {
         LOGGER.info("sending book='{}' to topic='{}'", kafkaMessage.getMessage(), kafkaMessage.getTopic());
         kafkaTemplate.send(kafkaMessage.getTopic(), kafkaMessage.getMessage());
     }
+    public void publishGenre(KafkaMessage kafkaMessage) {
+        LOGGER.info("sending book='{}' to topic='{}'", kafkaMessage.getMessage(), kafkaMessage.getTopic());
+        kafkaTemplate.send(kafkaMessage.getTopic(), kafkaMessage.getMessage());
+    }
 
 
 }

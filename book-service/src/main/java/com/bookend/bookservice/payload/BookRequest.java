@@ -1,29 +1,34 @@
 package com.bookend.bookservice.payload;
 
-import com.bookend.bookservice.model.BookGenre;
+
+import java.util.List;
 
 public class BookRequest {
 
 
     private Integer page;
 
-    private BookGenre genre;
+    private String genre;
 
     private String description;
 
 
     private String bookName;
     private String author;
+    private String authorid;
+    private List<Long> ISBN;
 
     public BookRequest() {
     }
 
-    public BookRequest(Integer page, BookGenre genre, String description, String bookName, String author) {
+    public BookRequest(Integer page, String genre, String description, String bookName, String author, String authorid, List<Long> ISBN) {
         this.page = page;
         this.genre = genre;
         this.description = description;
         this.bookName = bookName;
         this.author = author;
+        this.authorid = authorid;
+        this.ISBN = ISBN;
     }
 
     public Integer getPage() {
@@ -34,11 +39,11 @@ public class BookRequest {
         this.page = page;
     }
 
-    public BookGenre getGenre() {
+    public String getGenre() {
         return genre;
     }
 
-    public void setGenre(BookGenre genre) {
+    public void setGenre(String genre) {
         this.genre = genre;
     }
 
@@ -64,5 +69,21 @@ public class BookRequest {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public String getAuthorid() {
+        return authorid;
+    }
+
+    public void setAuthorid(String authorid) {
+        this.authorid = authorid;
+    }
+
+    public List<Long> getISBN() {
+        return ISBN;
+    }
+
+    public void setISBN(List<Long> ISBN) {
+        this.ISBN = ISBN;
     }
 }

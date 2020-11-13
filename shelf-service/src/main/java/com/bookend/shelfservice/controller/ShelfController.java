@@ -116,7 +116,7 @@ public class ShelfController {
     @DeleteMapping("/delete/{shelfid}")
     public void deleteShelf(@PathVariable("shelfid")  String shelfID,OAuth2Authentication auth){
         Shelf shelf = shelfService.getById(Long.valueOf(shelfID));
-        if(shelf.getUsername()!=auth.getName()){
+        if(!shelf.getUsername().equals(auth.getName())){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,"The action is forbidden.");
         }
         shelfService.deleteShelf(shelfService.getById(Long.valueOf(shelfID)));
@@ -132,7 +132,7 @@ public class ShelfController {
     public void deleteBook(@PathVariable("bookid") String bookId,
                            @PathVariable("shelfid")  String shelfID,OAuth2Authentication auth){
         Shelf shelf = shelfService.getById(Long.valueOf(shelfID));
-        if(shelf.getUsername()!=auth.getName()){
+        if(!shelf.getUsername().equals(auth.getName())){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,"The action is forbidden.");
         }
         bookService.delete(bookId,shelfID);

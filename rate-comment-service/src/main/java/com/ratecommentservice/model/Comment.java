@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name ="comments")
 public class Comment {
@@ -18,11 +20,13 @@ public class Comment {
     private String username;
     @Column(name = "comment",columnDefinition = "varchar(5465)")
     private String comment;
+    private LocalDateTime date;
 
     public Comment(Book book, String username, String comment) {
         this.book = book;
         this.username = username;
         this.comment = comment;
+        this.date = LocalDateTime.now();
     }
 
     public Comment() {
