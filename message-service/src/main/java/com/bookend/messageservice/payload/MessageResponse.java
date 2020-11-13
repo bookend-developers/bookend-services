@@ -10,5 +10,7 @@ public class MessageResponse {
     public String getMessage() {
         return message;
     }
+
 }
+
 

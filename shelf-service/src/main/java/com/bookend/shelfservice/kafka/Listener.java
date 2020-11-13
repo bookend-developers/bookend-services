@@ -28,6 +28,16 @@ public class Listener {
 
 
     }
+    @KafkaListener(topics = "adding-genre",
+            groupId ="bookend-shelfservice")
+    public void consumeGenre(String message) {
+        System.out.println(message);
+        String[] splited = message.split("\"");
+
+
+
+    }
+
 
 
 }

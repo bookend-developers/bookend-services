@@ -36,40 +36,6 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findBookById(id);
     }
 
-    @Override
-    public Map<String,String> getFullBookById(String id, String accessToken) {
-        ObjectMapper mapper = new ObjectMapper();
-        Map<String,String> fullBook = new HashMap<>();
-        String bookstr = new String();
-        String authorstr = new String();
-
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("Authorization", "Bearer "+accessToken);
-        HttpEntity<String> entity = new HttpEntity<>("body", headers);
-        Book book = bookRepository.findBookById(id);
-        if(book==null){
-          return null;
-        }
-        ResponseEntity<Author> responseEntity =restTemplate.exchange("http://localhost:8085/api/author/{authorid}", HttpMethod.GET, entity, Author.class,book.getAuthor());
-        Author author= responseEntity.getBody();
-
-        try {
-             bookstr = mapper.writeValueAsString(book);
-             authorstr = mapper.writeValueAsString(author);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        fullBook.put("book",bookstr);
-        fullBook.put("author", authorstr);
-
-
-
-
-
-        return fullBook;
-    }
 
 
 
@@ -103,7 +69,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> getAll() {
-        return bookRepository.findAll();
+        return bookRepository.findAllOrderByBookName();
     }
 
     @Override
@@ -121,5 +87,10 @@ public class BookServiceImpl implements BookService {
         KafkaMessage kafkaMessage = new KafkaMessage(DELETE_TOPIC,bookId);
         producer.deleteBook(kafkaMessage);
         bookRepository.delete(getById(bookId));
+    }
+
+    @Override
+    public List<Book> findBookByVerifiedIsFalse() {
+        return bookRepository.findBookByVerifiedIsFalse();
     }
 }

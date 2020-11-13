@@ -28,8 +28,6 @@ public class BookServiceImpl implements BookService {
     }
 
 
-
-
     @Override
     public ShelfsBook saveOrUpdate(ShelfsBook shelfsBook) {
         List<ShelfsBook> books = bookRepository.findShelfsBookByShelf(shelfsBook.getShelf());

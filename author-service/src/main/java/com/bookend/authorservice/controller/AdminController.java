@@ -63,5 +63,5 @@ public class AdminController {
 
     }
 
-   //TODO kafka listener will delete book info if the book service deletes book
+
 }

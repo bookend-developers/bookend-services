@@ -12,6 +12,6 @@ import java.util.List;
 @Repository
 public interface AuthorRepository extends MongoRepository<Author, String> {
     Author findAuthorById(String id);
-    List<Author> findAll();
+    List<Author> findAllOrderByName();
     List<Author> findByNameContainingIgnoreCase(String title);
 }

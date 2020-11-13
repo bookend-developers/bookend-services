@@ -3,6 +3,7 @@ package com.bookend.authorizationserver.controller;
 import com.bookend.authorizationserver.model.AuthUserDetail;
 import com.bookend.authorizationserver.model.User;
 import com.bookend.authorizationserver.payload.Profile;
+import com.bookend.authorizationserver.repository.UserDetailRepository;
 import com.bookend.authorizationserver.service.UserDetailServiceImpl;
 import com.bookend.authorizationserver.service.UserService;
 import io.swagger.annotations.ApiOperation;
@@ -11,6 +12,8 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/profile")
@@ -23,6 +26,8 @@ public class ProfileController {
     }
 
     @Autowired
+    private UserDetailRepository userDetailRepository;
+    @Autowired
     public void setUserDetailService(UserDetailServiceImpl userDetailService) {
         this.userDetailService = userDetailService;
     }
@@ -31,10 +36,16 @@ public class ProfileController {
             @ApiResponse(code = 200, message = "Successfully retrieved profile "),
             @ApiResponse(code = 400, message = "User name or email is already in use.")
     })
-    @GetMapping("/{username}")
-    public Profile getProfile(@PathVariable("username") String username){
+    @GetMapping("/full/{username}")
+    public Profile getFullProfile(@PathVariable("username") String username){
         User user = userService.findByUsername(username);
         return new Profile(user.getId().longValue(),user.getFirstname(),user.getLastname(),user.getUsername(),user.getAboutMe(),user.getEmail());
+    }
+    @GetMapping("/{username}")
+    public Profile getProfile(@PathVariable("username") String username){
+
+        User user =userDetailRepository.findByUsername(username).get();
+        return new Profile(user.getId(),user.getUsername(),user.getEmail());
     }
     @PostMapping("/{username}")
     public User setProfile(@PathVariable("username") String username,@RequestBody Profile profileRequest){
@@ -49,6 +60,7 @@ public class ProfileController {
             user.setLastname(profileRequest.getLastname());
         }
         return userService.save(user);
+
 
 
     }

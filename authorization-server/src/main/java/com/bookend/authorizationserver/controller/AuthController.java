@@ -1,6 +1,8 @@
 package com.bookend.authorizationserver.controller;
 
+import com.bookend.authorizationserver.payload.ConfirmResponse;
 import com.bookend.authorizationserver.payload.SignUpRequest;
+import com.bookend.authorizationserver.payload.SignUpResponse;
 import com.bookend.authorizationserver.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -12,7 +14,10 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/oauth")
@@ -26,19 +31,19 @@ public class AuthController {
             @ApiResponse(code = 400, message = "User name or email is already in use.")
     })
     @PostMapping("sign-up")
-    public ResponseEntity signUp(@RequestBody SignUpRequest signUpRequest){
-        userService.addUser(signUpRequest);
-        return ResponseEntity.ok("user registered. need confirmation");
+    public ResponseEntity<?> signUp(@RequestBody SignUpRequest signUpRequest){
+        SignUpResponse res = userService.addUser(signUpRequest);
+        return ResponseEntity.ok(res);
     }
     @ApiOperation(value = "Confirm User Email", response = ResponseEntity.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully confirmation of an email")
     })
     @GetMapping("confirm/{token}")
-    public ResponseEntity confirm(@PathVariable("token") String token){
+    public ResponseEntity<?> confirm(@PathVariable("token") String token){
 
-        userService.confirm(token);
-        return ResponseEntity.ok("Confirmation completed");
+        ConfirmResponse confirmResponse = userService.confirm(token);
+        return ResponseEntity.ok(confirmResponse);
     }
 
     @GetMapping("test")
