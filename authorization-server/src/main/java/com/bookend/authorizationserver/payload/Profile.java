@@ -17,7 +17,7 @@ public class Profile {
         return id;
 
     }
-
+//TODO usernam yap postrequest
     public void setId(Long id) {
         this.id = id;
     }

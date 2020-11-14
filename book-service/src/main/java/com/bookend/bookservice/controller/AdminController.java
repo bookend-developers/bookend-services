@@ -56,8 +56,12 @@ public class AdminController {
         newBook.setAuthorid(bookRequest.getAuthorid());
         newBook.setPage(bookRequest.getPage());
         newBook.setVerified(Boolean.TRUE);
-
-        return bookService.saveOrUpdate(newBook);
+        newBook.setISBN(bookRequest.getISBN());
+        Book addedBook =bookService.saveOrUpdate(newBook);
+        if(addedBook==null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Book already exists.");
+        }
+        return addedBook;
     }
     @ApiOperation(value = "Delete the book")
     @ApiResponses(value = {

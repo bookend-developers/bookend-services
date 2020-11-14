@@ -37,20 +37,20 @@ public class ClubController {
         return clubService.getMyClubs(ownerId);
     }
 
-    @GetMapping("{club-id}/posts")
+    @GetMapping("/{club-id}/posts")
     public List<Post> getClubPosts(@PathVariable("club-id") Long clubId){
         return clubService.getClubPosts(clubId);
     }
-    @GetMapping("{username}/invitations")
+    @GetMapping("/{username}/invitations")
     public List<Invitation> getMemberInvitations(@PathVariable("username") String username){
         return clubService.getMemberInvitations(username);
     }
 
-    @GetMapping("/{writer-id}/posts")
-    public List<Post> getWriterPosts(@PathVariable("writer-id") Long writerId){
-        return clubService.getClubPosts(writerId);
+    @GetMapping("/member/{username}/posts")
+    public List<Post> getWriterPosts(@PathVariable("username") String username){
+        return clubService.getWriterPosts(username);
     }
-    @GetMapping("/{username}/posts")
+    @GetMapping("/{username}/clubs")
     public List<Club> getUserClubs(@PathVariable("username") String username){
 
         return memberService.find(username).getClubs();

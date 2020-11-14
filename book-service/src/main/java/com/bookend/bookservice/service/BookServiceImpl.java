@@ -42,8 +42,24 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book saveOrUpdate(Book book) {
         Map<String, String> message= new HashMap<String, String>();
+        List<Book> books = bookRepository.findBookByBookName(book.getBookName());
+        if(books!=null){
+           List<Book> filteredbyAuthor = books.stream()
+                   .filter(b -> b.getAuthorid().equals(book.getAuthorid()))
+                   .collect(Collectors.toList());
+           if(filteredbyAuthor!=null){
+               List<Book> filteredbyDesc = filteredbyAuthor.stream()
+                       .filter(b -> b.getDescription().equals(book.getDescription()))
+                       .collect(Collectors.toList());
+               if(filteredbyDesc!=null){
+                   return null;
+               }
+           }
+
+
+        }
         Book savedBook = bookRepository.save(book);
-        message.put("author",book.getAuthor());
+        message.put("author",book.getAuthorid());
         message.put("book",savedBook.getId());
         KafkaMessage kafkaMessage = new KafkaMessage(BOOK_TOPIC,message);
         producer.publishBook(kafkaMessage);

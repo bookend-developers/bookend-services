@@ -135,8 +135,11 @@ public class BookController {
         book.setPage(bookRequest.getPage());
         book.setVerified(Boolean.FALSE);
         book.setISBN(bookRequest.getISBN());
-
-        return bookService.saveOrUpdate(book);
+        Book addedBook =bookService.saveOrUpdate(book);
+        if(addedBook==null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Book already exists.");
+        }
+        return addedBook;
     }
 
 
