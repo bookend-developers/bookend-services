@@ -32,7 +32,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public List<Author> getAll() {
 
-        return authorRepository.findAllOrderByName();
+        return authorRepository.findAll();
     }
 
     @Override

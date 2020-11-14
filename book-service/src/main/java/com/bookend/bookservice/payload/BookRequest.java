@@ -16,12 +16,12 @@ public class BookRequest {
     private String bookName;
     private String author;
     private String authorid;
-    private List<Long> ISBN;
+    private String ISBN;
 
     public BookRequest() {
     }
 
-    public BookRequest(Integer page, String genre, String description, String bookName, String author, String authorid, List<Long> ISBN) {
+    public BookRequest(Integer page, String genre, String description, String bookName, String author, String authorid, String ISBN) {
         this.page = page;
         this.genre = genre;
         this.description = description;
@@ -79,11 +79,11 @@ public class BookRequest {
         this.authorid = authorid;
     }
 
-    public List<Long> getISBN() {
+    public String getISBN() {
         return ISBN;
     }
 
-    public void setISBN(List<Long> ISBN) {
+    public void setISBN(String ISBN) {
         this.ISBN = ISBN;
     }
 }

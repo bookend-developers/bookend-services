@@ -22,7 +22,7 @@ public class Book {
     private String author;
     private String authorid;
     private Boolean verified;
-    private List<Long> ISBN;
+    private String ISBN;
 
     public Boolean getVerified() {
         return verified;
@@ -87,15 +87,15 @@ public class Book {
     public Book() {
     }
 
-    public List<Long> getISBN() {
+    public String getISBN() {
         return ISBN;
     }
 
-    public void setISBN(List<Long> ISBN) {
+    public void setISBN(String ISBN) {
         this.ISBN = ISBN;
     }
 
-    public Book(Integer page, Genre genre, String description, String bookName, String author, String authorid, Boolean verified, List<Long> ISBN) {
+    public Book(Integer page, Genre genre, String description, String bookName, String author, String authorid, Boolean verified, String ISBN) {
         this.page = page;
         this.genre = genre;
         this.description = description;

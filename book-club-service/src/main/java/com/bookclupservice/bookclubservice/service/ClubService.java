@@ -105,7 +105,7 @@ public class ClubService {
         post.setText(newPostRequest.getText());
         post.setTitle(newPostRequest.getTitle());
         post.setWriter(writer);
-        
+
         postRepository.save(post);
     }
 
