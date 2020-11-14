@@ -34,11 +34,11 @@ export default class NewBook extends Component {
     }
     componentDidMount(){
         console.log(this.props.location.state.selectedAuthorName)
-        
+
     }
     handleNewBook(page,genre,description,bookName,author,author_id,ISBN) {
         let myHeaders = new Headers();
-        myHeaders.append("Authorization", "Basic bW9iaWxlOnBpbg==");
+        myHeaders.append("Authorization", "Bearer "+AuthService.getCurrentUser());
         myHeaders.append("Content-Type", "application/json");
 
         let raw = JSON.stringify(

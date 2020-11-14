@@ -81,7 +81,7 @@ public class AdminController {
             @ApiResponse(code = 400, message = "Resource already exists.")
     }
     )
-    @PostMapping("/genre")
+    @PostMapping("/new/genre")
     public Genre addGenre(@RequestParam String genre){
         if(genreService.findByGenre(genre)==null){
             return genreService.addNewGenre(genre);

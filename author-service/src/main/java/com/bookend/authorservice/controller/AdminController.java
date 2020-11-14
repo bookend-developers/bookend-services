@@ -52,12 +52,12 @@ public class AdminController {
         newAuthor.setName(author.getName());
         newAuthor.setBiography(author.getBiography());
 
-        newAuthor.setBirthDate(LocalDate.parse(author.getBirthDate(), DateTimeFormatter.ofPattern("d-MMM-yyyy", Locale.US)));
+        newAuthor.setBirthDate(LocalDate.parse(author.getBirthDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.US)));
 
         if(author.getDateOfDeath()==null){
             newAuthor.setDateOfDeath(null);
         }else{
-            newAuthor.setDateOfDeath(LocalDate.parse(author.getDateOfDeath(), DateTimeFormatter.ofPattern("d-MMM-yyyy", Locale.US)));
+            newAuthor.setDateOfDeath(LocalDate.parse(author.getDateOfDeath(), DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.US)));
         }
         return authorService.saveOrUpdate(newAuthor);
 
