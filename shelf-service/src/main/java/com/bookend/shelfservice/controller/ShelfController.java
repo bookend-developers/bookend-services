@@ -2,6 +2,7 @@ package com.bookend.shelfservice.controller;
 
 import com.bookend.shelfservice.model.ShelfsBook;
 import com.bookend.shelfservice.model.Shelf;
+import com.bookend.shelfservice.payload.ShelfRequest;
 import com.bookend.shelfservice.service.BookService;
 import com.bookend.shelfservice.service.ShelfService;
 import io.swagger.annotations.ApiOperation;
@@ -59,9 +60,9 @@ public class ShelfController {
     }
     )
     @PostMapping("/new")
-    public Shelf newShelf(@RequestParam(name = "name") String shelfname,
+    public Shelf newShelf(@RequestBody ShelfRequest shelfRequest,
                           OAuth2Authentication auth){
-        Shelf newShelf =shelfService.saveOrUpdate(new Shelf(shelfname,auth.getName()));
+        Shelf newShelf =shelfService.saveOrUpdate(new Shelf(shelfRequest.getShelfname(),auth.getName(),shelfRequest.getTags()));
         if(newShelf== null){
 
            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Shelfname is already in use.");
