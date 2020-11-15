@@ -55,6 +55,10 @@ public class ClubController {
 
         return memberService.find(username).getClubs();
     }
+    @GetMapping("/post/{postid}")
+    public Post getPost(@PathVariable("postid") Long postId){
+        return clubService.findPostByID(postId);
+    }
 
     @PostMapping("/add")
     public ResponseEntity<?> addClub(@RequestBody  NewClubRequest newClubRequest){

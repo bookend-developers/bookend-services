@@ -109,5 +109,8 @@ public class ClubService {
 
         postRepository.save(post);
     }
+    public Post findPostByID(Long postID){
+        return postRepository.findPostById(postID);
+    }
 
 }
