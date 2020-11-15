@@ -6,6 +6,9 @@ import com.bookend.authorizationserver.model.User;
 import com.bookend.authorizationserver.payload.*;
 import com.bookend.authorizationserver.repository.TokenRepository;
 import com.bookend.authorizationserver.repository.UserDetailRepository;
+
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -54,6 +57,22 @@ public class UserService {
                         "" + "localhost:9191/api/oauth/confirm/"+ token.getConfirmationToken()));
         return new SignUpResponse("user registered. need confirmation",token.getConfirmationToken());
     }
+    
+    public ResetPasswordResponse resetPassword(ResetPasswordRequest resetPasswordRequest) {
+    	User user = userDetailRepository.findUserByEmail(resetPasswordRequest.getEmail());
+    	if (user == null){
+    		return null;
+    	}
+    	Token token = new Token(user);
+    	messageProducer.sendResetPasswordMailRequest(new MailRequest(user.getEmail(),"Reset Password Confirmation Mail",
+        "Şifrenizi yenilemek için aktivasyon linkine tıklayınız.\n Aktivasyon linki: " +
+        "" + "localhost:9191/api/oauth/confirmPassword/"  + token.getConfirmationToken() +
+        "\n\n" +
+        "Click on the activation link to reset your password..\nActivation link: " +
+        "" + "localhost:9191/api/oauth/confirmPassword/"+ token.getConfirmationToken()));
+    	
+    	return new ResetPasswordResponse("need confirmation to reset passsword",token.getConfirmationToken());
+    }
 
     public User save(User user){
         return userDetailRepository.save(user);
@@ -73,6 +92,24 @@ public class UserService {
         messageProducer.sendUserInformation(new KafkaUserRegistered(user.getId(),user.getUsername(),user.getEmail()));
         return  new ConfirmResponse("confirmed successfully",user.getUsername());
     }
+    
+    public ConfirmResponse confirmPassword(String token,NewPasswordRequest newPasswordRequest){
+
+        Token confirmationToken = tokenRepository.findByConfirmationToken(token);
+        if(confirmationToken==null){
+            return new ConfirmResponse("not valid token",null);
+        }
+        User user = confirmationToken.getUser();
+        user.setEnabled(true);
+        user.setPassword(passwordEncoder.encode(newPasswordRequest.getPassword()));
+        userDetailRepository.save(user);
+        tokenRepository.delete(confirmationToken);
+        //messageProducer.sendUserInformation(new KafkaUserRegistered(user.getId(),user.getUsername(),user.getEmail()));
+        return  new ConfirmResponse("password reset confirmed successfully",user.getUsername());
+    }
+    
+    
+    /*
     public void addToMailService(String id, String email){
         RestTemplate restTemplate = new RestTemplate();
 
@@ -101,5 +138,5 @@ public class UserService {
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
 
         ResponseEntity<String> response = restTemplate.postForEntity( "http://localhost:8090/confirmation-mail", request , String.class );
-    }
+    }*/
 }
