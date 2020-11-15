@@ -32,9 +32,9 @@ public class ClubController {
         return publicClubs;
     }
 
-    @GetMapping("/{owner-id}")
-    public List<Club> getMyClubs(@PathVariable("owner-id")Long ownerId){
-        return clubService.getMyClubs(ownerId);
+    @GetMapping("/{username}")
+    public List<Club> getMyClubs(@PathVariable("username")String username){
+        return clubService.getMyClubs(username);
     }
 
     @GetMapping("/{club-id}/posts")

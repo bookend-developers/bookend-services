@@ -29,8 +29,9 @@ public class ClubService {
         return clubRepository.findAll();
     }
 
-    public List<Club> getMyClubs(Long ownerId){
-        return clubRepository.findByOwnerId(ownerId);
+    public List<Club> getMyClubs(String username){
+        Member member=memberRepository.findByUserName(username);
+        return clubRepository.findByOwner(member);
     }
     public List<Invitation> getMemberInvitations(String username){
         Member member = memberRepository.findByUserName(username);
