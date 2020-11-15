@@ -12,13 +12,13 @@ public class Book {
 
     private String id;
     private Integer page;
-
+    private String bookName;
     private Genre genre;
 
     private String description;
 
 
-    private String bookName;
+
     private String author;
     private String authorid;
     private Boolean verified;

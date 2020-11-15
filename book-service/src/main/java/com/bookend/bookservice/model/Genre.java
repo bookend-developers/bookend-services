@@ -5,10 +5,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "genres")
 public class Genre {
-
-    private String genre;
     @Id
     private String id;
+    private String genre;
+
 
 
     public Genre() {

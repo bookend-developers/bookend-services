@@ -8,6 +8,7 @@ import com.bookend.bookservice.repository.BookRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -43,21 +44,22 @@ public class BookServiceImpl implements BookService {
     public Book saveOrUpdate(Book book) {
         Map<String, String> message= new HashMap<String, String>();
         List<Book> books = bookRepository.findBookByBookName(book.getBookName());
-        if(books!=null){
+        if(books.size()!=0){
            List<Book> filteredbyAuthor = books.stream()
                    .filter(b -> b.getAuthorid().equals(book.getAuthorid()))
                    .collect(Collectors.toList());
-           if(filteredbyAuthor!=null){
+           if(filteredbyAuthor.size()!=0){
                List<Book> filteredbyDesc = filteredbyAuthor.stream()
                        .filter(b -> b.getDescription().equals(book.getDescription()))
                        .collect(Collectors.toList());
-               if(filteredbyDesc!=null){
+               if(filteredbyDesc.size()!=0){
                    return null;
                }
            }
 
 
         }
+
         Book savedBook = bookRepository.save(book);
         message.put("author",book.getAuthorid());
         message.put("book",savedBook.getId());
@@ -85,7 +87,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> getAll() {
-        return bookRepository.findAllOrderByBookName();
+        return bookRepository.findAll(Sort.by(Sort.Direction.ASC,"bookName"));
     }
 
     @Override

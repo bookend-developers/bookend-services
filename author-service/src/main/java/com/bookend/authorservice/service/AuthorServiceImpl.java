@@ -3,8 +3,11 @@ package com.bookend.authorservice.service;
 import com.bookend.authorservice.model.Author;
 import com.bookend.authorservice.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.management.Query;
 import java.util.List;
 
 @Service
@@ -32,7 +35,9 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public List<Author> getAll() {
 
-        return authorRepository.findAll();
+
+        List<Author> authors = authorRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
+        return authors;
     }
 
     @Override
