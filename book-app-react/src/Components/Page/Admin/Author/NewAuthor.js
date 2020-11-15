@@ -30,7 +30,7 @@ export default class NewAuthor extends Component {
         };
     }
 
-    handleNewAuthor(author_name,biography,birthDate,dateOfdate) {
+    handleNewAuthor(author_name,birthDate,biography,dateOfdate) {
         let myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer "+AuthService.getCurrentUser());
         myHeaders.append("Content-Type", "application/json");
@@ -52,10 +52,11 @@ export default class NewAuthor extends Component {
         return fetch("http://localhost:8085/api/author/admin/new", requestOptions)
             .then(response => response.text())
             .then(result => {
-                if(result!=="user registered. need confirmation"){
-                    alert("\n" +JSON.parse(result).message)
+                if(JSON.parse(result).name === author_name){
+                    alert("Added successfully.")
+
                 }else{
-                    alert(result)
+                    alert(JSON.parse(result).message)
                 }
             })
     }
@@ -140,7 +141,6 @@ export default class NewAuthor extends Component {
                                     }}
                                 />
                             </div><br/>
-
 
 
                         </form>

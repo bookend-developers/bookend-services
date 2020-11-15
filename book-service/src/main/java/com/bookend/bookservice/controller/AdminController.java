@@ -83,6 +83,9 @@ public class AdminController {
     )
     @PostMapping("/new/genre")
     public Genre addGenre(@RequestParam String genre){
+        if(genre.equals("")){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Genre must be filled.");
+        }
         if(genreService.findByGenre(genre)==null){
             return genreService.addNewGenre(genre);
         }
@@ -101,8 +104,21 @@ public class AdminController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"The book does not exist.");
         }
         book.setVerified(Boolean.TRUE);
-        return bookService.saveOrUpdate(book);
+        return bookService.update(book);
 
     }
-
+    @GetMapping("/genres")
+    public List<Genre> listGenres(){
+        return genreService.findAll();
+    }
+    @PostMapping("/genre")
+    public Genre updateGenre(@RequestBody Genre genre){
+        Genre updatedGenre = genreService.findById(genre.getId());
+        if(updatedGenre!=null){
+           return genreService.update(genre);
+        }
+        else{
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Cant found genre.");
+        }
+    }
 }

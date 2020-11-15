@@ -7,6 +7,7 @@ import { Redirect } from 'react-router-dom';
 import {Typography} from "@material-ui/core";
 import TableCell from "@material-ui/core/TableCell";
 import AuthorList from "./AuthorList";
+import AuthService from "../../../../Service/AuthService";
 
 
 export default class NewBook extends Component {
@@ -60,10 +61,10 @@ export default class NewBook extends Component {
         return fetch("http://localhost:8082/api/book/admin/new", requestOptions)
             .then(response => response.text())
             .then(result => {
-                if(result!=="user registered. need confirmation"){
-                    alert("\n" +JSON.parse(result).message)
+                if(JSON.parse(result).bookName===bookName){
+                    alert("Added successfully.")
                 }else{
-                    alert(result)
+                    alert("Something went wrong.")
                 }
             })
     }

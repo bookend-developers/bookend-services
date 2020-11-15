@@ -69,6 +69,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public Book update(Book book) {
+        return bookRepository.save(book);
+    }
+
+    @Override
     public List<Book> getBooksofShelf(Long shelfID, String accessToken) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();

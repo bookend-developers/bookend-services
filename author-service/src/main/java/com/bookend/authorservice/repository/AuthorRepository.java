@@ -16,4 +16,5 @@ public interface AuthorRepository extends MongoRepository<Author, String> {
     List<Author> findAll(Sort sort);
     //List<Author> findAllOrderByName();
     List<Author> findByNameContainingIgnoreCase(String title);
+    List<Author> findByName(String name);
 }

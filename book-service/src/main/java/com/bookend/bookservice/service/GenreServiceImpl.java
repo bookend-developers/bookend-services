@@ -7,6 +7,8 @@ import com.bookend.bookservice.repository.GenreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class GenreServiceImpl implements GenreService{
     private static final String GENRE_TOPIC = "adding-genre";
@@ -38,5 +40,20 @@ public class GenreServiceImpl implements GenreService{
 
         }
         return null;
+    }
+
+    @Override
+    public List<Genre> findAll() {
+        return genreRepository.findAll();
+    }
+
+    @Override
+    public Genre findById(String id) {
+        return genreRepository.findGenreById(id);
+    }
+
+    @Override
+    public Genre update(Genre genre) {
+        return genreRepository.save(genre);
     }
 }

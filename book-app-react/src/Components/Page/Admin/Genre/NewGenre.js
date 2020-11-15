@@ -16,25 +16,22 @@ import Paper from "@material-ui/core/Paper";
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 
-export default class AuthorList  extends React.Component {
+export default class NewGenre extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            genre: "",
+            new_genre: "",
             open: false,
-
-
         };
-
     }
 
 
     handleClickOpen = () => {
         this.setState({open: true});
     };
-    onChangeGenre = (e) => {
-        this.setState({genre: e.target.value})
+    onChangeNewGenre = (e) => {
+        this.setState({new_genre: e.target.value})
     }
 
 
@@ -44,16 +41,7 @@ export default class AuthorList  extends React.Component {
     };
 
 
-
-
-
-    componentDidMount() {
-        console.log(AuthService.getCurrentUserId())
-        this.handleGenre();
-    }
-
-
-    handleGenre = (genre) => {
+    handleGenre = () => {
         let myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer "+AuthService.getCurrentUser());
         myHeaders.append("Content-Type", "application/json");
@@ -66,13 +54,14 @@ export default class AuthorList  extends React.Component {
             redirect: 'follow'
         };
 
-       fetch("http://localhost:8082/api/book/admin/new/genre?genre="+this.state.genre, requestOptions)
+        fetch("http://localhost:8082/api/book/admin/new/genre?genre="+this.state.new_genre, requestOptions)
             .then(response => response.text())
             .then(result => {
-                if(result!==""){
-                    alert("\n" +JSON.parse(result).message)
+                if(JSON.parse(result).genre === this.state.new_genre){
+                    alert("Added successfully")
+                    window.location.reload();
                 }else{
-                    alert(result)
+                    alert(JSON.parse(result).message)
                 }
             })
     }
@@ -84,24 +73,32 @@ export default class AuthorList  extends React.Component {
 
         return (
             <div>
-                <td><Button
-                    onClick={this.handleClickOpen}
-                    style={{marginLeft: "17%",marginTop: "35%", backgroundColor: "#E5E7E9"}}
-                >Authors</Button></td>
+                <Button
+                    orientation="vertical"
+                    color="primary"
+                    aria-label="vertical contained primary button group"
+                    variant="contained"
+                    style={{textAlign:"center",marginTop:10,marginLeft:"38%"}}
+                    onClick={this.handleClickOpen}>Add Genre</Button>
                 <Dialog
-
+                    fullWidth={"xs"}
+                    maxWidth={"xs"}
                     disableBackdropClick disableEscapeKeyDown open={this.state.open} onClose={this.handleClose}>
                     <DialogContent>
-                        <Typography
-                            style={{marginLeft: "35%"}}>New Genre</Typography>
-                        <Paper>
-
-
-                        </Paper>
-
-
+                        <TableCell><form noValidate autoComplete="off">
+                            <TextField
+                                style={{backgroundColor:"white"}}
+                                id="standard-basic"
+                                label="New Genre"
+                                value={this.state.new_genre}
+                                onChange={this.onChangeNewGenre}
+                            />
+                        </form></TableCell>
                     </DialogContent>
                     <DialogActions>
+                        <Button onClick={()=>this.handleGenre()} color="primary">
+                            Send
+                        </Button>
                         <Button onClick={this.handleClose} color="primary">
                             Close
                         </Button>

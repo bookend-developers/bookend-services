@@ -19,7 +19,7 @@ import RateAndComments from "./Components/Page/Profile/RateAndComment/Rate";
 import AllClubs from "./Components/Page/Profile/Clubs/AllClubs";
 import ClubAndPost from "./Components/Page/Profile/Clubs/ClubAndPost";
 import NewBook from "./Components/Page/Admin/Book/NewBook";
-import NewGenre from "./Components/Page/Admin/Book/NewGenre";
+import Genres from "./Components/Page/Admin/Genre/Genres";
 import UnverifiedBooks from "./Components/Page/Admin/Book/UnverifiedBooks";
 import NewAuthor from "./Components/Page/Admin/Author/NewAuthor";
 import AdminPage from "./Components/Page/Admin/AdminPage";
@@ -46,7 +46,7 @@ ReactDOM.render(
               <Route path="/admin-book-new" component={NewBook} />
               <Route path="/admin-unverified" component={UnverifiedBooks} />
               <Route path="/admin-author-new" component={NewAuthor} />
-              <Route path="/admin-genre-new" component={NewGenre} />
+              <Route path="/admin-genres" component={Genres} />
               <Route path="/club" component={ClubAndPost} />
           </Router>
       </BrowserRouter>

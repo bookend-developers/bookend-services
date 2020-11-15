@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.management.Query;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthorServiceImpl implements AuthorService {
@@ -28,6 +29,22 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public Author saveOrUpdate(Author author) {
+        List<Author> authors = authorRepository.findByName(author.getName());
+        if(authors.size()!=0){
+            List<Author> filteredByBirth = authors.stream()
+                    .filter(a -> a.getBirthDate().isEqual(author.getBirthDate()))
+                    .collect(Collectors.toList());
+            if(filteredByBirth.size()!=0){
+                if(!author.getDateOfDeath().equals("")){
+                    List<Author> filteredByDeath = filteredByBirth.stream()
+                            .filter(auth -> auth.getDateOfDeath().isEqual(author.getDateOfDeath()))
+                            .collect(Collectors.toList());
+                    if(filteredByDeath.size()!=0){
+                        return null;
+                    }
+                }
+            }
+        }
 
         return authorRepository.save(author);
     }
