@@ -30,14 +30,8 @@ public class RateServiceImpl implements RateService {
     @Override
     public Double getBookAverageRate(String bookID) {
         Book book = bookRepository.findBookByBookId(bookID);
-        List<Double> rates = rateRepository.findByBook(book).stream()
-                .map(p -> p.getRate())
-                .collect(Collectors.toList());
-        if(rates==null){
-            return 0.0;
-        }
-        return rates.stream().mapToDouble(a -> a)
-                .average().getAsDouble();
+
+        return book.getAverageRate();
     }
 
     @Override

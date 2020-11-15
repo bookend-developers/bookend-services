@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "book")
@@ -20,6 +21,7 @@ public class Book {
     @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true,
             fetch = FetchType.LAZY,mappedBy = "book")
     private List<Rate> rates;
+    private Double averageRate;
     @Column
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "book")
@@ -33,6 +35,15 @@ public class Book {
         this.bookname = bookname;
     }
 
+    public Double getAverageRate() {
+        return averageRate;
+    }
+
+
+
+    public void setAverageRate(Double averageRate) {
+        this.averageRate = averageRate;
+    }
 
     public Long getId() {
         return id;
@@ -69,5 +80,16 @@ public class Book {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+    public Double calAv(){
+
+        List<Double> rates = this.getRates().stream()
+                .map(p -> p.getRate())
+                .collect(Collectors.toList());
+        if(rates==null){
+            return 0.0;
+        }
+        return rates.stream().mapToDouble(a -> a)
+                .average().getAsDouble();
     }
 }

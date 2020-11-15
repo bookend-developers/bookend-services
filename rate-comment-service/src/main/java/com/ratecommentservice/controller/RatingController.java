@@ -91,11 +91,16 @@ public class RatingController {
             Book book = bookService.findBookByBookID(rateRequest.getBookId());
             if(book == null){
                 Book newBook = new Book(rateRequest.getBookId(),rateRequest.getBookname());
+                newBook.setAverageRate(rateRequest.getRate());
                 bookService.save(newBook);
-                return rateService.save( new Rate(newBook,auth.getName(),rateRequest.getRate()));
+                Rate newRate= rateService.save( new Rate(newBook,auth.getName(),rateRequest.getRate()));
+                newBook.getRates().add(newRate);
+                return newRate;
             }
 
-            return rateService.save( new Rate(book,auth.getName(),rateRequest.getRate()));
+            Rate newRate = rateService.save( new Rate(book,auth.getName(),rateRequest.getRate()));
+            book.getRates().add(newRate);
+            return newRate;
         }
         rate.setRate(rateRequest.getRate());
         return rateService.save(rate);
