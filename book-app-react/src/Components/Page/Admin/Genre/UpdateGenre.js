@@ -81,6 +81,7 @@ export default class UpdateGenre extends React.Component {
                     variant="contained"
                     style={{textAlign:"center",marginTop:10,marginLeft:"38%"}}
                     onClick={this.handleClickOpen}>Update</Button>
+
                 <Dialog
                     fullWidth={"xs"}
                     maxWidth={"xs"}
@@ -109,3 +110,4 @@ export default class UpdateGenre extends React.Component {
         );
     }
 }
+

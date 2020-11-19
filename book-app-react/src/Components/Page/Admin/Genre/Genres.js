@@ -12,6 +12,7 @@ import Table from "@material-ui/core/Table";
 import UpdateGenre from "./UpdateGenre";
 import NewGenre from "./NewGenre";
 
+
 export default class Genres extends React.Component {
     constructor(props) {
         super(props);
@@ -84,7 +85,6 @@ export default class Genres extends React.Component {
                 </Table>
                 <Paper style={{marginLeft:"35%",minWidth:400,maxWidth: 500}}>
                     <TableHead>
-
                         <TableCell>Genre</TableCell>
                     </TableHead>
                     {(this.state.rowsPerPage > 0
@@ -94,8 +94,6 @@ export default class Genres extends React.Component {
                             <TableCell><div>{row.genre}</div></TableCell>
                             <TableCell><div><UpdateGenre data={row.id}/>
                             </div></TableCell>
-
-
                         </TableRow>
 
                     )}

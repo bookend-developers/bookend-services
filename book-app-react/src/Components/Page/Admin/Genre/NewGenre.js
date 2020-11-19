@@ -46,8 +46,6 @@ export default class NewGenre extends React.Component {
         myHeaders.append("Authorization", "Bearer "+AuthService.getCurrentUser());
         myHeaders.append("Content-Type", "application/json");
 
-
-
         let requestOptions = {
             method: 'POST',
             headers: myHeaders,
@@ -70,6 +68,7 @@ export default class NewGenre extends React.Component {
 
 
     render() {
+
 
         return (
             <div>

@@ -32,9 +32,11 @@ public class ClubController {
         return publicClubs;
     }
 
+
     @GetMapping("/{username}")
     public List<Club> getMyClubs(@PathVariable("username")String username){
         return clubService.getMyClubs(username);
+
     }
 
     @GetMapping("/{club-id}/posts")
@@ -54,6 +56,11 @@ public class ClubController {
     public List<Club> getUserClubs(@PathVariable("username") String username){
 
         return memberService.find(username).getClubs();
+    }
+
+    @GetMapping("/post/{postid}")
+    public Post getPost(@PathVariable("postid") Long postId){
+        return clubService.findPostByID(postId);
     }
 
     @PostMapping("/add")

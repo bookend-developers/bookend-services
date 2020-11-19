@@ -32,6 +32,7 @@ public class ClubService {
     public List<Club> getMyClubs(String username){
         Member member=memberRepository.findByUserName(username);
         return clubRepository.findByOwner(member);
+
     }
     public List<Invitation> getMemberInvitations(String username){
         Member member = memberRepository.findByUserName(username);
@@ -45,6 +46,7 @@ public class ClubService {
     public List<Post> getClubPosts(Long clubId){
         return postRepository.findByClubId(clubId);
     }
+
 
     public Club saveClub(NewClubRequest newClubRequest){
         Member owner = memberRepository.findByUserName(newClubRequest.getUsername());
@@ -108,6 +110,10 @@ public class ClubService {
         post.setWriter(writer);
 
         postRepository.save(post);
+    }
+
+    public Post findPostByID(Long postID){
+        return postRepository.findPostById(postID);
     }
 
 }
