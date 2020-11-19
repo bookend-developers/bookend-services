@@ -86,19 +86,9 @@ public class RatingController {
             throw  new ResponseStatusException(HttpStatus.BAD_REQUEST,"The way you are trying to rate is not accepted.");
         }
 
-        Rate rate = rateService.findRateByBookIdandUsername(rateRequest.getBookId(),auth.getName());
-        if(rate==null){
-            Book book = bookService.findBookByBookID(rateRequest.getBookId());
-            if(book == null){
-                Book newBook = new Book(rateRequest.getBookId(),rateRequest.getBookname());
-                bookService.save(newBook);
-                return rateService.save( new Rate(newBook,auth.getName(),rateRequest.getRate()));
-            }
 
-            return rateService.save( new Rate(book,auth.getName(),rateRequest.getRate()));
-        }
-        rate.setRate(rateRequest.getRate());
-        return rateService.save(rate);
+
+        return rateService.save(rateRequest,auth.getName());
 
     }
     @ApiOperation(value = "Delete a specific rate")

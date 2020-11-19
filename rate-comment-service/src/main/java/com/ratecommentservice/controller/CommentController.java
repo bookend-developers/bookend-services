@@ -109,6 +109,6 @@ public class CommentController {
         if(book== null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Resource is not found");
         }
-        return bookService.findBookByBookID(bookId);
+        return book;
     }
 }

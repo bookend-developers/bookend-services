@@ -77,7 +77,7 @@ public class BookController {
         }
         if(genre!=null){
             books = books.stream().filter(book ->
-                    book.getGenre().toString().equals(genre))
+                    book.getGenre().getGenre().equals(genre))
                     .collect(Collectors.toList());
             if(books==null){
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND,"There is no match.");

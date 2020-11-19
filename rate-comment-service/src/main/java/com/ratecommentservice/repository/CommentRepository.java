@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment,Long> {
-    List<Comment> findByBookOrderByDateAsc(Book bookId);
+   // List<Comment> findByBookOrderByDateAsc(Book bookId);
     List<Comment> findByBook(Book bookId);
     List<Comment> findCommentByUsername(String username);
     Comment findByCommentId(Long commentId);
