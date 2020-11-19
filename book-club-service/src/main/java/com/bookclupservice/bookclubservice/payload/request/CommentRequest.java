@@ -1,21 +1,21 @@
-package com.ratecommentservice.payload;
+package com.bookclupservice.bookclubservice.payload.request;
 
 import java.time.LocalDateTime;
 
-public class PostCommentRequest {
+public class CommentRequest {
     private String comment;
     private Long postID;
     private String username;
     private LocalDateTime localDateTime;
 
-    public PostCommentRequest(String comment, Long postID, String username) {
+    public CommentRequest(String comment, Long postID, String username, LocalDateTime localDateTime) {
         this.comment = comment;
         this.postID = postID;
         this.username = username;
-        this.localDateTime = LocalDateTime.now();
+        this.localDateTime = localDateTime;
     }
 
-    public PostCommentRequest() {
+    public CommentRequest() {
     }
 
     public String getComment() {

@@ -22,11 +22,11 @@ public class PostComment {
     private String comment;
     private LocalDateTime date;
 
-    public PostComment(Long postID, String username, String comment, LocalDateTime date) {
+    public PostComment(Long postID, String username, String comment) {
         this.postID = postID;
         this.username = username;
         this.comment = comment;
-        this.date = date;
+        this.date = LocalDateTime.now();
     }
 
     public PostComment() {

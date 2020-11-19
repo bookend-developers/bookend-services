@@ -137,6 +137,7 @@ public class ShelfController {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,"The action is forbidden.");
         }
         bookService.delete(bookId,shelfID);
+
     }
 
 }

@@ -101,8 +101,42 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> search(String title) {
-        return bookRepository.findByBookNameContainingIgnoreCase(title);
+    public List<Book> search(String title,String genre, boolean rateSort,String accessToken) {
+        List<Book> books = new ArrayList<>();
+        if(rateSort){
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.set("Authorization", "Bearer "+accessToken);
+            HttpEntity<String> entity = new HttpEntity<>("body", headers);
+            ResponseEntity<String[]> responseEntity =restTemplate.exchange("http://localhost:8081/api/rate/sort/", HttpMethod.GET, entity, String[].class);
+            List<String> bookIDs = Arrays.asList(responseEntity.getBody());
+            books = bookIDs.stream().map(b -> bookRepository.findBookById(b)).collect(Collectors.toList());
+        }
+        else {
+            books = bookRepository.findAll();
+        }
+
+        if(title!=null){
+            books = books.stream()
+                    .filter(book -> book.getBookName().toLowerCase()
+                            .contains(title.toLowerCase()))
+                    .collect(Collectors.toList());
+            if(books.size()==0){
+                return null;
+            }
+        }
+        if(genre!=null){
+            books = books.stream()
+                    .filter(book -> book.getGenre().getGenre().toLowerCase()
+                            .contains(genre.toLowerCase()))
+                    .collect(Collectors.toList());
+            if(books.size()==0){
+                return null;
+            }
+        }
+
+        return books;
     }
 
     @Override

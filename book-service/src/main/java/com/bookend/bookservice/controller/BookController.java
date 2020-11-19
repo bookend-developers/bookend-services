@@ -62,27 +62,17 @@ public class BookController {
     })
     @GetMapping("")
     public List<Book> search(@RequestParam(required = false) String title
-            ,@RequestParam(required = false) String genre){
-        List<Book> books = new ArrayList<Book>();
+            ,@RequestParam(required = false) String genre
+            ,@RequestParam(required = false) boolean rateSort, OAuth2Authentication auth){
+        final OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) auth.getDetails();
 
-        if(title == null){
-            bookService.getAll().forEach(books::add);
+        String accessToken = details.getTokenValue();
+        List<Book> books = bookService.search(title,genre,rateSort,accessToken);
+        if(books==null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"There is no match.");
+        }
 
-        }
-        else {
-            bookService.search(title).forEach(books::add);
-            if(books==null){
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND,"There is no match for title.");
-            }
-        }
-        if(genre!=null){
-            books = books.stream().filter(book ->
-                    book.getGenre().getGenre().equals(genre))
-                    .collect(Collectors.toList());
-            if(books==null){
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND,"There is no match.");
-            }
-        }
+
 
         return books;
     }

@@ -110,5 +110,9 @@ public class RatingController {
         rateService.deleteRate(rate);
         return ResponseEntity.ok(new MessageResponse("Rate deleted successfully."));
     }
+    @GetMapping("/sort/")
+    public List<String> listBookIDs(){
+        return bookService.findAll();
+    }
 }
 
