@@ -2,9 +2,11 @@ package com.bookend.shelfservice.controller;
 
 import com.bookend.shelfservice.model.ShelfsBook;
 import com.bookend.shelfservice.model.Shelf;
+import com.bookend.shelfservice.model.Tag;
 import com.bookend.shelfservice.payload.ShelfRequest;
 import com.bookend.shelfservice.service.BookService;
 import com.bookend.shelfservice.service.ShelfService;
+import com.bookend.shelfservice.service.TagService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 
+import javax.swing.text.TabableView;
 import java.util.List;
 
 @RestController
@@ -23,7 +26,12 @@ public class ShelfController {
 
     private BookService bookService;
     private ShelfService shelfService;
+    private TagService tagService;
 
+    @Autowired
+    public void setTagService(TagService tagService) {
+        this.tagService = tagService;
+    }
 
     @Autowired
     public void setBookService(BookService bookService){
@@ -62,7 +70,7 @@ public class ShelfController {
     @PostMapping("/new")
     public Shelf newShelf(@RequestBody ShelfRequest shelfRequest,
                           OAuth2Authentication auth){
-        Shelf newShelf =shelfService.saveOrUpdate(new Shelf(shelfRequest.getShelfname(),auth.getName(),shelfRequest.getTags()));
+        Shelf newShelf =shelfService.saveOrUpdate(shelfRequest,auth.getName());
         if(newShelf== null){
 
            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Shelfname is already in use.");
@@ -138,6 +146,16 @@ public class ShelfController {
         }
         bookService.delete(bookId,shelfID);
 
+    }
+    @ApiOperation(value = "List tags")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved tags"),
+            @ApiResponse(code = 401, message = "You are not authorized to get the resource")
+    }
+    )
+    @GetMapping("/tags")
+    public List<Tag> listTags(){
+        return tagService.allTag();
     }
 
 }
