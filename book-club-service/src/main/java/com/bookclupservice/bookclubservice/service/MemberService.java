@@ -17,4 +17,7 @@ public class MemberService {
         member.setUserName(userName);
         memberRepository.save(member);
     }
+    public Member find(String username){
+        return memberRepository.findByUserName(username);
+    }
 }

@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface GenreRepository  extends MongoRepository<Genre, String> {
     Genre findByGenre(String genre);
+    Genre findGenreById(String id);
 }

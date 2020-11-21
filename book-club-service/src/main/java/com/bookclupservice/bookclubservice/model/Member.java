@@ -3,6 +3,7 @@ package com.bookclupservice.bookclubservice.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,6 +22,15 @@ public class Member {
     @JsonIgnore
     private List<Club> clubs;
 
+    public Member(Long id, String userName) {
+        this.id = id;
+        this.userName = userName;
+        this.clubs = new ArrayList<>();
+        this.ownedClubs = new ArrayList<>();
+    }
+
+    public Member() {
+    }
 
     public Long getId() {
         return id;

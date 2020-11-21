@@ -3,20 +3,39 @@ package com.bookend.authorizationserver.payload;
 import java.time.LocalDate;
 
 public class Profile {
-    private Long id;
-    private String username;
 
+
+    private Long id;
+    private String firstname;
+    private String lastname;
+    private String username;
     private String aboutMe;
     private String email;
 
 
     public Long getId() {
         return id;
-    }
 
+    }
+//TODO usernam yap postrequest
     public void setId(Long id) {
         this.id = id;
     }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+
+    }
+
+
 
     public String getEmail() {
         return email;
@@ -55,6 +74,7 @@ public class Profile {
     }
 
     public Profile(String firstname, String lastname, String username, String aboutMe, String email) {
+
         this.firstname = firstname;
         this.lastname = lastname;
 

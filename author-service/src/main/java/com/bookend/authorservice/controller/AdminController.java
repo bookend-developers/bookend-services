@@ -39,7 +39,7 @@ public class AdminController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully added author"),
             @ApiResponse(code = 401, message = "You are not authorized to add the resource"),
-            @ApiResponse(code = 400, message = "The way you are trying to add author is not accepted.")
+            @ApiResponse(code = 400, message = "The way you are trying to add author is not accepted or author already exists.")
     }
     )
     @PostMapping("/new")
@@ -52,14 +52,19 @@ public class AdminController {
         newAuthor.setName(author.getName());
         newAuthor.setBiography(author.getBiography());
 
-        newAuthor.setBirthDate(LocalDate.parse(author.getBirthDate(), DateTimeFormatter.ofPattern("d-MMM-yyyy", Locale.US)));
+        newAuthor.setBirthDate(LocalDate.parse(author.getBirthDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.US)));
 
-        if(author.getDateOfDeath()==null){
+        if(author.getDateOfDeath()==""){
             newAuthor.setDateOfDeath(null);
         }else{
-            newAuthor.setDateOfDeath(LocalDate.parse(author.getDateOfDeath(), DateTimeFormatter.ofPattern("d-MMM-yyyy", Locale.US)));
+            newAuthor.setDateOfDeath(LocalDate.parse(author.getDateOfDeath(), DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.US)));
         }
-        return authorService.saveOrUpdate(newAuthor);
+        Author addedAuthor = authorService.saveOrUpdate(newAuthor);
+        if(addedAuthor==null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Author already exists.");
+
+        }
+        return addedAuthor;
 
     }
 

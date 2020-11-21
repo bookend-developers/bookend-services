@@ -8,6 +8,7 @@ import com.bookend.bookservice.repository.BookRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -42,12 +43,34 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book saveOrUpdate(Book book) {
         Map<String, String> message= new HashMap<String, String>();
+        List<Book> books = bookRepository.findBookByBookName(book.getBookName());
+        if(books.size()!=0){
+           List<Book> filteredbyAuthor = books.stream()
+                   .filter(b -> b.getAuthorid().equals(book.getAuthorid()))
+                   .collect(Collectors.toList());
+           if(filteredbyAuthor.size()!=0){
+               List<Book> filteredbyDesc = filteredbyAuthor.stream()
+                       .filter(b -> b.getDescription().equals(book.getDescription()))
+                       .collect(Collectors.toList());
+               if(filteredbyDesc.size()!=0){
+                   return null;
+               }
+           }
+
+
+        }
+
         Book savedBook = bookRepository.save(book);
-        message.put("author",book.getAuthor());
+        message.put("author",book.getAuthorid());
         message.put("book",savedBook.getId());
         KafkaMessage kafkaMessage = new KafkaMessage(BOOK_TOPIC,message);
         producer.publishBook(kafkaMessage);
         return savedBook;
+    }
+
+    @Override
+    public Book update(Book book) {
+        return bookRepository.save(book);
     }
 
     @Override
@@ -69,7 +92,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> getAll() {
-        return bookRepository.findAllOrderByBookName();
+        return bookRepository.findAll(Sort.by(Sort.Direction.ASC,"bookName"));
     }
 
     @Override
@@ -78,8 +101,42 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> search(String title) {
-        return bookRepository.findByBookNameContainingIgnoreCase(title);
+    public List<Book> search(String title,String genre, boolean rateSort,String accessToken) {
+        List<Book> books = new ArrayList<>();
+        if(rateSort){
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.set("Authorization", "Bearer "+accessToken);
+            HttpEntity<String> entity = new HttpEntity<>("body", headers);
+            ResponseEntity<String[]> responseEntity =restTemplate.exchange("http://localhost:8081/api/rate/sort/", HttpMethod.GET, entity, String[].class);
+            List<String> bookIDs = Arrays.asList(responseEntity.getBody());
+            books = bookIDs.stream().map(b -> bookRepository.findBookById(b)).collect(Collectors.toList());
+        }
+        else {
+            books = bookRepository.findAll();
+        }
+
+        if(title!=null){
+            books = books.stream()
+                    .filter(book -> book.getBookName().toLowerCase()
+                            .contains(title.toLowerCase()))
+                    .collect(Collectors.toList());
+            if(books.size()==0){
+                return null;
+            }
+        }
+        if(genre!=null){
+            books = books.stream()
+                    .filter(book -> book.getGenre().getGenre().toLowerCase()
+                            .contains(genre.toLowerCase()))
+                    .collect(Collectors.toList());
+            if(books.size()==0){
+                return null;
+            }
+        }
+
+        return books;
     }
 
     @Override
