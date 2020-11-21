@@ -1,5 +1,6 @@
 package com.bookclupservice.bookclubservice.controller;
 
+import com.bookclupservice.bookclubservice.expection.NotMemberExpection;
 import com.bookclupservice.bookclubservice.model.*;
 import com.bookclupservice.bookclubservice.payload.MessageResponse;
 import com.bookclupservice.bookclubservice.payload.request.*;
@@ -95,8 +96,12 @@ public class ClubController {
     }
 
     @PostMapping("/new-post")
-    public ResponseEntity<?> sharePost(@RequestBody NewPostRequest newPostRequest){
-        clubService.savePost(newPostRequest);
+    public ResponseEntity<?> sharePost(@RequestBody NewPostRequest newPostRequest,OAuth2Authentication auth){
+        try {
+            clubService.savePost(newPostRequest,auth);
+        } catch (NotMemberExpection notMemberExpection) {
+            return ResponseEntity.badRequest().body(new MessageResponse(notMemberExpection.getMessage()));
+        }
         return ResponseEntity.ok(new MessageResponse("new post shared"));
     }
     @PostMapping("/{clubid}/post/comment")
