@@ -25,7 +25,9 @@ import org.springframework.web.server.ResponseStatusException;
 import java.security.Principal;
 
 @RestController
+
 @RequestMapping("/api/oauth")
+
 public class AuthController {
 
     @Autowired
