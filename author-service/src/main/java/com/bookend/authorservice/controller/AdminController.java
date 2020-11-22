@@ -9,11 +9,17 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.Locale;
 
 @RestController
 @RequestMapping("/api/author/admin")
@@ -32,51 +38,35 @@ public class AdminController {
     @ApiOperation(value = "Add new author", response = Author.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully added author"),
-            @ApiResponse(code = 401, message = "You are not authorized to add the resource")
+            @ApiResponse(code = 401, message = "You are not authorized to add the resource"),
+            @ApiResponse(code = 400, message = "The way you are trying to add author is not accepted or author already exists.")
     }
     )
     @PostMapping("/new")
     public Author newAuthor(@RequestBody AuthorRequest author)  {
+
         Author newAuthor = new Author();
+        if(author.getName()==null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Author name field cannot be empty.");
+        }
         newAuthor.setName(author.getName());
         newAuthor.setBiography(author.getBiography());
-        newAuthor.setBirthDate(author.getBirthDate());
-        if(author.getDateOfDeath()==null){
-            newAuthor.setDateOfDeath("-");
+
+        newAuthor.setBirthDate(LocalDate.parse(author.getBirthDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.US)));
+
+        if(author.getDateOfDeath()==""){
+            newAuthor.setDateOfDeath(null);
         }else{
-            newAuthor.setDateOfDeath(author.getDateOfDeath());
+            newAuthor.setDateOfDeath(LocalDate.parse(author.getDateOfDeath(), DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.US)));
         }
+        Author addedAuthor = authorService.saveOrUpdate(newAuthor);
+        if(addedAuthor==null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Author already exists.");
 
-        return authorService.saveOrUpdate(newAuthor);
+        }
+        return addedAuthor;
 
     }
-    @ApiOperation(value = "Add new book to author's shelf", response = Book.class)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully added book"),
-            @ApiResponse(code = 401, message = "You are not authorized to add the resource"),
-            @ApiResponse(code = 400, message = "The book is already exists in author's shelf."),
-            @ApiResponse(code = 404, message = "The author is not found.")
-    }
-    )
-    @PostMapping("/new/book")
-    public Book newBook(@RequestParam String bookid,
-                        @RequestParam String authorid){
-        Author author = authorService.getById(authorid);
-        if(author== null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"The author does not exist.");
-        }
-
-        Book book = new Book(bookid,author);
-        Book savedBook = bookService.save(book);
-        if(savedBook==null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"The book is already in author's shelf.");
-        }
-        author.getBookList().add(book);
 
 
-        authorService.saveOrUpdate(author);
-        return savedBook;
-
-    }
-   //TODO kafka listener will delete book info if the book service deletes book
 }

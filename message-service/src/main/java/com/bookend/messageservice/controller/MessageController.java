@@ -7,12 +7,17 @@ import java.util.List;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+
+import com.bookend.messageservice.payload.MessageResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import com.bookend.messageservice.model.Message;
 import com.bookend.messageservice.service.MessageService;
+import org.springframework.web.server.ResponseStatusException;
 
 
 @RestController
@@ -90,8 +95,13 @@ public class MessageController {
     }
     )
     @DeleteMapping("/delete/{messageid}")
-    public void deleteShelf(@PathVariable("messageid")  String messageId){
-        messageService.deleteMessage(messageService.getById(messageId));
+    public ResponseEntity<?> deleteMessage(@PathVariable("messageid")  String messageId){
+        Message message = messageService.getById(messageId);
+        if(message== null){
+            throw  new ResponseStatusException(HttpStatus.NOT_FOUND,"Message is not found.");
+        }
+        messageService.deleteMessage(message);
+        return ResponseEntity.ok(new MessageResponse("Successfully deleted."));
     }
     @ApiOperation(value = "View user's messages with another user ", response = Message.class)
     @ApiResponses(value = {

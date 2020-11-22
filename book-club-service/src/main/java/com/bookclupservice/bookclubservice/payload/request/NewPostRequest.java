@@ -11,7 +11,7 @@ public class NewPostRequest {
     private String title;
     private String text;
     private Long clubId;
-    private Long writerId;
+    private String username;
 
     public String getTitle() {
         return title;
@@ -37,11 +37,11 @@ public class NewPostRequest {
         this.clubId = clubId;
     }
 
-    public Long getWriterId() {
-        return writerId;
+    public String getUsername() {
+        return username;
     }
 
-    public void setWriterId(Long writerId) {
-        this.writerId = writerId;
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

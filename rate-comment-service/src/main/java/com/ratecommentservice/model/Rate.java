@@ -1,5 +1,6 @@
 package com.ratecommentservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
@@ -14,9 +15,11 @@ public class Rate {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @ApiModelProperty(notes = "The database generated product ID")
     private Long rateId;
-    @Column(name = "bookId")
-    @ApiModelProperty(notes = "The specific bookId that rate belongs to")
-    private String bookId;
+    @ApiModelProperty(notes = "The specific book that rate belongs to")
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "book_id")
+    private Book book;
     @Column(name = "username")
     @ApiModelProperty(notes = "The specific userId that rate is written by")
     private String username;
@@ -25,8 +28,8 @@ public class Rate {
     private Double rate;
 
 
-    public Rate(String bookId, String username, Double rate) {
-        this.bookId = bookId;
+    public Rate(Book book, String username, Double rate) {
+        this.book = book;
         this.username = username;
         this.rate = rate;
     }
@@ -37,12 +40,12 @@ public class Rate {
         return rateId;
     }
 
-    public String getBookId() {
-        return bookId;
+    public Book getBookId() {
+        return book;
     }
 
-    public void setBookId(String bookId) {
-        this.bookId = bookId;
+    public void setBookId(Book book) {
+        this.book = book;
     }
 
     public String getUsername() {

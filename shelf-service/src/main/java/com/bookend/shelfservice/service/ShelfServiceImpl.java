@@ -1,15 +1,14 @@
 package com.bookend.shelfservice.service;
 
-import com.bookend.shelfservice.model.Book;
 import com.bookend.shelfservice.model.Shelf;
 import com.bookend.shelfservice.model.ShelfsBook;
+import com.bookend.shelfservice.model.Tag;
+import com.bookend.shelfservice.payload.ShelfRequest;
 import com.bookend.shelfservice.repository.ShelfRepository;
+import com.bookend.shelfservice.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,6 +16,12 @@ import java.util.stream.Collectors;
 public class ShelfServiceImpl implements ShelfService {
 
     private ShelfRepository shelfRepository;
+    private TagRepository tagRepository;
+    @Autowired
+    public void setShelfRepository(ShelfRepository shelfRepository) {
+        this.shelfRepository = shelfRepository;
+    }
+
     @Autowired
     public void setBookRepository(ShelfRepository shelfRepository){
         this.shelfRepository=shelfRepository;
@@ -27,16 +32,22 @@ public class ShelfServiceImpl implements ShelfService {
         return  shelfRepository.findShelfById(id);
     }
 
-
-
     @Override
-    public Shelf saveOrUpdate(Shelf shelf) {
-        List<Shelf> shelves = shelfRepository.findShelvesByUsername(shelf.getUsername());
-
-        if(shelves.stream().anyMatch(s -> s.getShelfname().toLowerCase().matches(shelf.getShelfname().toLowerCase()))){
+    public Shelf saveOrUpdate(ShelfRequest shelfRequest,String username) {
+        List<Shelf> shelves = shelfRepository.findShelvesByUsername(username);
+        shelfRequest.getTags().stream().forEach(tag ->{
+            if(tagRepository.findByTag(tag.getTag())==null){
+                tag = tagRepository.save(tag);
+            }
+        });
+        if(shelves.stream().anyMatch(s -> s.getShelfname().toLowerCase().matches(shelfRequest.getShelfname().toLowerCase()))){
             return null;
         }
-        return shelfRepository.save(shelf);
+
+
+
+
+        return shelfRepository.save(new Shelf(shelfRequest.getShelfname(),username,shelfRequest.getTags()));
     }
 
     @Override
@@ -51,19 +62,12 @@ public class ShelfServiceImpl implements ShelfService {
     }
 
     @Override
-    public List<Book> getBooks(Long id, String accessToken) {
+    public List<String> getBooks(Long id) {
         List<String> bookIDs = getById(id).getShelfsBooks()
                                             .stream()
                                             .map(ShelfsBook::getBookID)
                                             .collect(Collectors.toList());
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("Authorization", "Bearer "+accessToken);
-        HttpEntity<String> entity = new HttpEntity<>("body", headers);
-        List<Book> books = bookIDs.stream()
-                .map(bookID ->restTemplate.exchange("http://localhost:8082/api/book/{bookId}", HttpMethod.GET, entity,Book.class,bookID).getBody())
-                .collect(Collectors.toList());
-        return books;
+
+        return bookIDs;
     }
 }

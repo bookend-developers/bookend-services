@@ -20,7 +20,7 @@ public class UserService {
         user.setId(id);
         return userRepository.save(user);
     }
-
+/*
     public void sendConfirmationMail(String toEmail, String token){
         final SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(toEmail);
@@ -28,11 +28,27 @@ public class UserService {
         mailMessage.setFrom("<MAIL>");
         mailMessage.setText(
                 "Kayıt olduğunuz için teşekkürler.\nKullanıcı adınız: " + toEmail + "\n Aktivasyon linki: " +
-                        "" + "localhost:9191/oauth/confirm"  + token +
+                        "" + "localhost:9191/oauth/confirm/"  + token +
                         "\n\n" +
                         "Thank you for registering.\nYour username: "+ toEmail+ "\n Activation link: " +
                         "" + "localhost:9191/oauth/confirm/"+ token);
 
         emailMailSender.sendEmail(mailMessage);
     }
+    
+    public void sendResetPasswordMail(String toEmail, String token){
+        final SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(toEmail);
+        mailMessage.setSubject("Reset Password Link!");
+        mailMessage.setFrom("<MAIL>");
+        mailMessage.setText(
+                "\nKullanıcı adınız: " + toEmail + "\n Şifre yenileme linki: " +
+                        "" + "localhost:9191/oauth/confirmPassword/"  + token +
+                        "\n\n" +
+                        "\nYour username: "+ toEmail+ "\n Reset Password link: " +
+                        "" + "localhost:9191/oauth/confirmPassword/"+ token);
+
+        emailMailSender.sendEmail(mailMessage);
+    }
+    */
 }

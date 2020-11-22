@@ -4,6 +4,8 @@ public class MailRequest {
 
     private Long id;
 
+    String email;
+
     private String subject;
 
     private String text;
@@ -30,5 +32,13 @@ public class MailRequest {
 
     public void setSubject(String subject) {
         this.subject = subject;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

@@ -8,5 +8,7 @@ public interface CommentService {
     List<Comment> getUserComments(String username);
     List<Comment> getBookComments(String bookId);
     Comment commentBook(Comment comment);
-    void deleteComment(Long commentId);
+    void deleteComment(Comment comment);
+    void deleteCommentByBookId(String bookId);
+    Comment findCommentId(Long commentId);
 }

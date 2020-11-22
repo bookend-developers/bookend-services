@@ -3,6 +3,7 @@ package com.bookclupservice.bookclubservice.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -10,7 +11,6 @@ import java.util.List;
 public class Member {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String userName;
@@ -22,9 +22,15 @@ public class Member {
     @JsonIgnore
     private List<Club> clubs;
 
-    @ManyToMany(mappedBy = "postMembers")
-    @JsonIgnore
-    private List<Club> allowedClubs;
+    public Member(Long id, String userName) {
+        this.id = id;
+        this.userName = userName;
+        this.clubs = new ArrayList<>();
+        this.ownedClubs = new ArrayList<>();
+    }
+
+    public Member() {
+    }
 
     public Long getId() {
         return id;
@@ -50,11 +56,4 @@ public class Member {
         this.clubs = clubs;
     }
 
-    public List<Club> getAllowedClubs() {
-        return allowedClubs;
-    }
-
-    public void setAllowedClubs(List<Club> allowedClubs) {
-        this.allowedClubs = allowedClubs;
-    }
 }

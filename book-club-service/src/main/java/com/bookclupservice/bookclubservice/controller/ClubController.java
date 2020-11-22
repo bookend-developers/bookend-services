@@ -1,74 +1,97 @@
 package com.bookclupservice.bookclubservice.controller;
 
-import com.bookclupservice.bookclubservice.model.Club;
-import com.bookclupservice.bookclubservice.model.Post;
-import com.bookclupservice.bookclubservice.model.SharePostRequest;
+import com.bookclupservice.bookclubservice.model.*;
 import com.bookclupservice.bookclubservice.payload.MessageResponse;
 import com.bookclupservice.bookclubservice.payload.request.*;
 import com.bookclupservice.bookclubservice.service.ClubService;
+import com.bookclupservice.bookclubservice.service.MemberService;
 import org.bouncycastle.cert.ocsp.Req;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import javax.swing.plaf.metal.MetalMenuBarUI;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("api/club")
+@RequestMapping("/api/club")
 public class ClubController {
 
     @Autowired
     private ClubService clubService;
-
+    @Autowired
+    private MemberService memberService;
     @GetMapping("/")
     public List<Club> getClubs(){
-        return clubService.getAll();
+
+        List<Club> publicClubs = clubService.getAll().stream()
+                .filter(club -> club.isPrivate()!=true)
+                .collect(Collectors.toList());
+        return publicClubs;
     }
 
-    @GetMapping("/requests/{club-id}")
-    public List<SharePostRequest> getRequests(@PathVariable("club-id") Long clubId){
-        return clubService.getRequests(clubId);
+    @GetMapping("/{username}")
+    public List<Club> getMyClubs(@PathVariable("username")String username){
+        return clubService.getMyClubs(username);
     }
-    @GetMapping("/post/{club-id}")
+
+    @GetMapping("/{club-id}/posts")
     public List<Post> getClubPosts(@PathVariable("club-id") Long clubId){
         return clubService.getClubPosts(clubId);
     }
-    @GetMapping("/post/{writer-id}")
-    public List<Post> getWriterPosts(@PathVariable("writer-id") Long writerId){
-        return clubService.getClubPosts(writerId);
+    @GetMapping("/{username}/invitations")
+    public List<Invitation> getMemberInvitations(@PathVariable("username") String username){
+        return clubService.getMemberInvitations(username);
     }
 
-    @PostMapping("/")
+    @GetMapping("/member/{username}/posts")
+    public List<Post> getWriterPosts(@PathVariable("username") String username){
+        return clubService.getWriterPosts(username);
+    }
+    @GetMapping("/{username}/clubs")
+    public List<Club> getUserClubs(@PathVariable("username") String username){
+
+        return memberService.find(username).getClubs();
+    }
+    @GetMapping("/post/{postid}")
+    public Post getPost(@PathVariable("postid") Long postId){
+        return clubService.findPostByID(postId);
+    }
+
+    @PostMapping("/add")
     public ResponseEntity<?> addClub(@RequestBody  NewClubRequest newClubRequest){
 
-        clubService.saveClub(newClubRequest);
-        return ResponseEntity.ok(new MessageResponse("club added succesfully"));
+        Club club = clubService.saveClub(newClubRequest);
+        return ResponseEntity.ok(club);
     }
 
     @PostMapping("/new-member")
-    public ResponseEntity<?> addClubToMember(@RequestBody NewClubMemberRequest newClubMemberRequest){
-        clubService.newMember(newClubMemberRequest);
+    public ResponseEntity<?> addClubToMember(@RequestBody NewClubMemberRequest newClubMemberRequest,
+                                             OAuth2Authentication auth){
+        clubService.newMember(newClubMemberRequest,auth.getName());
         return ResponseEntity.ok(new MessageResponse("member added succesfully"));
 
     }
-    @PostMapping("/request-membership")
-    public ResponseEntity<?> requestMembership(@RequestBody ClubMemberRequestRequest clubMemberRequestRequest){
-        clubService.requestMembership(clubMemberRequestRequest);
+
+
+    @PostMapping("/invite-person")
+    public ResponseEntity<?> invitePerson(@RequestBody InvitationRequest invitationRequest){
+
+        Invitation invitation =clubService.invitePerson(invitationRequest);
+        if(invitation==null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"You already invite this person.");
+        }
         return ResponseEntity.ok(new MessageResponse("request sended successfully"));
     }
-
-    @PostMapping("/request-post-permission")
-    public ResponseEntity<?> requestPermission(@RequestBody SharePostRequestRequest sharePostRequestRequest){
-        clubService.requestPermission(sharePostRequestRequest);
-        return ResponseEntity.ok(new MessageResponse("Permission request sended."));
-
-    }
-
-    @PostMapping("/allow-member")
-    public ResponseEntity<?> givePermission(@RequestBody NewPostAllowedMemberRequest newPostAllowedMemberRequest){
-        clubService.allowMemberForPost(newPostAllowedMemberRequest);
-        return ResponseEntity.ok(new MessageResponse("member now has post permission"));
-
+    @PostMapping("/reply-invitation")
+    public ResponseEntity<?> acceptPerson(@RequestBody InvitationReply invitationReply){
+        clubService.replyInvitation(invitationReply);
+        return ResponseEntity.ok(new MessageResponse("request sended successfully"));
     }
 
     @PostMapping("/new-post")
@@ -76,4 +99,23 @@ public class ClubController {
         clubService.savePost(newPostRequest);
         return ResponseEntity.ok(new MessageResponse("new post shared"));
     }
+    @PostMapping("/{clubid}/post/comment")
+    public ResponseEntity<?> commentPost(@RequestBody CommentRequest commentRequest,
+                                         @PathVariable("clubid") Long clubId,
+                                         OAuth2Authentication auth){
+        Club club = clubService.findByID(clubId);
+
+        commentRequest.setUsername(auth.getName());
+
+        boolean check = club.getMembers()
+                .stream()
+                .anyMatch(m -> m.getUserName().equals(auth.getName()));
+        if(check==false){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Only members can comment a post.");
+        }
+        clubService.sendComment(commentRequest);
+
+        return ResponseEntity.ok(new MessageResponse("new comment shared"));
+    }
+
 }

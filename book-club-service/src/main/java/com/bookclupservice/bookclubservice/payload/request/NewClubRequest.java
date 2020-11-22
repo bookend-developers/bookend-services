@@ -4,7 +4,7 @@ public class NewClubRequest {
 
     private String clubName;
     private String description;
-    private Long memberId;
+    private String username;
     private boolean privatee;
 
     public String getClubName() {
@@ -23,12 +23,12 @@ public class NewClubRequest {
         return privatee;
     }
 
-    public Long getMemberId() {
-        return memberId;
+    public String getUsername() {
+        return username;
     }
 
-    public void setMemberId(Long memberId) {
-        this.memberId = memberId;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public void setPrivatee(boolean privatee) {

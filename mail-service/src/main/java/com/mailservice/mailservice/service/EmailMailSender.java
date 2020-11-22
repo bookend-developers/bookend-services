@@ -43,4 +43,23 @@ public class EmailMailSender {
         mailMessage.setText(mailRequest.getText());
         sendEmail(mailMessage);
     }
+
+    public void sendConfirmationMailRequestsMail(MailRequest mailRequest){
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(mailRequest.getEmail());
+        mailMessage.setFrom("gradd.sschool@gmail.com");
+        mailMessage.setSubject(mailRequest.getSubject());
+        mailMessage.setText(mailRequest.getText());
+        sendEmail(mailMessage);
+    }
+    public void sendResetPasswordMailRequestsMail(MailRequest mailRequest){
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(mailRequest.getEmail());
+        mailMessage.setFrom("gradd.sschool@gmail.com");
+        mailMessage.setSubject(mailRequest.getSubject());
+        mailMessage.setText(mailRequest.getText());
+        sendEmail(mailMessage);
+    }
+
+
 }
