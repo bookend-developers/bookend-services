@@ -13,6 +13,11 @@ class KafkaTopicConfig {
         return TopicBuilder.name("user-registered").build();
     }
 
+    @Bean
+    public NewTopic comment() {
+        return TopicBuilder.name("comment").build();
+    }
+
 
 
 

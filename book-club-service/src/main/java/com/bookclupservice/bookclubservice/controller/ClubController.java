@@ -9,14 +9,17 @@ import org.bouncycastle.cert.ocsp.Req;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.swing.plaf.metal.MetalMenuBarUI;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("api/club")
+@RequestMapping("/api/club")
 public class ClubController {
 
     @Autowired
@@ -75,8 +78,9 @@ public class ClubController {
     }
 
     @PostMapping("/new-member")
-    public ResponseEntity<?> addClubToMember(@RequestBody NewClubMemberRequest newClubMemberRequest){
-        clubService.newMember(newClubMemberRequest);
+    public ResponseEntity<?> addClubToMember(@RequestBody NewClubMemberRequest newClubMemberRequest,
+                                             OAuth2Authentication auth){
+        clubService.newMember(newClubMemberRequest,auth.getName());
         return ResponseEntity.ok(new MessageResponse("member added succesfully"));
 
     }
@@ -101,6 +105,24 @@ public class ClubController {
     public ResponseEntity<?> sharePost(@RequestBody NewPostRequest newPostRequest){
         clubService.savePost(newPostRequest);
         return ResponseEntity.ok(new MessageResponse("new post shared"));
+    }
+    @PostMapping("/{clubid}/post/comment")
+    public ResponseEntity<?> commentPost(@RequestBody CommentRequest commentRequest,
+                                         @PathVariable("clubid") Long clubId,
+                                         OAuth2Authentication auth){
+        Club club = clubService.findByID(clubId);
+
+        commentRequest.setUsername(auth.getName());
+
+        boolean check = club.getMembers()
+                .stream()
+                .anyMatch(m -> m.getUserName().equals(auth.getName()));
+        if(check==false){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Only members can comment a post.");
+        }
+        clubService.sendComment(commentRequest);
+
+        return ResponseEntity.ok(new MessageResponse("new comment shared"));
     }
 
 }

@@ -64,6 +64,23 @@ public class MailListener {
             e.printStackTrace();
         }
     }
+    
+
+    @KafkaListener(topics = "resetPassword-mail",
+            groupId ="mailservice")
+    public void consumeResetPasswordMail(String message) {
+        System.out.println(message);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            MailRequest mailRequest = mapper.readValue(message, MailRequest.class);
+            emailMailSender.sendResetPasswordMailRequestsMail(mailRequest);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 }

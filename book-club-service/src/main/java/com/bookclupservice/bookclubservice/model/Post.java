@@ -4,6 +4,7 @@ package com.bookclupservice.bookclubservice.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "posts")
@@ -21,7 +22,7 @@ public class Post {
     @JoinColumn(name="club_id", nullable = false)
     @JsonBackReference
     private Club club;
-
+    private LocalDateTime date;
     @ManyToOne
     private Member writer;
 
@@ -61,7 +62,18 @@ public class Post {
         return writer;
     }
 
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
     public void setWriter(Member writer) {
         this.writer = writer;
     }
+
+
+
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +34,8 @@ public class Book {
     public Book(String bookId, String bookname) {
         this.bookId = bookId;
         this.bookname = bookname;
+        this.comments = new ArrayList<>();
+        this.rates = new ArrayList<>();
     }
 
     public Double getAverageRate() {

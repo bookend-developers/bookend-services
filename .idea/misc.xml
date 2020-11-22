@@ -3,5 +3,25 @@
   <component name="JavaScriptSettings">
     <option name="languageLevel" value="ES6" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="1.8.0_251" project-jdk-type="JavaSDK" />
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/../bookend-service/authorization-server/pom.xml" />
+        <option value="$PROJECT_DIR$/../bookend-service/book-club-service/pom.xml" />
+        <option value="$PROJECT_DIR$/../bookend-service/book-service/pom.xml" />
+        <option value="$PROJECT_DIR$/../bookend-service/mail-service/pom.xml" />
+        <option value="$PROJECT_DIR$/../bookend-service/message-service/pom.xml" />
+        <option value="$PROJECT_DIR$/../bookend-service/rate-comment-service/pom.xml" />
+        <option value="$PROJECT_DIR$/../bookend-service/shelf-service/pom.xml" />
+        <option value="$PROJECT_DIR$/author-service/pom.xml" />
+        <option value="$PROJECT_DIR$/authorization-server/pom.xml" />
+        <option value="$PROJECT_DIR$/book-club-service/pom.xml" />
+        <option value="$PROJECT_DIR$/message-service/pom.xml" />
+        <option value="$PROJECT_DIR$/book-service/pom.xml" />
+        <option value="$PROJECT_DIR$/rate-comment-service/pom.xml" />
+        <option value="$PROJECT_DIR$/shelf-service/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="11" project-jdk-type="JavaSDK" />
 </project>

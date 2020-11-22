@@ -58,13 +58,17 @@ public class ClubService {
         return clubRepository.save(club);
     }
 
-    public void newMember(NewClubMemberRequest newClubMemberRequest){
-        Member member = memberRepository.findById(newClubMemberRequest.getMemberId()).get();
+    public void newMember(NewClubMemberRequest newClubMemberRequest,String username){
+        Member member = memberRepository.findByUserName(username);
+        if(member== null){
+            member = new Member(newClubMemberRequest.getMemberId(),username);
+        }
         Club club = clubRepository.findById(newClubMemberRequest.getClubId()).get();
         member.getClubs().add(club);
         club.getMembers().add(member);
-        clubRepository.save(club);
         memberRepository.save(member);
+        clubRepository.save(club);
+
     }
 
     public Invitation invitePerson(InvitationRequest invitationRequest){
@@ -113,6 +117,12 @@ public class ClubService {
     }
     public Post findPostByID(Long postID){
         return postRepository.findPostById(postID);
+    }
+    public Club findByID(Long clubId){
+        return clubRepository.findClubById(clubId);
+    }
+    public void sendComment(CommentRequest commentRequest){
+        messageProducer.sendCommentRequest(commentRequest);
     }
 
     public Post findPostByID(Long postID){

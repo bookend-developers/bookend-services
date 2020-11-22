@@ -54,6 +54,8 @@ public class GenreServiceImpl implements GenreService{
 
     @Override
     public Genre update(Genre genre) {
+        KafkaMessage kafkaMessage = new KafkaMessage(GENRE_TOPIC,genre);
+        producer.publishGenre(kafkaMessage);
         return genreRepository.save(genre);
     }
 }

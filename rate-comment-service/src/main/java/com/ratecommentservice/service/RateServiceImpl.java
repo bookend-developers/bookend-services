@@ -41,13 +41,14 @@ public class RateServiceImpl implements RateService {
         Book book = bookRepository.findBookByBookId(rateRequest.getBookId());
         if(book==null){
             book = new Book(rateRequest.getBookId(),rateRequest.getBookname());
+            bookRepository.save(book);
 
         }
         rate = rateRepository.findByBookAndUsername(book,username);
 
 
         if(rate == null){
-            rate = new Rate(book,username,rateRequest.getRate());
+            rate = rateRepository.save(new Rate(book,username,rateRequest.getRate()));
         }else{
             rate.setRate(rateRequest.getRate());
         }

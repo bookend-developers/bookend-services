@@ -2,6 +2,7 @@ package com.bookclupservice.bookclubservice.kafka;
 
 import com.bookclupservice.bookclubservice.model.Member;
 import com.bookclupservice.bookclubservice.payload.MailRequest;
+import com.bookclupservice.bookclubservice.payload.request.CommentRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,5 +23,10 @@ public class MessageProducer {
 
         LOGGER.info("sending book='{}' to topic='{}'", mailRequest, "Mail");
         kafkaTemplate.send("Mail", mailRequest);
+    }
+    public void sendCommentRequest(CommentRequest commentRequest) {
+
+        LOGGER.info("sending book='{}' to topic='{}'", commentRequest, "comment");
+        kafkaTemplate.send("comment", commentRequest);
     }
 }
