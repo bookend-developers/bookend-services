@@ -28,6 +28,13 @@ public class MessageProducer {
         LOGGER.info("sending book='{}' to topic='{}'", kafkaUserRegistered, "user-registered");
         kafkaTemplate.send("user-registered", kafkaUserRegistered);
     }
+    
+    public void sendResetPasswordMailRequest(MailRequest mailRequest) {
+
+        LOGGER.info("sending mail='{}' to topic='{}'", mailRequest, "resetPassword-mail");
+        kafkaTemplate.send("resetPassword-mail", mailRequest);
+    }
+
 
 
 
