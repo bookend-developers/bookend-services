@@ -18,6 +18,11 @@ public class Profile {
 
     }
 
+//TODO usernam yap postrequest
+    public void setId(Long id) {
+        this.id = id;
+    }
+
 
     public String getFirstname() {
         return firstname;
@@ -32,9 +37,7 @@ public class Profile {
 
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+
 
     public String getEmail() {
         return email;

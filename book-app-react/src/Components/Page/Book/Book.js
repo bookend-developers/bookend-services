@@ -18,7 +18,8 @@ export default class Book extends React.Component {
         this.state = {
             loading: false,
             selectedBook: [],
-            author:[]
+            bookGenre:[]
+
         };
     }
 
@@ -37,8 +38,9 @@ export default class Book extends React.Component {
             .then(response => response.json())
             .then(result => {
                     if (result.status !== 500 || result.status !== 400) {
-                        this.setState({selectedBook: JSON.parse(result.book)});
-                        this.setState({author: JSON.parse(result.author)});
+                        this.setState({selectedBook: result});
+                        this.setState({bookGenre: result.genre});
+
                     } else {
                         alert(result.message)
                     }
@@ -47,7 +49,7 @@ export default class Book extends React.Component {
     }
 
     render() {
-        console.log('state', this.props.location.state.selectedBookId);
+
 
         return (
             <div style={{flexGrow: 1}}>
@@ -65,8 +67,8 @@ export default class Book extends React.Component {
                     />
 
                         <TableRow >
-                            <TableCell><div>Author : {this.state.author.name}</div></TableCell>
-                            <TableCell><div>Genre : {this.state.selectedBook.genre}</div></TableCell>
+                            <TableCell><div>Author : {this.state.selectedBook.author}</div></TableCell>
+                            <TableCell><div>Genre : {this.state.bookGenre.genre}</div></TableCell>
                             <TableCell><div>Page : {this.state.selectedBook.page}</div></TableCell>
                         </TableRow>
                             <Typography>

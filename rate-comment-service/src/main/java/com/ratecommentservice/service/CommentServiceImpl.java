@@ -32,7 +32,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<Comment> getBookComments(String bookId) {
         Book book = bookRepository.findBookByBookId(bookId);
-        return commentRepository.findByBookOrderByDateAsc(book);
+        return commentRepository.findByBook(book);
     }
 
     @Override

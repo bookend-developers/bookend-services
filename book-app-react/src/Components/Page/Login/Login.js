@@ -52,7 +52,7 @@ export default class Login extends Component {
         AuthService.login(this.state.username,this.state.password).then((res)=>{
             if(res.slice(2,7)!=="error") {
                 console.log(res)
-                this.props.history.push("/Home");
+                this.props.history.push("/admin");
                 window.location.reload();
             }else{
                 alert("\n" +

@@ -2,6 +2,7 @@ package com.bookend.bookservice.repository;
 
 import com.bookend.bookservice.model.Book;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,6 +14,7 @@ public interface BookRepository extends MongoRepository<Book, String> {
     Book findBookById(String id);
     List<Book> findByBookNameContainingIgnoreCase(String bookname);
     List<Book> findByAuthor(String author);
-    List<Book> findAllOrderByBookName();
+    List<Book> findAll(Sort sort);
+    List<Book> findBookByBookName(String bookname);
     List<Book> findBookByVerifiedIsFalse();
 }

@@ -2,6 +2,7 @@ package com.ratecommentservice.service;
 
 import com.ratecommentservice.model.Book;
 import com.ratecommentservice.model.Rate;
+import com.ratecommentservice.payload.RateRequest;
 import com.ratecommentservice.repository.BookRepository;
 import com.ratecommentservice.repository.RateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,19 +31,36 @@ public class RateServiceImpl implements RateService {
     @Override
     public Double getBookAverageRate(String bookID) {
         Book book = bookRepository.findBookByBookId(bookID);
-        List<Double> rates = rateRepository.findByBook(book).stream()
-                .map(p -> p.getRate())
-                .collect(Collectors.toList());
-        if(rates==null){
-            return 0.0;
-        }
-        return rates.stream().mapToDouble(a -> a)
-                .average().getAsDouble();
+
+        return book.getAverageRate();
     }
 
     @Override
-    public Rate save(Rate newRate) {
-        return rateRepository.save(newRate);
+    public Rate save(RateRequest rateRequest, String username) {
+        Rate rate;
+        Book book = bookRepository.findBookByBookId(rateRequest.getBookId());
+        if(book==null){
+            book = new Book(rateRequest.getBookId(),rateRequest.getBookname());
+            bookRepository.save(book);
+
+        }
+        rate = rateRepository.findByBookAndUsername(book,username);
+
+
+        if(rate == null){
+            rate = rateRepository.save(new Rate(book,username,rateRequest.getRate()));
+        }else{
+            rate.setRate(rateRequest.getRate());
+        }
+
+        book.getRates().add(rate);
+        book.setAverageRate(book.calAv());
+        bookRepository.save(book);
+        return rateRepository.save(rate);
+
+
+
+
     }
 
     @Override

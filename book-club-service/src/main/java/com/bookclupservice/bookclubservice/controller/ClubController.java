@@ -9,14 +9,17 @@ import org.bouncycastle.cert.ocsp.Req;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.swing.plaf.metal.MetalMenuBarUI;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("api/club")
+@RequestMapping("/api/club")
 public class ClubController {
 
     @Autowired
@@ -32,28 +35,32 @@ public class ClubController {
         return publicClubs;
     }
 
-    @GetMapping("/{owner-id}")
-    public List<Club> getMyClubs(@PathVariable("owner-id")Long ownerId){
-        return clubService.getMyClubs(ownerId);
+    @GetMapping("/{username}")
+    public List<Club> getMyClubs(@PathVariable("username")String username){
+        return clubService.getMyClubs(username);
     }
 
-    @GetMapping("{club-id}/posts")
+    @GetMapping("/{club-id}/posts")
     public List<Post> getClubPosts(@PathVariable("club-id") Long clubId){
         return clubService.getClubPosts(clubId);
     }
-    @GetMapping("{username}/invitations")
+    @GetMapping("/{username}/invitations")
     public List<Invitation> getMemberInvitations(@PathVariable("username") String username){
         return clubService.getMemberInvitations(username);
     }
 
-    @GetMapping("/{writer-id}/posts")
-    public List<Post> getWriterPosts(@PathVariable("writer-id") Long writerId){
-        return clubService.getClubPosts(writerId);
+    @GetMapping("/member/{username}/posts")
+    public List<Post> getWriterPosts(@PathVariable("username") String username){
+        return clubService.getWriterPosts(username);
     }
-    @GetMapping("/{username}/posts")
+    @GetMapping("/{username}/clubs")
     public List<Club> getUserClubs(@PathVariable("username") String username){
 
         return memberService.find(username).getClubs();
+    }
+    @GetMapping("/post/{postid}")
+    public Post getPost(@PathVariable("postid") Long postId){
+        return clubService.findPostByID(postId);
     }
 
     @PostMapping("/add")
@@ -64,8 +71,9 @@ public class ClubController {
     }
 
     @PostMapping("/new-member")
-    public ResponseEntity<?> addClubToMember(@RequestBody NewClubMemberRequest newClubMemberRequest){
-        clubService.newMember(newClubMemberRequest);
+    public ResponseEntity<?> addClubToMember(@RequestBody NewClubMemberRequest newClubMemberRequest,
+                                             OAuth2Authentication auth){
+        clubService.newMember(newClubMemberRequest,auth.getName());
         return ResponseEntity.ok(new MessageResponse("member added succesfully"));
 
     }
@@ -90,6 +98,24 @@ public class ClubController {
     public ResponseEntity<?> sharePost(@RequestBody NewPostRequest newPostRequest){
         clubService.savePost(newPostRequest);
         return ResponseEntity.ok(new MessageResponse("new post shared"));
+    }
+    @PostMapping("/{clubid}/post/comment")
+    public ResponseEntity<?> commentPost(@RequestBody CommentRequest commentRequest,
+                                         @PathVariable("clubid") Long clubId,
+                                         OAuth2Authentication auth){
+        Club club = clubService.findByID(clubId);
+
+        commentRequest.setUsername(auth.getName());
+
+        boolean check = club.getMembers()
+                .stream()
+                .anyMatch(m -> m.getUserName().equals(auth.getName()));
+        if(check==false){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Only members can comment a post.");
+        }
+        clubService.sendComment(commentRequest);
+
+        return ResponseEntity.ok(new MessageResponse("new comment shared"));
     }
 
 }
