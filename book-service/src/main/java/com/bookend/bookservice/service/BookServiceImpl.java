@@ -3,7 +3,9 @@ package com.bookend.bookservice.service;
 import com.bookend.bookservice.kafka.Producer;
 import com.bookend.bookservice.model.Author;
 import com.bookend.bookservice.model.Book;
+import com.bookend.bookservice.model.Genre;
 import com.bookend.bookservice.model.KafkaMessage;
+import com.bookend.bookservice.payload.BookRequest;
 import com.bookend.bookservice.repository.BookRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,6 +25,12 @@ public class BookServiceImpl implements BookService {
     private static final String DELETE_TOPIC = "deleting-book";
 
     private BookRepository bookRepository;
+    private GenreService genreService;
+    @Autowired
+    public void setGenreService(GenreService genreService) {
+        this.genreService = genreService;
+    }
+
     @Autowired
     public void setBookRepository(BookRepository bookRepository){
         this.bookRepository=bookRepository;
@@ -41,28 +49,42 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public Book saveOrUpdate(Book book) {
-        Map<String, String> message= new HashMap<String, String>();
-        List<Book> books = bookRepository.findBookByBookName(book.getBookName());
+    public Book save(BookRequest bookRequest) {
+        List<Book> books = bookRepository.findBookByBookName(bookRequest.getBookName());
         if(books.size()!=0){
-           List<Book> filteredbyAuthor = books.stream()
-                   .filter(b -> b.getAuthorid().equals(book.getAuthorid()))
-                   .collect(Collectors.toList());
-           if(filteredbyAuthor.size()!=0){
-               List<Book> filteredbyDesc = filteredbyAuthor.stream()
-                       .filter(b -> b.getDescription().equals(book.getDescription()))
-                       .collect(Collectors.toList());
-               if(filteredbyDesc.size()!=0){
-                   return null;
-               }
-           }
-
-
+            List<Book> filteredbyAuthor = books.stream()
+                    .filter(b -> b.getAuthorid().equals(bookRequest.getAuthorid()))
+                    .collect(Collectors.toList());
+            if(filteredbyAuthor.size()!=0){
+                List<Book> filteredbyDesc = filteredbyAuthor.stream()
+                        .filter(b -> b.getDescription().equals(bookRequest.getDescription()))
+                        .collect(Collectors.toList());
+                if(filteredbyDesc.size()!=0){
+                    return null;
+                }
+            }
         }
 
+        Book book = new Book();
+        book.setBookName(bookRequest.getBookName());
+        book.setAuthor(bookRequest.getAuthor());
+        book.setAuthorid(bookRequest.getAuthorid());
+        book.setDescription(bookRequest.getDescription());
+        book.setPage(bookRequest.getPage());
+        book.setVerified(bookRequest.getVerified());
+        book.setISBN(bookRequest.getISBN());
+        Genre genre = genreService.findByGenre(bookRequest.getGenre());
+        if(genre == null){
+            genre = genreService.addNewGenre(bookRequest.getGenre());
+        }
+        book.setGenre(genre);
+
         Book savedBook = bookRepository.save(book);
-        message.put("author",book.getAuthorid());
-        message.put("book",savedBook.getId());
+
+
+        Map<String, String> message= new HashMap<String, String>();
+        message.put("author",savedBook.getAuthorid());
+        message.put("bookRequest",savedBook.getId());
         KafkaMessage kafkaMessage = new KafkaMessage(BOOK_TOPIC,message);
         producer.publishBook(kafkaMessage);
         return savedBook;

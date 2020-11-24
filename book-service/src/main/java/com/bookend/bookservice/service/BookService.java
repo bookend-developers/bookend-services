@@ -1,13 +1,14 @@
 package com.bookend.bookservice.service;
 
 import com.bookend.bookservice.model.Book;
+import com.bookend.bookservice.payload.BookRequest;
 
 import java.util.List;
 import java.util.Map;
 
 public interface BookService {
     Book getById(String id);
-    Book saveOrUpdate(Book book);
+    Book save(BookRequest bookRequest);
     Book update(Book book);
     List<Book> getBooksofShelf(Long shelfID,String accessToken);
     List<Book> getAll();

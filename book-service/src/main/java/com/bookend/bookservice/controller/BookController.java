@@ -106,26 +106,16 @@ public class BookController {
     )
     @PostMapping("/new")
     public Book userBook(@RequestBody BookRequest bookRequest){
-        Book book= new Book();
-        if(bookRequest.getBookName()==null){
+       bookRequest.setVerified(false);
+        if(bookRequest.getBookName()==null  || bookRequest.getBookName().equals("")){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Book name field cannot be empty.");
         }
-        book.setBookName(bookRequest.getBookName());
-        if(bookRequest.getAuthor()==null){
+
+        if(bookRequest.getAuthor()==null || bookRequest.getAuthor().equals("")){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Author field cannot be empty.");
         }
-        book.setAuthor(bookRequest.getAuthor());
-        book.setDescription(bookRequest.getDescription());
-        Genre genre = genreService.findByGenre(bookRequest.getGenre());
-        if(genre == null){
-            genre = genreService.addNewGenre(bookRequest.getGenre());
-        }
-        book.setGenre(genre);
-        book.setAuthorid(bookRequest.getAuthorid());
-        book.setPage(bookRequest.getPage());
-        book.setVerified(Boolean.FALSE);
-        book.setISBN(bookRequest.getISBN());
-        Book addedBook =bookService.saveOrUpdate(book);
+
+        Book addedBook =bookService.save(bookRequest);
         if(addedBook==null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Book already exists.");
         }
