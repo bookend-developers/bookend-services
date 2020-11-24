@@ -74,7 +74,7 @@ export default class Invitations extends React.Component {
             redirect: 'follow'
         };
 
-        fetch("http://localhost:8089/api/club/"+AuthService.getCurrentUserId()+"/invitations", requestOptions)
+        fetch("http://localhost:8089/api/club/"+AuthService.getCurrentUserName()+"/invitations", requestOptions)
             .then(response => response.text())
             .then(result => {
                 if (result.slice(10, 23) !== "invalid_token") {

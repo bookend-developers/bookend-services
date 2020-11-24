@@ -13,6 +13,7 @@ import AllAuthor from "../../Home/AllAuthor";
 import MyClubs from "./MyClubs";
 import AddClub from "./AddClub";
 import Invitations from "./Invitations";
+import MembershipClubs from "./MembershipClubs";
 
 export default class AllClubs extends React.Component {
 
@@ -67,6 +68,11 @@ export default class AllClubs extends React.Component {
         if(this.state.chosen==="My"){
             return(<div>
                 <MyClubs/>
+            </div>)
+        }
+        if(this.state.chosen==="Membership"){
+            return(<div>
+                <MembershipClubs/>
             </div>)
         }
 

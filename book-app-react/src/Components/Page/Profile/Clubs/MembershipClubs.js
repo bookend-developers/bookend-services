@@ -15,7 +15,7 @@ import Invitations from "./Invitations";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
-import MembershipClubs from "./MembershipClubs";
+import UserShelves from "../Shelves/Shelves";
 import DialogActions from "@material-ui/core/DialogActions";
 export default class MyClubs extends React.Component {
 
@@ -49,46 +49,6 @@ export default class MyClubs extends React.Component {
         this.setState({page:0});
     };
 
-    onChangeUserName = (event) =>{
-        this.setState({userName:event.target.value})
-    };
-
-    handleInvitePerson(clubId){
-        let myHeaders = new Headers();
-        myHeaders.append("Authorization", "Bearer "+AuthService.getCurrentUser());
-        myHeaders.append("Content-Type", "application/json");
-
-        let raw = JSON.stringify(
-            {"clubId":clubId,
-                  "invitedPersonUserName":this.state.userName
-                });
-
-        let requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-        };
-
-        fetch("http://localhost:8089/api/club/invite-person", requestOptions)
-            .then(response => response.text())
-            .then(result => {
-                if (result.slice(10,23)!=="invalid_token") {
-                    console.log(result)
-                    if(JSON.parse(result).message==="request sended successfully" && JSON.parse(result).status !==500){
-                        alert("The invitation is sent")
-                    }else{
-                        alert("Sorry, there is a problem. Try again..")
-                    }
-
-                }else{
-                    this.props.history.push("/");
-                    window.location.reload();
-                }
-            })
-    }
-
-
     componentDidMount() {
         let myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer "+AuthService.getCurrentUser());
@@ -99,7 +59,7 @@ export default class MyClubs extends React.Component {
             redirect: 'follow'
         };
 
-        fetch("http://localhost:8089/api/club/"+AuthService.getCurrentUserName(), requestOptions)
+        fetch("http://localhost:8089/api/club/"+AuthService.getCurrentUserName()+"/clubs", requestOptions)
             .then(response => response.text())
             .then(result => {
                 if (result.slice(10,23)!=="invalid_token") {
@@ -122,9 +82,9 @@ export default class MyClubs extends React.Component {
                 <AllClubs/>
             </div>)
         }
-        if(this.state.chosen==="Membership"){
+        if(this.state.chosen==="My"){
             return(<div>
-                <MembershipClubs/>
+                <MyClubs/>
             </div>)
         }
 
@@ -136,9 +96,9 @@ export default class MyClubs extends React.Component {
                         style={{backgroundColor:"#E5E7E9"}}
                     >All Clubs</Button></td>
                     <td> <Button
-                        onClick={()=>this.setState({chosen:"Membership"})}
+                        onClick={()=>this.setState({chosen:"My"})}
                         style={{marginLeft:"13%",backgroundColor:"#E5E7E9"}}
-                    >Membership Clubs</Button></td>
+                    >My Clubs</Button></td>
                     <td><Invitations/></td>
                     <td><AddClub/></td>
                 </Table>
@@ -167,35 +127,7 @@ export default class MyClubs extends React.Component {
                                             private: row.private,
                                             selectedClubDescription: row.description}
                                     }}><Button style={{backgroundColor: "#5499C7", color: "white"}}>Show</Button>
-                                </Link>
-
-                                <Button
-                                    style={{marginLeft:"10%",backgroundColor:"#9B59B6", color:"white"}}
-                                    onClick={this.handleClickOpen}>Invite</Button>
-                                <Dialog
-                                    fullWidth={"xs"}
-                                    maxWidth={"xs"}
-                                    disableBackdropClick disableEscapeKeyDown open={this.state.open} onClose={this.handleClose}>
-                                    <DialogContent>
-                                        <TableCell><form noValidate autoComplete="off">
-                                            <TextField
-                                                style={{backgroundColor:"white"}}
-                                                id="standard-basic"
-                                                label="User Name"
-                                                value={this.state.userName}
-                                                onChange={this.onChangeUserName}
-                                            />
-                                        </form></TableCell>
-                                    </DialogContent>
-                                    <DialogActions>
-                                        <Button onClick={()=>this.handleInvitePerson(row.id)} color="primary">
-                                            Send
-                                        </Button>
-                                        <Button onClick={this.handleClose} color="primary">
-                                            Close
-                                        </Button>
-                                    </DialogActions>
-                                </Dialog></TableCell>
+                                </Link></TableCell>
                             </TableRow>
                         )}
                         <TablePagination

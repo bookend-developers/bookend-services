@@ -13,7 +13,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import AllAuthor from "./AllAuthor";
 import TextField from "@material-ui/core/TextField";
 import Table from "@material-ui/core/Table";
-import App from "../../../App/App";
+import Genre from "./Genre";
 
 export default class Home extends React.Component {
     constructor(props) {
@@ -35,7 +35,6 @@ export default class Home extends React.Component {
         this.handleSearchByBookName = this.handleSearchByBookName.bind(this);
         this.handleCurrentUserName = this.handleCurrentUserName.bind(this);
         this.handleListBook = this.handleListBook.bind(this);
-        this.handleCurrentUserId = this.handleCurrentUserId.bind(this);
 
     }
 
@@ -132,22 +131,10 @@ export default class Home extends React.Component {
             })
         }
 
-        handleCurrentUserId(){
-            AuthService.handleUserId(AuthService.getCurrentUserName())
-                .then((res)=>{
-                    if (res) {
-                        console.log(AuthService.getCurrentUserName())
-                    }else{
-                        alert("\n" +
-                            "You entered an incorrect username and password")
-                    }
-            })
-        }
 
     componentDidMount() {
        this.handleCurrentUserName();
        this.handleListBook();
-       this.handleCurrentUserId();
     }
 
     render() {
@@ -159,7 +146,12 @@ export default class Home extends React.Component {
             return(<div>
                 <AllAuthor/>
             </div>)
+        }if(this.state.searchCategory==="Genre"){
+            return(<div>
+                <Genre/>
+            </div>)
         }
+
 
 
         return (
@@ -183,6 +175,7 @@ export default class Home extends React.Component {
                     onClose={this.handleClose}
                 >
                     <MenuItem onClick={()=>this.handleSearchCategory("Book Name")}>Book</MenuItem>
+                    <MenuItem onClick={()=>this.handleSearchCategory("Genre")}>Genre</MenuItem>
                     <MenuItem onClick={()=>this.handleSearchCategory("Author Name")}>Author</MenuItem>
                 </Menu></TableCell>
                 <TableCell><form noValidate autoComplete="off">

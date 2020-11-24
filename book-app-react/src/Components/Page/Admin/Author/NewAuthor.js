@@ -40,7 +40,7 @@ export default class NewAuthor extends Component {
                 "biography":biography,
                 "birthDate":birthDate,
                 "dateOfDeath":dateOfdate,
-                });
+            });
 
         let requestOptions = {
             method: 'POST',

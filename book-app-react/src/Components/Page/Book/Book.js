@@ -35,16 +35,21 @@ export default class Book extends React.Component {
         };
 
         fetch("http://localhost:8082/api/book/"+this.props.location.state.selectedBookId, requestOptions)
-            .then(response => response.json())
+            .then(response => response.text())
             .then(result => {
+                if (result.slice(10,23)!=="invalid_token") {
+                    result=JSON.parse(result);
                     if (result.status !== 500 || result.status !== 400) {
                         this.setState({selectedBook: result});
                         this.setState({bookGenre: result.genre});
-
                     } else {
                         alert(result.message)
                     }
-                })
+                }else{
+                    this.props.history.push("/");
+                    window.location.reload();
+                }
+            })
 
     }
 
@@ -67,9 +72,13 @@ export default class Book extends React.Component {
                     />
 
                         <TableRow >
-                            <TableCell><div>Author : {this.state.selectedBook.author}</div></TableCell>
+                            <TableCell><div>Author : {this.state.selectedBook.authorid}</div></TableCell>
                             <TableCell><div>Genre : {this.state.bookGenre.genre}</div></TableCell>
                             <TableCell><div>Page : {this.state.selectedBook.page}</div></TableCell>
+                        </TableRow>
+                        <TableRow >
+                            <TableCell><div>ISBN : {this.state.selectedBook.isbn}</div></TableCell>
+                            <TableCell><div>Verified : {this.state.selectedBook.verified}</div></TableCell>
                         </TableRow>
                             <Typography>
                                 <TableCell><div>{this.state.selectedBook.description}</div></TableCell>

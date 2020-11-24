@@ -7,20 +7,41 @@ import AuthService from "../../../../Service/AuthService";
 import {Typography} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import { Link } from 'react-router-dom';
+import TablePagination from "@material-ui/core/TablePagination";
+import Table from "@material-ui/core/Table";
+import AddNewShelf from "./AddNewShelf";
+import AddNewTag from "./AddNewTag";
 
-export default class FetchRandomUser extends React.Component {
+
+export default class NewShelf extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            loading: false,
+            genres:[],
+            genreName:"",
             shelvesData: [],
             newShelfName:"",
+            page: 0,
+            rowsPerPage: 5,
         };
         this.onChangeShelfName=this.onChangeShelfName.bind(this);
-        this.createNewShelf=this.createNewShelf.bind(this);
         this.deleteShelf=this.deleteShelf.bind(this);
     }
+
+
+    handleChange = (event) => {
+        this.setState({genre:event.target.value});
+    };
+
+    handleChangePage = (event, newPage) => {
+        this.setState({page: newPage});
+    };
+
+    handleChangeRowsPerPage = (event) => {
+        this.setState({rowsPerPage: parseInt(event.target.value, 10)})
+        this.setState({page: 0});
+    };
 
     onChangeShelfName(event) {
         this.setState({
@@ -28,28 +49,6 @@ export default class FetchRandomUser extends React.Component {
         });
     }
 
-    createNewShelf(){
-        let myHeaders = new Headers();
-        myHeaders.append("Authorization", "Bearer "+ AuthService.getCurrentUser());
-
-        let requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            redirect: 'follow'
-        };
-
-        fetch("http://localhost:8083/api/shelf/new?name="+this.state.newShelfName, requestOptions)
-            .then(response => response.json())
-            .then(result => {
-                    if (result.status === 400) {
-                        alert("\n" + result.message)
-                    } else {
-                        alert("New shelf created. Please refresh..")
-                    }
-                }
-            )
-            .catch(error => console.log('error', error));
-    }
 
     deleteShelf(shelfId){
         let myHeaders = new Headers();
@@ -99,12 +98,18 @@ export default class FetchRandomUser extends React.Component {
 
         return (
             <div style={{flexGrow: 1}}>
-                <Paper style={{marginLeft:"20%",width:"50%"}}>
-                    <Typography
-                        style={{marginLeft:"10%",marginTop:"5%"}}
-                    >Shelves
-                    </Typography>
-                    {this.state.shelvesData.map((row)=>
+                <Paper style={{marginLeft:"25%",width:"50%"}}>
+
+                    <Table style={{marginLeft:"32%",width:"35%",marginTop:"2%"}}>
+                        <td><Typography
+                            style={{marginLeft:"10%",marginTop:"5%"}}
+                        >Shelves
+                        </Typography></td>
+                        <td><AddNewShelf/></td>
+                    </Table>
+                    {(this.state.rowsPerPage > 0
+                        ? this.state.shelvesData.slice(this.state.page * this.state.rowsPerPage,this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
+                        : this.state.shelvesData).map((row)=>
                         <TableRow >
                             <TableCell style={{marginLeft: "2%"}}>Shelf Name:</TableCell>
                             <TableCell><div>{row.shelfname}</div></TableCell>
@@ -117,26 +122,59 @@ export default class FetchRandomUser extends React.Component {
                             <TableCell><Button
                                 onClick={()=>this.deleteShelf(row.id)}
                                 style={{backgroundColor:"#C0392B",color:"white"}}>Delete</Button></TableCell>
+                        <TableCell><AddNewTag/></TableCell>
 
                         </TableRow>
-                    )}
-                    <br/>
-                    <TableRow>
-                        <TableCell><form noValidate autoComplete="off">
-                            <TextField
-                                style={{backgroundColor:"white"}}
-                                id="standard-basic"
-                                label="ShelfName"
-                                value={this.state.newShelfName}
-                                onChange={this.onChangeShelfName}
-                            />
-                        </form></TableCell>
-                        <TableCell><Button
-                            onClick={this.createNewShelf}
-                            style={{color:"white",backgroundColor:"#BB8FCE",marginTop:"10%"}} >Add New Shelf</Button></TableCell>
-                    </TableRow>
+                    )}<TablePagination
+                    count={50}
+                    page={this.state.page}
+                    onChangePage={this.handleChangePage}
+                    rowsPerPage={this.state.rowsPerPage}
+                    onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                />
+
                 </Paper>
             </div>
         );
     }
 }
+
+/*  <FormControl >
+                            <InputLabel id="demo-mutiple-checkbox-label">Tag</InputLabel>
+                            <Select
+                                labelId="demo-mutiple-checkbox-label"
+                                id="demo-mutiple-checkbox"
+                                multiple
+                                value={genreName}
+                                onChange={}
+                                input={<Input />}
+                                renderValue={(selected) => selected.join(', ')}
+                                MenuProps={MenuProps}
+                            >
+                                {genres.map((name) => (
+                                    <MenuItem key={name} value={name}>
+                                        <Checkbox checked={personName.indexOf(name) > -1} />
+                                        <ListItemText primary={name} />
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl><FormControl >
+                            <InputLabel id="demo-mutiple-checkbox-label">Tag</InputLabel>
+                            <Select
+                                labelId="demo-mutiple-checkbox-label"
+                                id="demo-mutiple-checkbox"
+                                multiple
+                                value={this.state.genreName}
+                                onChange={this.handleChange}
+                                input={<Input />}
+                                renderValue={(selected) => selected.join(', ')}
+                                MenuProps={MenuProps}
+                            >
+                                {genres.map((name) => (
+                                    <MenuItem key={name} value={name}>
+                                        <Checkbox checked={personName.indexOf(name) > -1} />
+                                        <ListItemText primary={name} />
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl> */

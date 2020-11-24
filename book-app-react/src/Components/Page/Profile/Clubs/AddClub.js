@@ -10,26 +10,17 @@ import AuthService from "../../../../Service/AuthService";
 import {Typography} from "@material-ui/core";
 import Radio from '@material-ui/core/Radio';
 import AddBoxIcon from "@material-ui/icons/AddBox";
-
-/*
-const styles = {
-    root: {
-        color: green[600],
-        '&$checked': {
-            color: green[500],
-        },
-    },
-    checked: {},
-};
-
- */
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 
 export default function AddClub(props) {
     const [open, setOpen] = React.useState(false);
     const [clubName, setClubName] = React.useState("");
     const [privateOrNot, setPrivateOrNot] = React.useState(false);
     const [description, setDescription] = React.useState(   "");
-
+    const [value, setValue] = React.useState('');
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -39,28 +30,38 @@ export default function AddClub(props) {
         setOpen(false);
     };
 
-    const onChangeClubName = (e) => {
-        setClubName(e.target.value);
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        if(value===true){
+            setPrivateOrNot(true);
+        }else{
+            setPrivateOrNot(false);
+        }
     };
 
-    const onChangePrivate= (e) => {
-        setPrivateOrNot(e.target.value);
+    const handleRadioChange = (event) => {
+        setPrivateOrNot(event.target.value);
+    };
+
+    const onChangeClubName = (e) => {
+        setClubName(e.target.value);
     };
 
     const onChangeDescription = (e) => {
         setDescription(e.target.value);
     };
 
-    const handleAddClub = (props) => {
+    const handleAddClub = (privateOrNot) => {
         let myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer "+AuthService.getCurrentUser());
         myHeaders.append("Content-Type", "application/json");
 
         let raw = JSON.stringify({
             "clubName":clubName,
-            "privatee":privateOrNot,
             "description":description,
-            "memberId":AuthService.getCurrentUserId()});
+            "username":AuthService.getCurrentUserName(),
+            "privatee":privateOrNot.booleanValue,
+           });
 
         let requestOptions = {
             method: 'POST',
@@ -69,7 +70,7 @@ export default function AddClub(props) {
             redirect: 'follow'
         };
 
-        fetch("http://localhost:8089/api/club/", requestOptions)
+        fetch("http://localhost:8089/api/club/add", requestOptions)
             .then(response => response.text())
             .then(result => {
                 console.log(privateOrNot)
@@ -109,16 +110,13 @@ export default function AddClub(props) {
                                 onChange={onChangeClubName}
                             />
                         </form></TableCell>
-
-                        <TableCell><form noValidate autoComplete="off">
-                            <TextField
-                                style={{backgroundColor:"white"}}
-                                id="standard-basic"
-                                label="Private(true/false)"
-                                value={privateOrNot}
-                                onChange={onChangePrivate}
-                            />
-                        </form></TableCell></TableRow><br/><br/>
+                        <TableCell><Typography>Private:</Typography></TableCell>
+                        <FormControl component="fieldset">
+                            <RadioGroup aria-label="gender" name="gender1" value={privateOrNot} onChange={handleRadioChange}>
+                                <FormControlLabel value="true" control={<Radio />} label="Yes" />
+                                <FormControlLabel value="false" control={<Radio />} label="No" />
+                            </RadioGroup>
+                        </FormControl></TableRow><br/><br/>
                     <Typography
                         style={{marginLeft:"5%"}}>Description</Typography>
                     <textarea  style={{marginLeft:"5%"}} rows="7" cols="50"
@@ -126,7 +124,7 @@ export default function AddClub(props) {
 
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleAddClub} color="primary">
+                    <Button onClick={()=>handleAddClub(privateOrNot)} color="primary">
                         Add
                     </Button>
                     <Button onClick={handleClose} color="primary">

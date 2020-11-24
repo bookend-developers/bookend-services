@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom';
 import AuthService from "../../../Service/AuthService";
 import DialogShelf from "./Shelves/DialogShelf";
 import EditProfile from "./EditProfile";
+import NewBook from "../Admin/Book/NewBook";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -65,7 +66,14 @@ export default function AutoGridNoWrap(props) {
                                 style={{textAlign:"center",marginTop:10,marginLeft:"36%"}}
                                 component={Link} to={"/inbox/sent/message"}>Messages</Button>
                             </TableRow>
-                            <TableRow><DialogShelf /></TableRow>
+                            <TableRow><Button
+                                orientation="vertical"
+                                color="primary"
+                                aria-label="vertical contained primary button group"
+                                variant="contained"
+                                style={{textAlign:"center",marginTop:10,marginLeft:"37.5%"}}
+                                component={Link} to={"/shelves"}>Shelves</Button>
+                            </TableRow>
                             <Button
                                 orientation="vertical"
                                 color="primary"
@@ -73,6 +81,12 @@ export default function AutoGridNoWrap(props) {
                                 variant="contained"
                                 style={{textAlign:"center",marginTop:10,marginLeft:"38%"}}
                                 component={Link} to={"/all-clubs" }>Groups</Button>
+                            <TableRow><Button orientation="vertical"
+                                              color="primary"
+                                              aria-label="vertical contained primary button group"
+                                              variant="contained"
+                                              style={{textAlign:"center",marginTop:10,marginLeft:"32%"}}
+                                              component={Link} to="/admin-book-new">Add new Book</Button></TableRow>
                         </Table>
                     </Grid>
                 </Grid>

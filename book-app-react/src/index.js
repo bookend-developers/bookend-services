@@ -25,6 +25,7 @@ import NewAuthor from "./Components/Page/Admin/Author/NewAuthor";
 import AdminPage from "./Components/Page/Admin/AdminPage";
 import Shelves from "./Components/Page/Profile/Shelves/Shelves";
 import Post from "./Components/Page/Profile/Clubs/Post";
+import Reset from "./Components/Page/ResetPassword/Reset";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -52,6 +53,7 @@ ReactDOM.render(
               <Route path="/admin-genres" component={Genres} />
               <Route path="/club" component={ClubAndPost} />
               <Route path="/club-post" component={Post} />
+              <Route path="/reset-password" component={Reset} />
           </Router>
       </BrowserRouter>
   </React.StrictMode>,

@@ -7,34 +7,35 @@ import AuthService from "../../../Service/AuthService";
 import {Typography} from "@material-ui/core";
 import { Link } from 'react-router-dom';
 import TablePagination from "@material-ui/core/TablePagination";
-import Home from './Home.js';
+import PopOverShelf from "./PopOverShelf";
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import AllAuthor from "./AllAuthor";
 import TextField from "@material-ui/core/TextField";
 import Table from "@material-ui/core/Table";
+import App from "../../../App/App";
 
-export default class AllAuthor extends React.Component {
+export default class Home extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             page:0,
             rowsPerPage:5,
-            author: [],
+            book: [],
             user: "",
             anchorEl:null,
-            authorSearch:""
+            searchCategory:"",
+            bookSearch:""
         };
+
         this.handleOnClickProfile=this.handleOnClickProfile.bind(this);
         this.handleClose=this.handleClose.bind(this);
         this.handleSearchCategory=this.handleSearchCategory.bind(this);
-        this.onChangeAuthorSearch = this.onChangeAuthorSearch.bind(this);
-        this.handleSearchByAuthorName = this.handleSearchByAuthorName.bind(this);
-    }
+        this.onChangeBookSearch = this.onChangeBookSearch.bind(this);
+        this.handleSearchByGenre = this.handleSearchByGenre.bind(this);
+        this.handleCurrentUserName = this.handleCurrentUserName.bind(this);
+        this.handleListBook = this.handleListBook.bind(this);
 
-    onChangeAuthorSearch(e){
-        this.setState({
-            authorSearch: e.target.value
-        });
     }
 
     handleSearchCategory = (category)=>{
@@ -49,6 +50,16 @@ export default class AllAuthor extends React.Component {
         this.setState({anchorEl:null});
     };
 
+    onChangeBookSearch(e){
+        this.setState({
+            bookSearch: e.target.value
+        });
+    }
+
+    handleOnClickProfile = () => {
+        this.props.history.push("/profile/"+AuthService.getCurrentUserName());
+        window.location.reload();
+    }
 
     handleChangePage = (event, newPage) => {
         this.setState({page:newPage});
@@ -59,12 +70,7 @@ export default class AllAuthor extends React.Component {
         this.setState({page:0});
     };
 
-    handleOnClickProfile = () => {
-        this.props.history.push("/profile/"+AuthService.getCurrentUserName());
-        window.location.reload();
-    }
-
-    handleSearchByAuthorName(){
+    handleSearchByGenre(){
         let myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer "+AuthService.getCurrentUser());
 
@@ -74,15 +80,15 @@ export default class AllAuthor extends React.Component {
             redirect: 'follow'
         };
 
-        fetch("http://localhost:8085/api/author?title="+this.state.authorSearch, requestOptions)
+        fetch("http://localhost:8082/api/book?genre="+this.state.bookSearch, requestOptions)
             .then(response => response.text())
             .then(result => {
                 if (result.slice(10,23)!=="invalid_token") {
                     if(result!=="[]") {
-                        this.setState({author: JSON.parse(result)});
+                        this.setState({book: JSON.parse(result)});
                         console.log(JSON.parse(result))
                     }else{
-                        alert("Author is not found for given title.")
+                        alert("Book is not found for given title.")
                     }
                 }else{
                     this.props.history.push("/");
@@ -91,7 +97,7 @@ export default class AllAuthor extends React.Component {
             })
     }
 
-    componentDidMount() {
+    handleListBook(){
         let myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer "+AuthService.getCurrentUser());
 
@@ -101,34 +107,52 @@ export default class AllAuthor extends React.Component {
             redirect: 'follow'
         };
 
-        fetch("http://localhost:8085/api/author", requestOptions)
+        fetch("http://localhost:8082/api/book", requestOptions)
             .then(response => response.text())
             .then(result => {
                 if (result.slice(10,23)!=="invalid_token") {
-                    this.setState({author:JSON.parse(result)});
+                    this.setState({book:JSON.parse(result)});
                     console.log(JSON.parse(result))
                 }else{
                     this.props.history.push("/");
                     window.location.reload();
                 }
             })
+    }
 
+    handleCurrentUserName(){
+        AuthService.handleUserName(AuthService.getCurrentUser()).then((res)=>{
+            if (res) {
+                console.log(AuthService.getCurrentUserName())
+            }else{
+                alert("\n" +
+                    "You entered an incorrect username and password")
+            }
+        })
+    }
+
+
+    componentDidMount() {
+        this.handleCurrentUserName();
+        this.handleListBook();
     }
 
     render() {
 
-        if (!this.state.author) {
-            return <div>didn't get an author</div>;
+        if (!this.state.book) {
+            return <div>didn't get a book</div>;
+        }
+        if(this.state.searchCategory==="Author Name"){
+            return(<div>
+                <AllAuthor/>
+            </div>)
         }
         if(this.state.searchCategory==="Book Name"){
             return(<div>
                 <Home/>
             </div>)
-        }if(this.state.searchCategory==="Genre"){
-            return(<div>
-                <Home/>
-            </div>)
         }
+
 
         return (
             <div style={{flexGrow: 1}}>
@@ -159,29 +183,29 @@ export default class AllAuthor extends React.Component {
                                 style={{backgroundColor:"white"}}
                                 id="standard-basic"
                                 label="Title"
-                                value={this.state.authorSearch}
-                                onChange={this.onChangeAuthorSearch}
+                                value={this.state.bookSearch}
+                                onChange={this.onChangeBookSearch}
                             />
                         </form></TableCell>
-                        <TableCell><Button style={{backgroundColor:"#FAE5D3"}} onClick={this.handleSearchByAuthorName}>Search</Button></TableCell>
+                        <TableCell><Button style={{backgroundColor:"#FAE5D3"}} onClick={this.handleSearchByBookName}>Search</Button></TableCell>
                     </TableRow>
                 </Table>
-
-                <Paper style={{marginLeft:"35%",minWidth:400,maxWidth: 500}}>
+                <Paper style={{marginLeft:"27%",minWidth:400,maxWidth: 700}}>
                     <Typography
                         style={{marginLeft:"30%",marginTop:"5%"}}
-                    >All Authors
+                    >Recommendations
                     </Typography>
                     {(this.state.rowsPerPage > 0
-                        ? this.state.author.slice(this.state.page * this.state.rowsPerPage,this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
-                        : this.state.author).map((row)=>
+                        ? this.state.book.slice(this.state.page * this.state.rowsPerPage,this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
+                        : this.state.book).map((row)=>
                         <TableRow >
-                            <TableCell style={{marginLeft: "2%"}}>Author Name:</TableCell>
-                            <TableCell><div>{row.name}</div></TableCell>
+                            <TableCell><div>Book Name: {row.bookName}</div></TableCell>
+                            <TableCell style={{marginLeft: "2%"}}>Genre: {row.genre.genre}</TableCell>
+                            <TableCell><PopOverShelf data={row.id}/></TableCell>
                             <TableCell><div><Link
                                 to={{
-                                    pathname: "/author/"+row.id,
-                                    state: { selectedAuthorId:row.id}
+                                    pathname: "/book/"+row.id,
+                                    state: { selectedBookId:row.id}
                                 }}><Button style={{backgroundColor: "#5499C7", color: "white"}}>Show</Button>
                             </Link></div></TableCell>
                         </TableRow>

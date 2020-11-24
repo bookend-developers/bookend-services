@@ -78,6 +78,7 @@ export default class Comment extends React.Component {
                 if (result.slice(10,23)!=="invalid_token") {
                     if (JSON.parse(result).status !== 400 || JSON.parse(result).status !== 401 || JSON.parse(result).status !== 404) {
                         alert("The comment is added successfully")
+                        window.location.reload()
                     } else {
                         alert(JSON.parse(result).message)
                     }
@@ -131,7 +132,6 @@ export default class Comment extends React.Component {
                         />
                     </form></TableCell>
                     <TableCell><Button onClick={this.giveComment} style={{backgroundColor:"#E6B0AA"}}>Add Comment</Button></TableCell>
-                    <TableCell><Button onClick={this.showComment} style={{backgroundColor:"#E5E7E9"}}>Refresh</Button></TableCell>
                 </TableRow>
                 {(this.state.rowsPerPage > 0
                     ? this.state.commentData.slice(this.state.page * this.state.rowsPerPage,this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
