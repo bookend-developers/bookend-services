@@ -1,6 +1,7 @@
 package com.bookend.shelfservice.kafka;
 
 import com.bookend.shelfservice.model.Tag;
+import com.bookend.shelfservice.payload.GenreMessage;
 import com.bookend.shelfservice.service.BookService;
 import com.bookend.shelfservice.service.ShelfService;
 import com.bookend.shelfservice.service.TagService;
@@ -49,14 +50,14 @@ public class Listener {
         System.out.println(message);
         ObjectMapper mapper = new ObjectMapper();
         try {
-            Tag tag = mapper.readValue(message, Tag.class);
-            Tag checkTag = tagService.findByID(tag.getId());
+            GenreMessage newGenre = mapper.readValue(message, GenreMessage.class);
+            Tag checkTag = tagService.findByID(newGenre.getId());
             if(checkTag!=null){
-                checkTag.setTag(tag.getTag());
+                checkTag.setTag(newGenre.getGenre());
                 tagService.save(checkTag);
             }
             else {
-                tagService.save(tag);
+                tagService.save(new Tag(newGenre.getId(),newGenre.getGenre()));
             }
 
 
