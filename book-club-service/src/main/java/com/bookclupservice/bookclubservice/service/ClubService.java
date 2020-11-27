@@ -1,11 +1,13 @@
 package com.bookclupservice.bookclubservice.service;
 
+import com.bookclupservice.bookclubservice.expection.NotMemberExpection;
 import com.bookclupservice.bookclubservice.kafka.MessageProducer;
 import com.bookclupservice.bookclubservice.model.*;
 import com.bookclupservice.bookclubservice.payload.MailRequest;
 import com.bookclupservice.bookclubservice.payload.request.*;
 import com.bookclupservice.bookclubservice.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -115,16 +117,20 @@ public class ClubService {
         invitationRepository.delete(invitation);
     }
 
-    public void savePost(NewPostRequest newPostRequest){
+    public void savePost(NewPostRequest newPostRequest, OAuth2Authentication auth) throws NotMemberExpection {
         Club club = clubRepository.findById(newPostRequest.getClubId()).get();
-        Member writer = memberRepository.findByUserName(newPostRequest.getUsername());
-        Post post = new Post();
-        post.setClub(club);
-        post.setText(newPostRequest.getText());
-        post.setTitle(newPostRequest.getTitle());
-        post.setWriter(writer);
+        Member writer = memberRepository.findByUserName((String) auth.getPrincipal());
+        if(club.getMembers().contains(writer)){
+            Post post = new Post();
+            post.setClub(club);
+            post.setText(newPostRequest.getText());
+            post.setTitle(newPostRequest.getTitle());
+            post.setWriter(writer);
 
-        postRepository.save(post);
+            postRepository.save(post);
+        }else
+            throw new NotMemberExpection("user doesn't belong to club");
+
     }
     public Post findPostByID(Long postID){
         return postRepository.findPostById(postID);
