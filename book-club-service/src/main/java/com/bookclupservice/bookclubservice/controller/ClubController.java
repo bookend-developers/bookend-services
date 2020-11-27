@@ -42,6 +42,20 @@ public class ClubController {
                 .collect(Collectors.toList());
         return publicClubs;
     }
+    @ApiOperation(value = "Get all members of club", response = Member.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved member list"),
+            @ApiResponse(code = 401, message = "You are not authorized to view resource."),
+            @ApiResponse(code = 404, message = "Club is not found.")
+    })
+    @GetMapping("/{clubid}/members")
+    public List<Member> getClubMembers(@PathVariable("clubid") Long clubId){
+        Club club = clubService.findByID(clubId);
+        if(club ==null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Club not found.");
+        }
+        return club.getMembers();
+    }
     @ApiOperation(value = "Get Clubs of the user", response = Club.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved club list"),
@@ -113,8 +127,11 @@ public class ClubController {
     @PostMapping("/new-member")
     public ResponseEntity<?> addClubToMember(@RequestBody NewClubMemberRequest newClubMemberRequest,
                                              OAuth2Authentication auth){
-        clubService.newMember(newClubMemberRequest,auth.getName());
-        return ResponseEntity.ok(new MessageResponse("member added succesfully"));
+        boolean check = clubService.newMember(newClubMemberRequest,auth.getName());
+        if(!check){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"You are already a member.");
+        }
+        return ResponseEntity.ok(new MessageResponse("member added successfully"));
 
     }
 
@@ -130,7 +147,7 @@ public class ClubController {
         if(invitation==null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"You already invite this person.");
         }
-        return ResponseEntity.ok(new MessageResponse("request sended successfully"));
+        return ResponseEntity.ok(new MessageResponse("request sent successfully"));
     }
     @ApiOperation(value = "Reply invitation as reject or accept", response = ResponseEntity.class)
     @ApiResponses(value = {
@@ -140,7 +157,7 @@ public class ClubController {
     @PostMapping("/reply-invitation")
     public ResponseEntity<?> acceptPerson(@RequestBody InvitationReply invitationReply){
         clubService.replyInvitation(invitationReply);
-        return ResponseEntity.ok(new MessageResponse("request sended successfully"));
+        return ResponseEntity.ok(new MessageResponse("request sent successfully"));
     }
     @ApiOperation(value = "Share new post", response = ResponseEntity.class)
     @ApiResponses(value = {
