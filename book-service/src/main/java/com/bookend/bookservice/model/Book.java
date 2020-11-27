@@ -18,7 +18,7 @@ public class Book {
     private String description;
     private String author;
     private String authorid;
-    private Boolean verified;
+    private boolean verified;
     private String ISBN;
     private List<Long> comments;
     private Double rate;
@@ -38,12 +38,12 @@ public class Book {
     public void setRate(Double rate) {
         this.rate = rate;
     }
-
-    public Boolean getVerified() {
+    @JsonGetter
+    public boolean getVerified() {
         return verified;
     }
 
-    public void setVerified(Boolean verified) {
+    public void setVerified(boolean verified) {
         this.verified = verified;
     }
 
@@ -103,7 +103,7 @@ public class Book {
         this.comments = new ArrayList<>();
         this.rate = 0.0;
     }
-
+    @JsonGetter
     public String getISBN() {
         return ISBN;
     }
@@ -112,7 +112,7 @@ public class Book {
         this.ISBN = ISBN;
     }
 
-    public Book(Integer page, Genre genre, String description, String bookName, String author, String authorid, Boolean verified, String ISBN) {
+    public Book(Integer page, Genre genre, String description, String bookName, String author, String authorid, boolean verified, String ISBN) {
         this.page = page;
         this.genre = genre;
         this.description = description;
