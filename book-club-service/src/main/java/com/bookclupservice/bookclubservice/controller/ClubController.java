@@ -42,6 +42,20 @@ public class ClubController {
                 .collect(Collectors.toList());
         return publicClubs;
     }
+    @ApiOperation(value = "Get all members of club", response = Member.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved member list"),
+            @ApiResponse(code = 401, message = "You are not authorized to view resource."),
+            @ApiResponse(code = 404, message = "Club is not found.")
+    })
+    @GetMapping("/{clubid}/members")
+    public List<Member> getClubMembers(@PathVariable("clubid") Long clubId){
+        Club club = clubService.findByID(clubId);
+        if(club ==null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Club not found.");
+        }
+        return club.getMembers();
+    }
     @ApiOperation(value = "Get Clubs of the user", response = Club.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved club list"),
