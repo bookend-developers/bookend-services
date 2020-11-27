@@ -146,7 +146,7 @@ public class ClubController {
 
         Invitation invitation =clubService.invitePerson(invitationRequest);
         if(invitation==null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"You already invite this person.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"You already invite this person or person does not exist.");
         }
         return ResponseEntity.ok(new MessageResponse("request sent successfully"));
     }
