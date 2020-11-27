@@ -38,8 +38,14 @@ public class MessageServiceImp implements MessageService{
 	}
 
 	@Override
-	public void deleteMessage(Message message) {
-		messageRepository.delete(message);
+	public void deleteMessage(Message message,String username) {
+		if(message.getReceiver().equals(username)){
+			message.setReceiver(null);
+		}
+		if(message.getSender().equals(username)){
+			message.setSender(null);
+		}
+		messageRepository.save(message);
 	}
 	
 	public List<Message> findChatByUserName(String userName1,String userName2){
@@ -65,6 +71,7 @@ public class MessageServiceImp implements MessageService{
 		}
 		
 		Collections.sort(chat, (o1, o2) -> o1.getSendDate().compareTo(o2.getSendDate()));
+		Collections.reverse(chat);
 		return chat;
 		
 	}

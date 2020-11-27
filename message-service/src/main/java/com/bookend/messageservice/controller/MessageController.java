@@ -52,6 +52,7 @@ public class MessageController {
 
         List<Message> chat =  messageService.findMessageByReceiver(auth.getUserAuthentication().getName());
         Collections.sort(chat, (o1, o2) -> o1.getSendDate().compareTo(o2.getSendDate()));
+        Collections.reverse(chat);
         
         return chat;
         
@@ -67,7 +68,7 @@ public class MessageController {
 
     	List<Message> chat = messageService.findMessageBySender(auth.getUserAuthentication().getName());
         Collections.sort(chat, (o1, o2) -> o1.getSendDate().compareTo(o2.getSendDate()));
-        
+        Collections.reverse(chat);
         return chat;
     }
     @ApiOperation(value = "Send a message for a specific user", response = ResponseEntity.class)
@@ -95,12 +96,12 @@ public class MessageController {
     }
     )
     @DeleteMapping("/delete/{messageid}")
-    public ResponseEntity<?> deleteMessage(@PathVariable("messageid")  String messageId){
+    public ResponseEntity<?> deleteMessage(@PathVariable("messageid")  String messageId,OAuth2Authentication auth){
         Message message = messageService.getById(messageId);
         if(message== null){
             throw  new ResponseStatusException(HttpStatus.NOT_FOUND,"Message is not found.");
         }
-        messageService.deleteMessage(message);
+        messageService.deleteMessage(message,auth.getName());
         return ResponseEntity.ok(new MessageResponse("Successfully deleted."));
     }
     @ApiOperation(value = "View user's messages with another user ", response = Message.class)
