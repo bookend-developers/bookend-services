@@ -172,14 +172,19 @@ public class ClubController {
     @ApiOperation(value = "Comment a post", response = ResponseEntity.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully commented."),
-            @ApiResponse(code = 401, message = "You are not authorized to comment resource.")
+            @ApiResponse(code = 401, message = "You are not authorized to comment resource."),
+            @ApiResponse(code = 403, message = "Only members can comment a post."),
+            @ApiResponse(code = 404, message = "Post is not found")
     })
-    @PostMapping("/{clubid}/post/comment")
+    @PostMapping("/post/comment")
     public ResponseEntity<?> commentPost(@RequestBody CommentRequest commentRequest,
-                                         @PathVariable("clubid") Long clubId,
                                          OAuth2Authentication auth){
-        Club club = clubService.findByID(clubId);
 
+        Post post = clubService.findPostByID(commentRequest.getPostID());
+        if(post==null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Post is not found");
+        }
+        Club club = post.getClub();
         commentRequest.setUsername(auth.getName());
 
         boolean check = club.getMembers()
