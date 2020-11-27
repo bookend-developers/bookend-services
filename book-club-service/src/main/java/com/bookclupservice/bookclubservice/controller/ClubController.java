@@ -113,8 +113,11 @@ public class ClubController {
     @PostMapping("/new-member")
     public ResponseEntity<?> addClubToMember(@RequestBody NewClubMemberRequest newClubMemberRequest,
                                              OAuth2Authentication auth){
-        clubService.newMember(newClubMemberRequest,auth.getName());
-        return ResponseEntity.ok(new MessageResponse("member added succesfully"));
+        boolean check = clubService.newMember(newClubMemberRequest,auth.getName());
+        if(!check){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"You are already a member.");
+        }
+        return ResponseEntity.ok(new MessageResponse("member added successfully"));
 
     }
 
@@ -130,7 +133,7 @@ public class ClubController {
         if(invitation==null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"You already invite this person.");
         }
-        return ResponseEntity.ok(new MessageResponse("request sended successfully"));
+        return ResponseEntity.ok(new MessageResponse("request sent successfully"));
     }
     @ApiOperation(value = "Reply invitation as reject or accept", response = ResponseEntity.class)
     @ApiResponses(value = {
@@ -140,7 +143,7 @@ public class ClubController {
     @PostMapping("/reply-invitation")
     public ResponseEntity<?> acceptPerson(@RequestBody InvitationReply invitationReply){
         clubService.replyInvitation(invitationReply);
-        return ResponseEntity.ok(new MessageResponse("request sended successfully"));
+        return ResponseEntity.ok(new MessageResponse("request sent successfully"));
     }
     @ApiOperation(value = "Share new post", response = ResponseEntity.class)
     @ApiResponses(value = {

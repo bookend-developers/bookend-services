@@ -61,16 +61,24 @@ public class ClubService {
         return clubRepository.save(club);
     }
 
-    public void newMember(NewClubMemberRequest newClubMemberRequest,String username){
+    public boolean newMember(NewClubMemberRequest newClubMemberRequest,String username){
         Member member = memberRepository.findByUserName(username);
         if(member== null){
             member = new Member(newClubMemberRequest.getMemberId(),username);
         }
+
         Club club = clubRepository.findById(newClubMemberRequest.getClubId()).get();
+        if(club.getOwner().getUserName().equals(username)){
+            return false;
+        }
+        if(club.getMembers().stream().anyMatch(m-> m.getUserName().toLowerCase().matches(username.toLowerCase()))){
+            return false;
+        }
         member.getClubs().add(club);
         club.getMembers().add(member);
         memberRepository.save(member);
         clubRepository.save(club);
+        return true;
 
     }
 
