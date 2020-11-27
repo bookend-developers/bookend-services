@@ -6,9 +6,9 @@ import java.util.List;
 
 public class ShelfRequest {
     private String shelfname;
-    private List<Tag> tags;
+    private List<String > tags;
 
-    public ShelfRequest(String shelfname, List<Tag> tags) {
+    public ShelfRequest(String shelfname, List<String> tags) {
         this.shelfname = shelfname;
         this.tags = tags;
     }
@@ -24,11 +24,11 @@ public class ShelfRequest {
         this.shelfname = shelfname;
     }
 
-    public List<Tag> getTags() {
+    public List<String> getTags() {
         return tags;
     }
 
-    public void setTags(List<Tag> tags) {
+    public void setTags(List<String> tags) {
         this.tags = tags;
     }
 }

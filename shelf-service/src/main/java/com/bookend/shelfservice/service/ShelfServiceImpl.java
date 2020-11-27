@@ -48,9 +48,13 @@ public class ShelfServiceImpl implements ShelfService {
         if(shelfRequest.getTags().isEmpty()){
             return shelfRepository.save(new Shelf(shelfRequest.getShelfname(),username));
         }
+        List<Tag> tags = shelfRequest.getTags()
+                                            .stream()
+                                            .map(t -> tagRepository.findByTag(t))
+                                            .collect(Collectors.toList());
        
 
-        return shelfRepository.save(new Shelf(shelfRequest.getShelfname(),username,shelfRequest.getTags()));
+        return shelfRepository.save(new Shelf(shelfRequest.getShelfname(),username,tags));
     }
 
     @Override
