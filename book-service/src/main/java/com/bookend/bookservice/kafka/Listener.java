@@ -2,6 +2,7 @@ package com.bookend.bookservice.kafka;
 
 import com.bookend.bookservice.model.Book;
 import com.bookend.bookservice.service.BookService;
+import com.bookend.bookservice.service.SortService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,16 @@ import java.util.Map;
 
 @Component
 public class Listener {
+    private SortService sortService;
+
     private BookService bookService;
+
+    @Autowired
+    public void setSortService(SortService sortService) {
+        this.sortService = sortService;
+    }
+
+
     @Autowired
     public void setBookService(BookService bookService) {
         this.bookService = bookService;
@@ -27,11 +37,13 @@ public class Listener {
         try {
             Map<String,String> msg = mapper.readValue(message,Map.class);
             Book book = bookService.getById(msg.get("book"));
+            sortService.remove(book,"comment");
             System.out.println(msg.get("comment"));
             System.out.println(Long.valueOf(msg.get("comment")));
             book.getComments().add(Long.valueOf(msg.get("comment")));
-
-            bookService.update(book);
+            Book updatedBook = bookService.update(book);
+            sortService.add(updatedBook,"comment");
+            sortService.sort("comment");
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -47,10 +59,13 @@ public class Listener {
         ObjectMapper mapper = new ObjectMapper();
         try {
             Map<String,String> msg = mapper.readValue(message,Map.class);
-            Book book = bookService.getById(msg.get("book"));
-            book.setRate(Double.valueOf(msg.get("rate")));
 
-            bookService.update(book);
+            Book book = bookService.getById(msg.get("book"));
+            sortService.remove(book,"rate");
+            book.setRate(Double.valueOf(msg.get("rate")));
+            Book updatedBook = bookService.update(book);
+            sortService.add(updatedBook,"rate");
+            sortService.sort("rate");
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         } catch (IOException e) {

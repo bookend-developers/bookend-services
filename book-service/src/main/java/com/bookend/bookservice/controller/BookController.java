@@ -63,11 +63,13 @@ public class BookController {
     @GetMapping("")
     public List<Book> search(@RequestParam(required = false) String title
             ,@RequestParam(required = false) String genre
-            ,@RequestParam(required = false) boolean rateSort, OAuth2Authentication auth){
+            ,@RequestParam(required = false) boolean rateSort
+            ,@RequestParam(required = false) boolean commentSort
+            , OAuth2Authentication auth){
         final OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) auth.getDetails();
 
         String accessToken = details.getTokenValue();
-        List<Book> books = bookService.search(title,genre,rateSort,accessToken);
+        List<Book> books = bookService.search(title,genre,rateSort,commentSort,accessToken);
         if(books==null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"There is no match.");
         }

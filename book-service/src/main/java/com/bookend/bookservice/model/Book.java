@@ -11,7 +11,6 @@ import java.util.List;
 @Document(collection = "books")
 public class Book {
     @Id
-
     private String id;
     private Integer page;
     private String bookName;

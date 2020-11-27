@@ -13,7 +13,7 @@ public interface BookService {
     List<Book> getBooksofShelf(Long shelfID,String accessToken);
     List<Book> getAll();
     List<Book> findByAuthor(String author);
-    List<Book> search(String title,String genre,boolean rateSort,String accessToken);
+    List<Book> search(String title,String genre,boolean rateSort,boolean commentSort,String accessToken);
     void delete(String bookId);
     List<Book> findBookByVerifiedIsFalse();
 
