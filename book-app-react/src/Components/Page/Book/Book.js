@@ -5,9 +5,6 @@ import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import AuthService from "../../../Service/AuthService";
 import {Typography} from "@material-ui/core";
-import {Link, Redirect} from 'react-router-dom';
-import TablePagination from "@material-ui/core/TablePagination";
-import Table from "@material-ui/core/Table";
 import Paper from "@material-ui/core/Paper";
 import Rate from "./Rate";
 import Comment from "./Comment";
@@ -59,7 +56,7 @@ export default class Book extends React.Component {
         return (
             <div style={{flexGrow: 1}}>
                 <Grid container spacing={3}>
-                <Grid item xs={12} sm={6} style={{marginLeft:"10%",minWidth:400,maxWidth: 500}}>
+                <Grid item xs={12} sm={6} style={{marginLeft:"10%",maxWidth: 500}}>
                     <Paper>
                     <Typography
                         style={{marginLeft:"30%",marginTop:"5%"}}
@@ -83,13 +80,13 @@ export default class Book extends React.Component {
                             <Typography>
                                 <TableCell><div>{this.state.selectedBook.description}</div></TableCell>
                             </Typography>
-                        <Rate data={{bookId:this.state.selectedBook.id,bookName: this.state.selectedBook.bookName}}/>
+                        <Rate data={{bookId:this.props.location.state.selectedBookId,bookName: this.state.selectedBook.bookName}}/>
                     </Paper>
                 </Grid>
-                <Grid item xs={16} sm={8} style={{marginLeft:"5%",minWidth:400,maxWidth: 700,maxHeight:600}}>
+                <Grid item xs={16} sm={6} style={{marginLeft:"5%",maxWidth: 700,maxHeight:600}}>
                     <Paper style={{marginTop:"3.5%"}}>
                     <Typography>
-                   <Comment data={{bookId:this.state.selectedBook.id,bookName: this.state.selectedBook.bookName}}/>
+                   <Comment data={{bookId:this.props.location.state.selectedBookId,bookName: this.state.selectedBook.bookName}}/>
                     </Typography>
                     </Paper>
                     </Grid>

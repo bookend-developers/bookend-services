@@ -62,7 +62,7 @@ public class AuthController {
         return ResponseEntity.ok(res);
     }
     
-    @GetMapping("confirmPassword/{token}")
+    @PostMapping("confirmPassword/{token}")
     public ResponseEntity<?> confirmResetPassword(@PathVariable("token") String token,@RequestBody NewPasswordRequest newPasswordRequest){
     	ConfirmResponse confirmResponse = userService.confirmPassword(token,newPasswordRequest);
         return ResponseEntity.ok(confirmResponse);

@@ -19,7 +19,7 @@ export default class FetchRandomUser extends React.Component {
             subject:"",
             chat:[],
             page:0,
-            rowsPerPage:5,
+            rowsPerPage:4,
         };
         this.sendMessage=this.sendMessage.bind(this);
         this.onChangeSubject=this.onChangeSubject.bind(this);
@@ -106,16 +106,6 @@ export default class FetchRandomUser extends React.Component {
             <div style={{flexGrow: 1}}>
                 <Grid container spacing={3}>
                     <Grid item xs={12} sm={6} style={{marginLeft:"10%",marginTop:"2%",minWidth:400,maxWidth: 500}}>
-                        <Table style={{marginLeft:"32%",width:"20%",marginTop:"2%"}}>
-                            <td> <Button
-                                component={ Link } to="/home"
-                                style={{backgroundColor:"#E5E7E9"}}
-                            >Home</Button></td>
-                            <td> <Button
-                                component={ Link } to={"/profile/"+AuthService.getCurrentUserName()}
-                                style={{marginLeft:"20%",backgroundColor:"#E5E7E9"}}
-                            >Profile</Button></td>
-                        </Table>
                         <Paper>
                     <Typography
                         style={{marginLeft:"40%",marginTop:"10%"}}
@@ -140,16 +130,14 @@ export default class FetchRandomUser extends React.Component {
                     </form><br/>
                     <Button
                         style={{backgroundColor:"#CB4335",color:"white",marginLeft:"40%"}}
-                        onClick={()=>{if(this.state.text!==""){this.sendMessage()}else{alert("Text cannot be empty")}}}>Send</Button>
+                        onClick={()=>{if(this.state.text!=="" && this.state.subject!==""){this.sendMessage()}else{alert("Text and subject cannot be empty")}}}>Send</Button>
                     </Paper>
                 </Grid>
                     <Grid item xs={16} sm={8} style={{marginLeft:"5%",minWidth:400,maxWidth: 700,maxHeight:600}}>
                         <Paper style={{marginTop:"3.5%"}}>
                             <Table>
                             <TableRow><TableCell><Typography style={{marginTop:"3%",marginLeft:"5%"}}>Chat</Typography></TableCell>
-                                <TableCell><Button
-                                    style={{backgroundColor:"#E5E7E9"}}
-                                    onClick={this.handleMessageRefresh}>Refresh</Button></TableCell>
+
                             </TableRow>
                             </Table>
 
@@ -162,8 +150,11 @@ export default class FetchRandomUser extends React.Component {
                                   <tr> {row.sender} said to {row.receiver}</tr>
                                            <tr>Date and Time: {row.sendDate.split("T")[0]+ " and "+ row.sendDate.split("T")[1].split(".")[0]}</tr>
                                </tr>
+                                       <tr>
+                                           Subject: {row.subject}
+                                       </tr>
                                    <tr>
-                                   {row.text}
+                                   Message: {row.text}
                                    </tr>
                                    </TableCell>
                                </TableRow>

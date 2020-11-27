@@ -87,12 +87,8 @@ export default class Author extends React.Component {
 
         return (
             <div style={{flexGrow: 1}}>
-                <Button
-                    component={ Link } to={"/profile/"+AuthService.getCurrentUserName()}
-                    style={{marginLeft:"48%",marginTop:"2%",backgroundColor:"#E5E7E9"}}
-                >Profile</Button>
                 <Grid container spacing={3}>
-                    <Grid item xs={12} sm={6} style={{marginLeft:"10%",minWidth:400,maxWidth: 500}}>
+                    <Grid item xs={12} sm={6} style={{marginLeft:"10%",marginTop:"5%",minWidth:400,maxWidth: 500}}>
                         <Paper>
                             <Typography
                                 style={{marginLeft:"35%",marginTop:"5%"}}

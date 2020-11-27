@@ -37,6 +37,18 @@ export default class ClubAndPost extends React.Component {
         this.setState({page:0});
     };
 
+    handleCurrentUserId(){
+        AuthService.handleUserId(AuthService.getCurrentUserName())
+            .then((res)=>{
+                if (res) {
+                    console.log(AuthService.getCurrentUserName())
+                }else{
+                    alert("\n" +
+                        "You entered an incorrect username and password")
+                }
+            })
+    }
+
     handleJoin = (clubId) => {
         let myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer "+AuthService.getCurrentUser());
@@ -47,6 +59,7 @@ export default class ClubAndPost extends React.Component {
                 "memberId":AuthService.getCurrentUserId()
             });
 
+        console.log(AuthService.getCurrentUserId())
         let requestOptions = {
             method: 'POST',
             headers: myHeaders,
@@ -58,11 +71,10 @@ export default class ClubAndPost extends React.Component {
             .then(response => response.text())
             .then(result => {
                 if (result.slice(10,23)!=="invalid_token") {
-                    console.log(result)
-                    if(JSON.parse(result).message==="member added succesfully" && JSON.parse(result).status !==500){
+                    if(JSON.parse(result).message==="member added successfully" && JSON.parse(result).status !==400){
                         alert("You are joined to the club")
                     }else{
-                        alert("Sorry, there is a problem. Try again..")
+                        alert("You are already member")
                     }
 
                 }else{
@@ -73,6 +85,7 @@ export default class ClubAndPost extends React.Component {
     }
 
     componentDidMount() {
+        this.handleCurrentUserId();
         let myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer "+AuthService.getCurrentUser());
 
@@ -101,18 +114,8 @@ export default class ClubAndPost extends React.Component {
             }
         return (
             <div style={{flexGrow: 1}}>
-                <Table style={{marginLeft:"42%",width:"20%",marginTop:"1%"}}>
-                    <td> <Button
-                        component={ Link } to="/home"
-                        style={{backgroundColor:"#E5E7E9"}}
-                    >Home</Button></td>
-                    <td> <Button
-                        component={ Link } to={"/profile/"+AuthService.getCurrentUserName()}
-                        style={{backgroundColor:"#E5E7E9"}}
-                    >Profile</Button></td>
-                </Table>
                 <Grid container spacing={3}>
-                    <Grid item xs={12} sm={6} style={{marginLeft:"10%",marginTop:"2%",minWidth:400,maxWidth: 500}}>
+                    <Grid item xs={12} sm={6} style={{marginLeft:"10%",marginTop:"7%",minWidth:400,maxWidth: 500}}>
                         <Paper>
                             <Typography style={{textAlign:"center"}}>Club Name : {this.props.location.state.selectedClubName}</Typography>
                             <img

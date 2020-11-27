@@ -23,7 +23,7 @@ export default class NewBook extends Component {
             author_name: "",
             author_id: "",
             genre: "",
-            book_page: null,
+            book_page: 0,
             description: "",
             ISBN: "",
             page: 0,
@@ -161,15 +161,30 @@ export default class NewBook extends Component {
         });
     }
 
+    checkValidation =()=>{
+        if(this.state.book_name!=="" && this.state.genre!=="" && this.state.book_page!=="" && this.state.ISBN!=="" && this.state.author!=="" && this.state.description!=="") {
+            if ((/^\d+$/.test(this.state.ISBN)) && (/^\d+$/.test(this.state.book_page))) {
+                if(this.state.ISBN.length===13) {
+                    this.handleNewBook(this.state.book_page, this.state.genre, this.state.description, this.state.book_name, this.state.author_name, this.state.author_id, this.state.ISBN)
+                }else{
+                    alert("The length of the ISBN must be 13")
+                }
+            }else{
+                alert("ISBN or book page must contain only digits.")
+            }
+
+        }else{
+            alert("All fields must be filled!!")
+        }
+    }
 
     render() {
 
         return (
             <div className="col-md-12">
                 <div className="card card-container">
-                    <Paper style={{backgroundColor:"#F8F9F9",marginTop:"2%",marginLeft:"25%",width:"50%"}}>
-                        <Typography style={{textAlign:"center"}}>New Book</Typography>
-
+                    <Paper style={{backgroundColor:"#F8F9F9",marginTop:"1.5%",marginLeft:"25%",width:"50%"}}>
+                        <Typography style={{marginLeft:"40%"}}>New Book</Typography>
                         <form style={{marginTop:"5%",marginLeft:"30%"}}>
                             <div className="form-group">
                                 <TextField
@@ -244,6 +259,7 @@ export default class NewBook extends Component {
                                     label="ISBN13"
                                     value={this.state.ISBN}
                                     onChange={this.onChangeISBN}
+                                    inputProps={{ maxLength: 13, minLength:13 }}
                                 />
                             </div><br/>
                             <div className="form-group">
@@ -275,17 +291,12 @@ export default class NewBook extends Component {
                             style={{marginLeft:"22%"}}>Description:</Typography>
                         <textarea  style={{marginLeft:"22%"}} rows="7" cols="50" value={this.state.description} onChange={this.onChangeDescription} />
                         <Button
-                            onClick={()=>{
-                                if(this.state.book_name!=="" && this.state.genre!=="" && this.state.page!=="" && this.state.ISBN!=="" && this.state.author!=="" && this.state.description!=="")
-                                {this.handleNewBook(this.state.book_page,this.state.genre,this.state.description,this.state.book_name,this.state.author_name,this.state.author_id,this.state.ISBN)}
-                                else{
-                                    alert("All fields must be filled!!")
-                                }}}
-                            style={{marginTop:"5%",marginLeft:"26%"}}
+                            onClick={()=>{this.checkValidation()}}
+                            style={{marginTop:"3%",marginLeft:"33%",backgroundColor:"#5DADE2",color:"white"}}
                             variant="outlined">Add</Button>
                         <Button
                             component={Link} to={"/admin"}
-                            style={{marginTop:"5%",marginLeft:"5%"}}
+                            style={{marginTop:"3%",marginLeft:"5%",backgroundColor:"#C0392B",color:"white"}}
                             variant="outlined"
                         >Cancel</Button>
 

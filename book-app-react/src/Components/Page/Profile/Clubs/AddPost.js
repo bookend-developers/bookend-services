@@ -83,6 +83,7 @@ export default class Invitations extends React.Component {
                     console.log(result)
                     if(JSON.parse(result).message==="new post shared" && JSON.parse(result).status !==500){
                         alert("New post shared")
+                        window.location.reload();
                     }else{
                         alert("Sorry, there is a problem. Try again..")
                     }
@@ -124,7 +125,13 @@ export default class Invitations extends React.Component {
                                    value={this.state.text} onChange={this.onChangeText} />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={()=>this.handleAddPost(this.state.propsClubId)} color="primary">
+                        <Button onClick={()=>{
+                            if(this.state.title!=="" && this.state.text!==""){
+                                this.handleAddPost(this.state.propsClubId);
+                            }else{
+                                alert("All fields must be filled..")
+                            }
+                        }} color="primary">
                             Add
                         </Button>
                         <Button onClick={this.handleClose} color="primary">

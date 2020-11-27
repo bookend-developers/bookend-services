@@ -13,12 +13,13 @@ export default class Login extends Component {
         this.state = {
             password: "",
             link:"",
+            confirm_password:"",
         };
     }
 
     onChangeLink =(e)=> {
         this.setState({
-            username: e.target.value
+            link: e.target.value
         });
     }
 
@@ -28,6 +29,34 @@ export default class Login extends Component {
         });
     }
 
+    onChangeConfirmPassword =(e) =>{
+        this.setState({
+            confirm_password: e.target.value
+        });
+    }
+
+    handleControl=()=>{
+        if(this.state.link!=="" && this.state.password!=="" && this.state.confirm_password!=="") {
+            if(this.state.password.length>=8){
+                if(/[A-Z]/.test(this.state.password) && /\d/.test(this.state.password)){
+                    if(this.state.password === this.state.confirm_password){
+                        this.handleResetPassword();
+                    }else{
+                        alert("The passwords you entered did not match, please try again..")
+                    }
+                }else{
+                    alert("Your password must be at least 8 characters and also must contains at least one upper letter and one number")
+                }
+            }else{
+                alert("Your password must be at least 8 characters and also must contains at least one upper letter and one number")
+            }
+        }
+        else{
+            alert("All fields must be filled!!");
+        }
+
+    }
+
     handleResetPassword =()=>{
         let myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -35,7 +64,7 @@ export default class Login extends Component {
         let raw = JSON.stringify({"password":this.state.password});
 
         let requestOptions = {
-            method: 'GET',
+            method: 'POST',
             headers: myHeaders,
             body: raw,
             redirect: 'follow'
@@ -59,8 +88,7 @@ export default class Login extends Component {
                 <div className="card card-container">
                     <Paper style={{backgroundColor:"#F8F9F9",marginTop:"5%",marginLeft:"35%",width:"30%"}}><br/>
                         <Typography style={{textAlign:"center"}}>RESET PASSWORD</Typography>
-
-                        <form onSubmit={this.handleLogin} style={{marginTop:"5%",marginLeft:"25%"}}>
+                        <form style={{marginTop:"5%",marginLeft:"25%"}}>
                             <div className="form-group">
                                 <TextField
                                     style={{backgroundColor:"white"}}
@@ -86,11 +114,25 @@ export default class Login extends Component {
                                     value={this.state.password}
                                     onChange={this.onChangePassword}
                                 />
+                            </div><br/>
+
+                            <div className="form-group">
+                                <TextField
+                                    required
+                                    style={{backgroundColor:"white"}}
+                                    variant="outlined"
+                                    id="standard-password-input"
+                                    label="Confirm Password"
+                                    type="password"
+                                    autoComplete="current-password"
+                                    value={this.state.confirm_password}
+                                    onChange={this.onChangeConfirmPassword}
+                                />
                             </div>
                         </form>
                         <div><Button
                             //component={Link} to={"/Home"}
-                            onClick={()=> {this.handleResetPassword()}}
+                            onClick={()=> {this.handleControl();}}
                             style={{marginTop:"5%",marginLeft:"38%"}}
                             variant="outlined">Update</Button></div>
                         <div><Button

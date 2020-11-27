@@ -129,6 +129,7 @@ export default function DialogSelect(props) {
                             defaultValue={userInfo.firstname}
                             value={firstName}
                             onChange={onChangeFirstName}
+                            inputProps={{ maxLength: 25 }}
                         />
                     </form></TableCell>
                     <TableCell><form noValidate autoComplete="off">
@@ -137,6 +138,7 @@ export default function DialogSelect(props) {
                             id="standard-basic"
                             label="LastName"
                             defaultValue={userInfo.lastname}
+                            inputProps={{ maxLength: 25 }}
                             value={lastName}
                             onChange={onChangeLastName}
                         />
@@ -149,7 +151,7 @@ export default function DialogSelect(props) {
 
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={edit} color="primary">
+                    <Button onClick={()=>{edit()}} color="primary">
                         Edit
                     </Button>
                     <Button onClick={handleClose} color="primary">

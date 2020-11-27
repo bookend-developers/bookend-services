@@ -12,6 +12,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from "@material-ui/core/TextField";
 import Table from "@material-ui/core/Table";
+import Genre from "./Genre";
 
 export default class AllAuthor extends React.Component {
     constructor(props) {
@@ -126,22 +127,17 @@ export default class AllAuthor extends React.Component {
             </div>)
         }if(this.state.searchCategory==="Genre"){
             return(<div>
-                <Home/>
+                <Genre/>
             </div>)
         }
 
         return (
             <div style={{flexGrow: 1}}>
-                <Button
-                    //component={ Link } to="/Profile"
-                    onClick={this.handleOnClickProfile}
-                    style={{marginLeft:"48%",marginTop:"1%",backgroundColor:"#E5E7E9"}}
-                >Profile</Button>
                 <Table style={{marginLeft:"35%",width:"30%"}}>
                     <TableRow >
                         <TableCell><Button
                             style={{backgroundColor:"#FAE5D3"}} aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleClick}>
-                            Category
+                            Author
                         </Button>
                             <Menu
                                 id="simple-menu"

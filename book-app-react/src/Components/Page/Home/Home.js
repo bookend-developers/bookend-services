@@ -156,16 +156,11 @@ export default class Home extends React.Component {
 
         return (
             <div style={{flexGrow: 1}}>
-                <Button
-                    //component={ Link } to="/Profile"
-                    onClick={this.handleOnClickProfile}
-                    style={{marginLeft:"48%",marginTop:"1%",backgroundColor:"#E5E7E9"}}
-                >Profile</Button>
                 <Table style={{marginLeft:"35%",width:"30%"}}>
                 <TableRow >
                     <TableCell><Button
                         style={{backgroundColor:"#FAE5D3"}} aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleClick}>
-                    Category
+                    Book
                 </Button>
                 <Menu
                     id="simple-menu"
@@ -190,7 +185,7 @@ export default class Home extends React.Component {
                     <TableCell><Button style={{backgroundColor:"#FAE5D3"}} onClick={this.handleSearchByBookName}>Search</Button></TableCell>
                 </TableRow>
                 </Table>
-                <Paper style={{marginLeft:"35%",minWidth:400,maxWidth: 500}}>
+                <Paper style={{marginLeft:"27%",minWidth:400,maxWidth: 700}}>
                     <Typography
                         style={{marginLeft:"30%",marginTop:"5%"}}
                     >Recommendations
@@ -198,17 +193,17 @@ export default class Home extends React.Component {
                     {(this.state.rowsPerPage > 0
                         ? this.state.book.slice(this.state.page * this.state.rowsPerPage,this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
                         : this.state.book).map((row)=>
-                    <TableRow >
-                            <TableCell style={{marginLeft: "2%"}}>Book Name:</TableCell>
-                            <TableCell><div>{row.bookName}</div></TableCell>
+                        <TableRow >
+                            <TableCell><div>Book Name: {row.bookName}</div></TableCell>
+                            <TableCell style={{marginLeft: "2%"}}>Genre: {row.genre.genre}</TableCell>
                             <TableCell><PopOverShelf data={row.id}/></TableCell>
-                        <TableCell><div><Link
-                            to={{
-                                pathname: "/book/"+row.id,
-                                state: { selectedBookId:row.id}
-                            }}><Button style={{backgroundColor: "#5499C7", color: "white"}}>Show</Button>
-                        </Link></div></TableCell>
-                    </TableRow>
+                            <TableCell><div><Link
+                                to={{
+                                    pathname: "/book/"+row.id,
+                                    state: { selectedBookId:row.id}
+                                }}><Button style={{backgroundColor: "#5499C7", color: "white"}}>Show</Button>
+                            </Link></div></TableCell>
+                        </TableRow>
                     )}
                     <TablePagination
                         count={50}

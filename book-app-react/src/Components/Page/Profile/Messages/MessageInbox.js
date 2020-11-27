@@ -50,6 +50,7 @@ export default class MessageInbox extends React.Component {
                 if (result.slice(10,23)!=="invalid_token") {
                     if (result.slice(2, 9) === "message") {
                         alert("It has been deleted. Please refresh..")
+                        window.location.reload();
                     } else {
                         alert("Not found")
                     }
@@ -99,21 +100,14 @@ export default class MessageInbox extends React.Component {
 
         return (
             <div style={{flexGrow: 1}}>
-                <Table style={{marginLeft:"35%",width:"30%",marginTop:"2%"}}>
+                <Table style={{marginLeft:"45%",width:"30%",marginTop:"1.5%"}}>
                    <td> <Button
                         onClick={()=>this.setState({chosen:"Sent"})}
                         style={{backgroundColor:"#E5E7E9"}}
                     >Sent</Button></td>
-                    <td> <Button
-                    component={ Link } to="/Profile"
-                    style={{marginLeft:"20%",backgroundColor:"#E5E7E9"}}
-                >Profile</Button></td>
-                    <td>  <Button
-                        onClick={this.handleRefresh}
-                        style={{marginLeft:"20%",backgroundColor:"#E5E7E9"}}
-                    >Refresh</Button></td>
                 </Table>
                 <Paper style={{marginLeft:"20%",width:"60%",marginTop:"1%"}}>
+                    <Typography style={{marginLeft:"42%"}}>INBOX</Typography>
                     <Table>
                <TableHead>
                    <TableCell>From</TableCell>

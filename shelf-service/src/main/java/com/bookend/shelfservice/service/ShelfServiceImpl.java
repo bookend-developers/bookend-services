@@ -42,9 +42,10 @@ public class ShelfServiceImpl implements ShelfService {
     @Override
     public Shelf saveOrUpdate(ShelfRequest shelfRequest,String username) {
         List<Shelf> shelves = shelfRepository.findShelvesByUsername(username);
+        if(!shelves.isEmpty()){
         if(shelves.stream().anyMatch(s -> s.getShelfname().toLowerCase().matches(shelfRequest.getShelfname().toLowerCase()))){
             return null;
-        }
+        }}
         if(shelfRequest.getTags().isEmpty()){
             return shelfRepository.save(new Shelf(shelfRequest.getShelfname(),username));
         }

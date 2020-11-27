@@ -10,6 +10,10 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TableHead from "@material-ui/core/TableHead";
 import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
+import AddBoxIcon from "@material-ui/icons/AddBox";
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogActions from "@material-ui/core/DialogActions";
 
 export default class Comment extends React.Component {
     constructor(props) {
@@ -52,6 +56,15 @@ export default class Comment extends React.Component {
             comment: e.target.value
         });
     }
+
+    handleClickOpen = () => {
+        this.setState({open: true});
+    };
+
+    handleClose = () => {
+        this.setState({open: false});
+    };
+
 
     giveComment(){
         let myHeaders = new Headers();
@@ -118,21 +131,35 @@ export default class Comment extends React.Component {
 
         return (
             <div style={{flexGrow: 1}}>
-                <TableRow>
-                    <TableCell> <Typography
-                        style={{marginTop:"5%"}}
-                    >Comments</Typography></TableCell>
-                    <TableCell><form noValidate autoComplete="off">
-                        <TextField
-                            style={{backgroundColor:"white"}}
-                            id="standard-basic"
-                            label="Comment"
-                            value={this.state.comment}
-                            onChange={this.onChangeComment}
-                        />
-                    </form></TableCell>
-                    <TableCell><Button onClick={this.giveComment} style={{backgroundColor:"#E6B0AA"}}>Add Comment</Button></TableCell>
-                </TableRow>
+                <td><Typography style={{marginLeft:"10%"}}>Comments</Typography></td>
+                <td> <Button onClick={this.handleClickOpen} style={{marginLeft:"35%"}}> <AddBoxIcon color="primary"/> </Button></td>
+                <Dialog
+                    fullWidth={"xs"}
+                    maxWidth={"xs"}
+                    disableBackdropClick disableEscapeKeyDown open={this.state.open} onClose={this.handleClose}>
+                    <DialogContent>
+                        <Typography
+                            style={{marginLeft:"35%"}}>Adding Comment</Typography><br/>
+
+                        <Typography
+                            style={{marginLeft:"5%"}}>Comment</Typography>
+                        <textarea  style={{marginLeft:"5%"}} rows="8" cols="45"
+                                   value={this.state.comment} onChange={this.onChangeComment} />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={()=>{
+                            if(this.state.comment===""){
+                                alert("The comment field must be filled")}
+                            else{
+                                this.giveComment();
+                            }}} color="primary">
+                            Add
+                        </Button>
+                        <Button onClick={this.handleClose} color="primary">
+                            Close
+                        </Button>
+                    </DialogActions>
+                </Dialog>
                 {(this.state.rowsPerPage > 0
                     ? this.state.commentData.slice(this.state.page * this.state.rowsPerPage,this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
                     : this.state.commentData).map((row)=>

@@ -8,21 +8,18 @@ import { Link } from 'react-router-dom';
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
-import AddBoxIcon from '@material-ui/icons/AddBox';
 import AllClubs from "./AllClubs";
 import AddClub from "./AddClub";
 import Invitations from "./Invitations";
-import TextField from "@material-ui/core/TextField";
-import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
-import UserShelves from "../Shelves/Shelves";
-import DialogActions from "@material-ui/core/DialogActions";
-export default class MyClubs extends React.Component {
+import {Typography} from "@material-ui/core";
+import MyClubs from "./MyClubs";
+
+export default class MembershipClubs extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            my_clubs: [],
+            membership_clubs: [],
             page:0,
             rowsPerPage:6,
             chosen:"",
@@ -63,9 +60,9 @@ export default class MyClubs extends React.Component {
             .then(response => response.text())
             .then(result => {
                 if (result.slice(10,23)!=="invalid_token") {
-                    this.setState({my_clubs:JSON.parse(result)});
+                    this.setState({membership_clubs:JSON.parse(result)});
                     console.log(AuthService.getCurrentUserId())
-                    console.log(this.state.my_clubs)
+                    console.log(this.state.membership_clubs)
                 }else{
                     this.props.history.push("/");
                     window.location.reload();
@@ -74,7 +71,7 @@ export default class MyClubs extends React.Component {
     }
 
     render() {
-        if (!this.state.my_clubs) {
+        if (!this.state.membership_clubs) {
             return <div>didn't get a club</div>;
         }
         if(this.state.chosen==="All"){
@@ -103,6 +100,7 @@ export default class MyClubs extends React.Component {
                     <td><AddClub/></td>
                 </Table>
                 <Paper style={{marginLeft:"25%",width:"50%",marginTop:"1%"}}>
+                    <Typography style={{marginLeft:"42%"}}>MEMBERSHIP CLASS</Typography>
                     <Table >
                         <TableHead>
                             <TableCell>Club Name</TableCell>
@@ -111,8 +109,8 @@ export default class MyClubs extends React.Component {
 
                         </TableHead>
                         {(this.state.rowsPerPage > 0
-                            ? this.state.my_clubs.slice(this.state.page * this.state.rowsPerPage,this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
-                            : this.state.my_clubs).map((row)=>
+                            ? this.state.membership_clubs.slice(this.state.page * this.state.rowsPerPage,this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
+                            : this.state.membership_clubs).map((row)=>
                             <TableRow >
                                 <TableCell><div>{row.clubName}</div></TableCell>
                                 <TableCell><div>{row.owner.userName}</div></TableCell>

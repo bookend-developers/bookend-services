@@ -114,7 +114,8 @@ export default class Invitations extends React.Component {
                 if (result.slice(10,23)!=="invalid_token") {
                     console.log(result)
                     if(JSON.parse(result).message==="request sended successfully" && JSON.parse(result).status !==500){
-                        alert("The invitation is sent")
+                        alert("Your answer is sent")
+                        window.location.reload();
                     }else{
                         alert("Sorry, there is a problem. Try again..")
                     }
@@ -135,7 +136,6 @@ export default class Invitations extends React.Component {
                     style={{marginLeft: "17%", backgroundColor: "#E5E7E9"}}
                 >Invitations</Button></td>
                 <Dialog
-
                     disableBackdropClick disableEscapeKeyDown open={this.state.open} onClose={this.handleClose}>
                     <DialogContent>
                         <Typography

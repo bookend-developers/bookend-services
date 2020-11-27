@@ -13,25 +13,25 @@ import MenuItem from '@material-ui/core/MenuItem';
 import AllAuthor from "./AllAuthor";
 import TextField from "@material-ui/core/TextField";
 import Table from "@material-ui/core/Table";
-import App from "../../../App/App";
+import Home from "./Home";
 
-export default class Home extends React.Component {
+export default class Genre extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             page:0,
             rowsPerPage:5,
-            book: [],
+            bookData: [],
             user: "",
             anchorEl:null,
             searchCategory:"",
-            bookSearch:""
+            genreSearch:""
         };
 
         this.handleOnClickProfile=this.handleOnClickProfile.bind(this);
         this.handleClose=this.handleClose.bind(this);
         this.handleSearchCategory=this.handleSearchCategory.bind(this);
-        this.onChangeBookSearch = this.onChangeBookSearch.bind(this);
+        this.onChangeGenreSearch = this.onChangeGenreSearch.bind(this);
         this.handleSearchByGenre = this.handleSearchByGenre.bind(this);
         this.handleCurrentUserName = this.handleCurrentUserName.bind(this);
         this.handleListBook = this.handleListBook.bind(this);
@@ -50,9 +50,9 @@ export default class Home extends React.Component {
         this.setState({anchorEl:null});
     };
 
-    onChangeBookSearch(e){
+    onChangeGenreSearch(e){
         this.setState({
-            bookSearch: e.target.value
+            genreSearch: e.target.value
         });
     }
 
@@ -79,14 +79,13 @@ export default class Home extends React.Component {
             headers: myHeaders,
             redirect: 'follow'
         };
-
-        fetch("http://localhost:8082/api/book?genre="+this.state.bookSearch, requestOptions)
+        fetch("http://localhost:8082/api/book?genre="+this.state.genreSearch, requestOptions)
             .then(response => response.text())
             .then(result => {
                 if (result.slice(10,23)!=="invalid_token") {
                     if(result!=="[]") {
-                        this.setState({book: JSON.parse(result)});
-                        console.log(JSON.parse(result))
+                        this.setState({bookData: JSON.parse(result)});
+                        console.log(this.state.bookData)
                     }else{
                         alert("Book is not found for given title.")
                     }
@@ -111,7 +110,7 @@ export default class Home extends React.Component {
             .then(response => response.text())
             .then(result => {
                 if (result.slice(10,23)!=="invalid_token") {
-                    this.setState({book:JSON.parse(result)});
+                    this.setState({bookData:JSON.parse(result)});
                     console.log(JSON.parse(result))
                 }else{
                     this.props.history.push("/");
@@ -139,7 +138,7 @@ export default class Home extends React.Component {
 
     render() {
 
-        if (!this.state.book) {
+        if (!this.state.bookData) {
             return <div>didn't get a book</div>;
         }
         if(this.state.searchCategory==="Author Name"){
@@ -156,16 +155,11 @@ export default class Home extends React.Component {
 
         return (
             <div style={{flexGrow: 1}}>
-                <Button
-                    //component={ Link } to="/Profile"
-                    onClick={this.handleOnClickProfile}
-                    style={{marginLeft:"48%",marginTop:"1%",backgroundColor:"#E5E7E9"}}
-                >Profile</Button>
                 <Table style={{marginLeft:"35%",width:"30%"}}>
                     <TableRow >
                         <TableCell><Button
                             style={{backgroundColor:"#FAE5D3"}} aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleClick}>
-                            Category
+                            Genre
                         </Button>
                             <Menu
                                 id="simple-menu"
@@ -183,11 +177,11 @@ export default class Home extends React.Component {
                                 style={{backgroundColor:"white"}}
                                 id="standard-basic"
                                 label="Title"
-                                value={this.state.bookSearch}
-                                onChange={this.onChangeBookSearch}
+                                value={this.state.genreSearch}
+                                onChange={this.onChangeGenreSearch}
                             />
                         </form></TableCell>
-                        <TableCell><Button style={{backgroundColor:"#FAE5D3"}} onClick={this.handleSearchByBookName}>Search</Button></TableCell>
+                        <TableCell><Button style={{backgroundColor:"#FAE5D3"}} onClick={this.handleSearchByGenre}>Search</Button></TableCell>
                     </TableRow>
                 </Table>
                 <Paper style={{marginLeft:"27%",minWidth:400,maxWidth: 700}}>
@@ -196,8 +190,8 @@ export default class Home extends React.Component {
                     >Recommendations
                     </Typography>
                     {(this.state.rowsPerPage > 0
-                        ? this.state.book.slice(this.state.page * this.state.rowsPerPage,this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
-                        : this.state.book).map((row)=>
+                        ? this.state.bookData.slice(this.state.page * this.state.rowsPerPage,this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
+                        : this.state.bookData).map((row)=>
                         <TableRow >
                             <TableCell><div>Book Name: {row.bookName}</div></TableCell>
                             <TableCell style={{marginLeft: "2%"}}>Genre: {row.genre.genre}</TableCell>

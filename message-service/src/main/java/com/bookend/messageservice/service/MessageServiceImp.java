@@ -38,7 +38,8 @@ public class MessageServiceImp implements MessageService{
 	}
 
 	@Override
-	public void deleteMessage(Message message,String username) {
+
+	public void deleteMessage(Message message, String username) {
 		if(message.getReceiver().equals(username)){
 			message.setReceiver(null);
 		}

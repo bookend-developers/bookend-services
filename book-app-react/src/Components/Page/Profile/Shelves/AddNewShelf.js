@@ -33,7 +33,7 @@ const MenuProps = {
     },
 };
 
-export default class Invitations extends React.Component {
+export default class AddNewShelf extends React.Component {
 
     constructor(props) {
         super(props);
@@ -69,7 +69,7 @@ export default class Invitations extends React.Component {
         myHeaders.append("Content-Type", "application/json");
 
         let raw = JSON.stringify({
-            "shelfname":this.state.newShelfName,
+            "shelfname":this.state.shelfName,
             "tags":this.state.genreName,
            });
 

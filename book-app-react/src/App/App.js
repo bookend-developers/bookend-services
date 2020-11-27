@@ -77,7 +77,7 @@ export default class ButtonAppBar extends React.Component {
                                   open={Boolean(this.state.anchorEl)}
                                   onClose={this.handleClose}
                               >
-                                  <div style={{marginLeft:"34%",fontWeight:"bold"}}>{AuthService.getCurrentUserName()}</div>
+                                  <div style={{marginLeft:"12%",fontWeight:"bold"}}>{AuthService.getCurrentUserName()}</div>
                                   <MenuItem><Button component={Link} to={"/home"}>Home</Button></MenuItem>
                                   <MenuItem><Button component={Link} to={"/profile/"+AuthService.getCurrentUserName()}>Profile</Button></MenuItem>
                               <MenuItem> <Button

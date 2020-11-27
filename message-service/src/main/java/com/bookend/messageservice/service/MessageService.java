@@ -10,6 +10,8 @@ public interface MessageService {
 	 List<Message> findMessageByReceiver(String userName);
 	 List<Message> findMessageBySender(String userName);
 	 Message saveOrUpdate(Message message);
-	 void deleteMessage(Message messageId,String username);
+
+	 void deleteMessage(Message messageId, String username);
+
 	 List<Message> findChatByUserName(String userName,String userName2);
 }
