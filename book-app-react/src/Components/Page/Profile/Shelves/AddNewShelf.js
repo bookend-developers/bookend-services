@@ -103,7 +103,7 @@ export default class AddNewShelf extends React.Component {
             redirect: 'follow'
         };
 
-        fetch("http://localhost:8082/api/book/admin/genres", requestOptions)
+        fetch("http://localhost:8083/api/shelf/tags", requestOptions)
             .then(response => response.text())
             .then(result => {
                 if (result.slice(10,23)!=="invalid_token" && result) {
@@ -151,9 +151,9 @@ export default class AddNewShelf extends React.Component {
                                 MenuProps={MenuProps}
                             >
                                 {this.state.genres.map((name) => (
-                                    <MenuItem key={name.genre} value={name.genre}>
-                                        <Checkbox checked={this.state.genreName.indexOf(name.genre) > -1} />
-                                        <ListItemText primary={name.genre} />
+                                    <MenuItem key={name.tag} value={name.tag}>
+                                        <Checkbox checked={this.state.genreName.indexOf(name.tag) > -1} />
+                                        <ListItemText primary={name.tag} />
                                     </MenuItem>
                                 ))}
                             </Select>

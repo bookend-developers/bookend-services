@@ -36,7 +36,7 @@ export default class Invitations extends React.Component {
             genreName:[],
             genres:[]
         };
-        this.createNewShelf = this.createNewShelf.bind(this);
+
     }
 
     onChangeGenreName = (e) => {
@@ -54,7 +54,7 @@ export default class Invitations extends React.Component {
             redirect: 'follow'
         };
 
-        fetch("http://localhost:8082/api/book/admin/genres", requestOptions)
+        fetch("http://localhost:8083/api/shelf/tags", requestOptions)
             .then(response => response.text())
             .then(result => {
                 if (result.slice(10,23)!=="invalid_token" && result) {
@@ -71,26 +71,7 @@ export default class Invitations extends React.Component {
 
         return (
             <div>
-                <FormControl style={{marginLeft:"25%",width:"50%"}}>
-                    <InputLabel id="demo-mutiple-checkbox-label">Tag</InputLabel>
-                    <Select
-                        labelId="demo-mutiple-checkbox-label"
-                        id="demo-mutiple-checkbox"
-                        multiple
-                        value={this.state.genreName}
-                        onChange={this.onChangeGenreName}
-                        input={<Input />}
-                        renderValue={(selected) => selected.join(', ')}
-                        MenuProps={MenuProps}
-                    >
-                        {this.state.genres.map((name) => (
-                            <MenuItem key={name.genre} value={name.genre}>
-                                <Checkbox checked={this.state.genreName.indexOf(name.genre) > -1} />
-                                <ListItemText primary={name.genre} />
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
+
             </div>
         );
     }

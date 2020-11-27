@@ -33,9 +33,11 @@ public class GenreServiceImpl implements GenreService{
         Genre newGenre = findByGenre(genre);
         if(newGenre==null){
            newGenre = new Genre(genre);
+
+           newGenre = genreRepository.save(newGenre);
            KafkaMessage kafkaMessage = new KafkaMessage(GENRE_TOPIC,newGenre);
            producer.publishGenre(kafkaMessage);
-           genreRepository.save(newGenre);
+
            return newGenre;
 
         }

@@ -23,6 +23,7 @@ export default class NewShelf extends React.Component {
             shelvesData: [],
             newShelfName:"",
             page: 0,
+            tags: [],
             rowsPerPage: 5,
         };
         this.onChangeShelfName=this.onChangeShelfName.bind(this);
@@ -113,6 +114,8 @@ export default class NewShelf extends React.Component {
                         <TableRow >
                             <TableCell style={{marginLeft: "2%"}}>Shelf Name:</TableCell>
                             <TableCell><div>{row.shelfname}</div></TableCell>
+                            <TableCell style={{marginLeft: "2%"}}>Tags:</TableCell>
+                            <TableCell><div>{row.tags.map(tag => <div> {tag.tag}</div>)}</div></TableCell>
                             <TableCell><div><Link
                                 to={{
                                     pathname: "/shelf/"+AuthService.getCurrentUserName()+"/"+row.shelfname,
