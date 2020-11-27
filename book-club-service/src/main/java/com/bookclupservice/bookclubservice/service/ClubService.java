@@ -50,6 +50,9 @@ public class ClubService {
 
     public Club saveClub(NewClubRequest newClubRequest){
         Member owner = memberRepository.findByUserName(newClubRequest.getUsername());
+        if(clubRepository.findAll().stream().anyMatch(club -> club.getClubName().toLowerCase().matches(newClubRequest.getClubName().toLowerCase()))){
+            return null;
+        }
         Club club = new Club();
         club.setClubName(newClubRequest.getClubName());
         club.setDescription(newClubRequest.getDescription());
@@ -125,8 +128,6 @@ public class ClubService {
         messageProducer.sendCommentRequest(commentRequest);
     }
 
-    public Post findPostByID(Long postID){
-        return postRepository.findPostById(postID);
-    }
+
 
 }
