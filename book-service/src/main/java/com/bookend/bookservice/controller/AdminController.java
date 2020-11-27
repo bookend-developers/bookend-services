@@ -104,6 +104,9 @@ public class AdminController {
     @PostMapping("/genre")
     public Genre updateGenre(@RequestBody Genre genre){
         Genre updatedGenre = genreService.findById(genre.getId());
+        if(genreService.findByGenre(genre.getGenre())!=null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Genre already exist.");
+        }
         if(updatedGenre!=null){
            return genreService.update(genre);
         }
