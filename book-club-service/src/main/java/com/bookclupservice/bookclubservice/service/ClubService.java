@@ -86,6 +86,9 @@ public class ClubService {
 
     public Invitation invitePerson(InvitationRequest invitationRequest){
         Member invitedPerson = memberRepository.findByUserName(invitationRequest.getInvitedPersonUserName());
+        if(invitedPerson==null){
+            return null;
+        }
         Club club = clubRepository.findById(invitationRequest.getClubId()).get();
         if(invitationRepository.findByClubAndInvitedPerson(club,invitedPerson)!=null){
             return null;
