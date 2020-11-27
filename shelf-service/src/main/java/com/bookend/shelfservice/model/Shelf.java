@@ -53,7 +53,7 @@ public class Shelf {
     public void setUsername(String account) {
         this.username = account;
     }
-
+    @JsonGetter
     public List<Tag> getTags() {
         return tags;
     }
