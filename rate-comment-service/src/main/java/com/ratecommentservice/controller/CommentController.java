@@ -74,15 +74,9 @@ public class CommentController {
         if(commentRequest.getBookname()==null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"The way you are trying to comment is not accepted.");
         }
-        Book book = bookService.findBookByBookID(commentRequest.getBookID());
-        if(book==null){
-            Book newBook = new Book(commentRequest.getBookID(),commentRequest.getBookname());
 
-            bookService.save(newBook);
-            return commentService.commentBook(new Comment(newBook,auth.getName(),commentRequest.getComment()));
-        }
 
-        return commentService.commentBook(new Comment(book,auth.getName(),commentRequest.getComment()));
+        return commentService.commentBook(commentRequest,auth.getName());
     }
     @ApiOperation(value = "Delete a specific comment")
     @ApiResponses(value = {

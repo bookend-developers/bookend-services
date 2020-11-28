@@ -3,6 +3,7 @@ package com.ratecommentservice.service;
 import com.ratecommentservice.kafka.Producer;
 import com.ratecommentservice.model.Book;
 import com.ratecommentservice.model.Comment;
+import com.ratecommentservice.payload.CommentRequest;
 import com.ratecommentservice.payload.KafkaMessage;
 import com.ratecommentservice.repository.BookRepository;
 import com.ratecommentservice.repository.CommentRepository;
@@ -18,7 +19,13 @@ public class CommentServiceImpl implements CommentService {
     private static final String COMMENT_TOPIC = "new-comment";
     private CommentRepository commentRepository;
     private BookRepository bookRepository;
+    private BookService bookService;
     private Producer producer;
+    @Autowired
+    public void setBookService(BookService bookService) {
+        this.bookService = bookService;
+    }
+
     @Autowired
     public void setProducer(Producer producer) {
         this.producer = producer;
@@ -46,11 +53,20 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment commentBook(Comment comment) {
-        Book book = comment.getBook();
+    public Comment commentBook(CommentRequest commentRequest, String username) {
+        Comment comment = new Comment();
+        Book book = bookService.findBookByBookID(commentRequest.getBookID());
+        if(book == null){
+            book = bookService.save(new Book(commentRequest.getBookID(),commentRequest.getBookname()));
+        }
+        comment.setBook(book);
+        comment.setComment(commentRequest.getComment());
+        comment.setUsername(username);
+
+        comment = commentRepository.save(comment);
         book.getComments().add(comment);
         bookRepository.save(book);
-        comment = commentRepository.save(comment);
+
         Map<String, String> message= new HashMap<String, String>();
         message.put("book",book.getBookid());
         message.put("comment",comment.getCommentId().toString());
