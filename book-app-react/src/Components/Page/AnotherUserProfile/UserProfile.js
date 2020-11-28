@@ -89,18 +89,8 @@ export default class UserProfile extends React.Component {
 
         return (
             <div style={{flexGrow: 1}}>
-                <Table style={{marginLeft:"42%",width:"20%",marginTop:"1%"}}>
-                    <td> <Button
-                        component={ Link } to="/home"
-                        style={{backgroundColor:"#E5E7E9"}}
-                    >Home</Button></td>
-                    <td> <Button
-                        component={ Link } to={"/profile/"+AuthService.getCurrentUserName()}
-                        style={{backgroundColor:"#E5E7E9"}}
-                    >Profile</Button></td>
-                </Table>
                 <Grid container spacing={3}>
-                    <Grid item xs={12} sm={6} style={{marginLeft:"10%",marginTop:"2%",minWidth:400,maxWidth: 500}}>
+                    <Grid item xs={12} sm={6} style={{marginLeft:"10%",marginTop:"7%",minWidth:400,maxWidth: 500}}>
                         <Paper>
                     <img
                         style={{marginLeft:"30%",width:"40%",marginTop:"3%"}}

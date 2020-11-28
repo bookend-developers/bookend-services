@@ -13,6 +13,8 @@ import AllAuthor from "../../Home/AllAuthor";
 import MyClubs from "./MyClubs";
 import AddClub from "./AddClub";
 import Invitations from "./Invitations";
+import MembershipClubs from "./MembershipClubs";
+import {Typography} from "@material-ui/core";
 
 export default class AllClubs extends React.Component {
 
@@ -69,6 +71,11 @@ export default class AllClubs extends React.Component {
                 <MyClubs/>
             </div>)
         }
+        if(this.state.chosen==="Membership"){
+            return(<div>
+                <MembershipClubs/>
+            </div>)
+        }
 
         return (
             <div style={{flexGrow: 1}}>
@@ -85,6 +92,7 @@ export default class AllClubs extends React.Component {
                     <td><AddClub/></td>
                 </Table>
                 <Paper style={{marginLeft:"20%",width:"60%",marginTop:"1%"}}>
+                    <Typography style={{marginLeft:"42%"}}>ALL CLUBS</Typography>
                     <Table>
                         <TableHead>
                             <TableCell>Club Name</TableCell>

@@ -11,7 +11,7 @@ public class BookRequest {
     private String genre;
 
     private String description;
-
+    private Boolean isVerified;
 
     private String bookName;
     private String author;
@@ -21,14 +21,23 @@ public class BookRequest {
     public BookRequest() {
     }
 
-    public BookRequest(Integer page, String genre, String description, String bookName, String author, String authorid, String ISBN) {
+    public BookRequest(Integer page, String genre, String description, Boolean isVerified, String bookName, String author, String authorid, String ISBN) {
         this.page = page;
         this.genre = genre;
         this.description = description;
+        this.isVerified = isVerified;
         this.bookName = bookName;
         this.author = author;
         this.authorid = authorid;
         this.ISBN = ISBN;
+    }
+
+    public Boolean getVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(Boolean verified) {
+        isVerified = verified;
     }
 
     public Integer getPage() {

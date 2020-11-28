@@ -10,6 +10,7 @@ import {Table} from "@material-ui/core";
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import { Link } from 'react-router-dom';
 import AuthService from "../../../Service/AuthService";
+import NewGenre from "./Genre/NewGenre";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -71,13 +72,15 @@ export default function AutoGridNoWrap(props) {
                                 variant="contained"
                                 style={{textAlign:"center",marginTop:10,marginLeft:"38%"}}
                                 component={Link} to={"/admin-author-new" }>Add new Author</Button>
-                            <Button
+                            <NewGenre/>
+                            <TableRow><Button
                                 orientation="vertical"
                                 color="primary"
                                 aria-label="vertical contained primary button group"
                                 variant="contained"
-                                style={{textAlign:"center",marginTop:10,marginLeft:"38%"}}
-                                component={Link} to={"/admin-genres" }>Genres</Button>
+                                style={{textAlign:"center",marginTop:10,marginLeft:"36%"}}
+                                component={Link} to={"/admin-genres"}>Genres</Button>
+                            </TableRow>
                         </Table>
                     </Grid>
                 </Grid>

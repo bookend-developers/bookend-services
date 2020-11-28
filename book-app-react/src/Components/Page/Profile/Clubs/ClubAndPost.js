@@ -12,6 +12,8 @@ import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import Table from "@material-ui/core/Table";
 import LockIcon from '@material-ui/icons/Lock';
+import AddPost from "./AddPost";
+import DialogContent from "@material-ui/core/DialogContent";
 
 export default class ClubAndPost extends React.Component {
     constructor(props) {
@@ -19,7 +21,7 @@ export default class ClubAndPost extends React.Component {
         this.state = {
             page:0,
             rowsPerPage:5,
-
+            posts:[]
         };
         this.handleChangePage=this.handleChangePage.bind(this);
         this.handleChangeRowsPerPage=this.handleChangeRowsPerPage.bind(this);
@@ -35,6 +37,18 @@ export default class ClubAndPost extends React.Component {
         this.setState({page:0});
     };
 
+    handleCurrentUserId(){
+        AuthService.handleUserId(AuthService.getCurrentUserName())
+            .then((res)=>{
+                if (res) {
+                    console.log(AuthService.getCurrentUserName())
+                }else{
+                    alert("\n" +
+                        "You entered an incorrect username and password")
+                }
+            })
+    }
+
     handleJoin = (clubId) => {
         let myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer "+AuthService.getCurrentUser());
@@ -45,6 +59,7 @@ export default class ClubAndPost extends React.Component {
                 "memberId":AuthService.getCurrentUserId()
             });
 
+        console.log(AuthService.getCurrentUserId())
         let requestOptions = {
             method: 'POST',
             headers: myHeaders,
@@ -56,11 +71,10 @@ export default class ClubAndPost extends React.Component {
             .then(response => response.text())
             .then(result => {
                 if (result.slice(10,23)!=="invalid_token") {
-                    console.log(result)
-                    if(JSON.parse(result).message==="member added succesfully" && JSON.parse(result).status !==500){
+                    if(JSON.parse(result).message==="member added successfully" && JSON.parse(result).status !==400){
                         alert("You are joined to the club")
                     }else{
-                        alert("Sorry, there is a problem. Try again..")
+                        alert("You are already member")
                     }
 
                 }else{
@@ -71,26 +85,37 @@ export default class ClubAndPost extends React.Component {
     }
 
     componentDidMount() {
-            console.log(AuthService.getCurrentUserId())
+        this.handleCurrentUserId();
+        let myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer "+AuthService.getCurrentUser());
+
+        let requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+
+        fetch("http://localhost:8089/api/club/"+ this.props.location.state.selectedClubId+"/posts", requestOptions)
+            .then(response => response.text())
+            .then(result => {
+                if (result.slice(10,23)!=="invalid_token") {
+                    this.setState({posts:JSON.parse(result)});
+                }else{
+                    this.props.history.push("/");
+                    window.location.reload();
+                }
+            })
 
     }
 
     render() {
-
+            if(!this.props.location.state.selectedClubId){
+                return <div>There is no selected club</div>
+            }
         return (
             <div style={{flexGrow: 1}}>
-                <Table style={{marginLeft:"42%",width:"20%",marginTop:"1%"}}>
-                    <td> <Button
-                        component={ Link } to="/home"
-                        style={{backgroundColor:"#E5E7E9"}}
-                    >Home</Button></td>
-                    <td> <Button
-                        component={ Link } to={"/profile/"+AuthService.getCurrentUserName()}
-                        style={{backgroundColor:"#E5E7E9"}}
-                    >Profile</Button></td>
-                </Table>
                 <Grid container spacing={3}>
-                    <Grid item xs={12} sm={6} style={{marginLeft:"10%",marginTop:"2%",minWidth:400,maxWidth: 500}}>
+                    <Grid item xs={12} sm={6} style={{marginLeft:"10%",marginTop:"7%",minWidth:400,maxWidth: 500}}>
                         <Paper>
                             <Typography style={{textAlign:"center"}}>Club Name : {this.props.location.state.selectedClubName}</Typography>
                             <img
@@ -126,7 +151,33 @@ export default class ClubAndPost extends React.Component {
                     </Grid>
                     <Grid item xs={16} sm={8} style={{marginLeft:"5%",minWidth:400,maxWidth: 700,maxHeight:600}}>
                         <Paper style={{marginTop:"3.5%"}}>
-
+                            <td> <Typography
+                                style={{marginLeft: "35%"}}>Posts</Typography></td>
+                        <td><AddPost data={this.props.location.state.selectedClubId}/></td>
+                                {(this.state.rowsPerPage > 0
+                                    ? this.state.posts.slice(this.state.page * this.state.rowsPerPage,this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
+                                    : this.state.posts).map((row)=>
+                                    <TableRow>
+                                        <TableCell><div>Title: {row.title}</div></TableCell>
+                                        <TableCell>by {row.writer.userName}</TableCell>
+                                        <TableCell><div><Link
+                                            to={{
+                                                pathname: "/club-post/"+row.id,
+                                                state: { postId:row.id,
+                                                    title: row.title,
+                                                    owner: row.writer.userName,
+                                                    text: row.text}
+                                            }}><Button style={{backgroundColor: "#5499C7", color: "white"}}>Show</Button>
+                                        </Link></div></TableCell>
+                                    </TableRow>
+                                )}
+                                <TablePagination
+                                    count={50}
+                                    page={this.state.page}
+                                    onChangePage={this.handleChangePage}
+                                    rowsPerPage={this.state.rowsPerPage}
+                                    onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                                />
                         </Paper>
                     </Grid>
                 </Grid>

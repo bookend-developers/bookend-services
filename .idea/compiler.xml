@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="Book-service" />
+        <module name="rate-comment-service" />
+        <module name="authorization-server" />
+        <module name="shelf-service" />
+        <module name="book-club-service" />
+        <module name="mail-service" />
+        <module name="message-service" />
+        <module name="author-service" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="author-service" target="11" />
+      <module name="authorization-server" target="1.8" />
+      <module name="book-club-service" target="11" />
+      <module name="Book-service" target="11" />
+      <module name="mail-service" target="11" />
+      <module name="message-service" target="11" />
+      <module name="rate-comment-service" target="11" />
+      <module name="shelf-service" target="11" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Book-service" options="-parameters" />
+      <module name="author-service" options="-parameters" />
+      <module name="authorization-server" options="-parameters" />
+      <module name="book-club-service" options="-parameters" />
+      <module name="mail-service" options="-parameters" />
+      <module name="message-service" options="-parameters" />
+      <module name="rate-comment-service" options="-parameters" />
+      <module name="shelf-service" options="-parameters" />
+    </option>
+  </component>
+</project>

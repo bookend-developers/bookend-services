@@ -1,34 +1,49 @@
 package com.bookend.bookservice.model;
 
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "books")
 public class Book {
     @Id
-
     private String id;
     private Integer page;
     private String bookName;
     private Genre genre;
-
     private String description;
-
-
-
     private String author;
     private String authorid;
-    private Boolean verified;
+    private boolean verified;
     private String ISBN;
+    private List<Long> comments;
+    private Double rate;
 
-    public Boolean getVerified() {
+    public List<Long> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Long> comments) {
+        this.comments = comments;
+    }
+    @JsonGetter
+    public Double getRate() {
+        return rate;
+    }
+
+    public void setRate(Double rate) {
+        this.rate = rate;
+    }
+    @JsonGetter
+    public boolean getVerified() {
         return verified;
     }
 
-    public void setVerified(Boolean verified) {
+    public void setVerified(boolean verified) {
         this.verified = verified;
     }
 
@@ -85,8 +100,10 @@ public class Book {
     }
 
     public Book() {
+        this.comments = new ArrayList<>();
+        this.rate = 0.0;
     }
-
+    @JsonGetter
     public String getISBN() {
         return ISBN;
     }
@@ -95,7 +112,7 @@ public class Book {
         this.ISBN = ISBN;
     }
 
-    public Book(Integer page, Genre genre, String description, String bookName, String author, String authorid, Boolean verified, String ISBN) {
+    public Book(Integer page, Genre genre, String description, String bookName, String author, String authorid, boolean verified, String ISBN) {
         this.page = page;
         this.genre = genre;
         this.description = description;
@@ -104,5 +121,7 @@ public class Book {
         this.authorid = authorid;
         this.verified = verified;
         this.ISBN = ISBN;
+        this.comments = new ArrayList<>();
+        this.rate = 0.0;
     }
 }

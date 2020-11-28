@@ -63,11 +63,13 @@ public class BookController {
     @GetMapping("")
     public List<Book> search(@RequestParam(required = false) String title
             ,@RequestParam(required = false) String genre
-            ,@RequestParam(required = false) boolean rateSort, OAuth2Authentication auth){
+            ,@RequestParam(required = false) boolean rateSort
+            ,@RequestParam(required = false) boolean commentSort
+            , OAuth2Authentication auth){
         final OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) auth.getDetails();
 
         String accessToken = details.getTokenValue();
-        List<Book> books = bookService.search(title,genre,rateSort,accessToken);
+        List<Book> books = bookService.search(title,genre,rateSort,commentSort,accessToken);
         if(books==null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"There is no match.");
         }
@@ -106,26 +108,16 @@ public class BookController {
     )
     @PostMapping("/new")
     public Book userBook(@RequestBody BookRequest bookRequest){
-        Book book= new Book();
-        if(bookRequest.getBookName()==null){
+       bookRequest.setVerified(false);
+        if(bookRequest.getBookName()==null  || bookRequest.getBookName().equals("")){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Book name field cannot be empty.");
         }
-        book.setBookName(bookRequest.getBookName());
-        if(bookRequest.getAuthor()==null){
+
+        if(bookRequest.getAuthor()==null || bookRequest.getAuthor().equals("")){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Author field cannot be empty.");
         }
-        book.setAuthor(bookRequest.getAuthor());
-        book.setDescription(bookRequest.getDescription());
-        Genre genre = genreService.findByGenre(bookRequest.getGenre());
-        if(genre == null){
-            genre = genreService.addNewGenre(bookRequest.getGenre());
-        }
-        book.setGenre(genre);
-        book.setAuthorid(bookRequest.getAuthorid());
-        book.setPage(bookRequest.getPage());
-        book.setVerified(Boolean.FALSE);
-        book.setISBN(bookRequest.getISBN());
-        Book addedBook =bookService.saveOrUpdate(book);
+
+        Book addedBook =bookService.save(bookRequest);
         if(addedBook==null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Book already exists.");
         }

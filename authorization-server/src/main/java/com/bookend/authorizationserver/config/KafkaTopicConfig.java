@@ -17,5 +17,10 @@ class KafkaTopicConfig {
     public NewTopic confirmationMail() {
         return TopicBuilder.name("confirmation-mail").build();
     }
+    
+    @Bean
+    public NewTopic resetPasswordMail() {
+        return TopicBuilder.name("resetPassword-mail").build();
+    }
 
 }

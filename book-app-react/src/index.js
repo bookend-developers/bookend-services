@@ -23,6 +23,9 @@ import Genres from "./Components/Page/Admin/Genre/Genres";
 import UnverifiedBooks from "./Components/Page/Admin/Book/UnverifiedBooks";
 import NewAuthor from "./Components/Page/Admin/Author/NewAuthor";
 import AdminPage from "./Components/Page/Admin/AdminPage";
+import Shelves from "./Components/Page/Profile/Shelves/Shelves";
+import Post from "./Components/Page/Profile/Clubs/Post";
+import Reset from "./Components/Page/ResetPassword/Reset";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -38,6 +41,7 @@ ReactDOM.render(
               <Route path="/book" component={Book} />
               <Route path="/author" component={Author} />
               <Route path="/user" component={UserProfile} />
+              <Route path="/shelves" component={Shelves} />
               <Route path="/user-shelf" component={AnotherUserBooks} />
               <Route path="/message" component={MessageWithUser} />
               <Route path="/inbox/sent/message" component={MessageInbox} />
@@ -48,6 +52,8 @@ ReactDOM.render(
               <Route path="/admin-author-new" component={NewAuthor} />
               <Route path="/admin-genres" component={Genres} />
               <Route path="/club" component={ClubAndPost} />
+              <Route path="/club-post" component={Post} />
+              <Route path="/reset-password" component={Reset} />
           </Router>
       </BrowserRouter>
   </React.StrictMode>,

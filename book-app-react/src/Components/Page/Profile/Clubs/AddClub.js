@@ -9,27 +9,13 @@ import TableRow from "@material-ui/core/TableRow";
 import AuthService from "../../../../Service/AuthService";
 import {Typography} from "@material-ui/core";
 import Radio from '@material-ui/core/Radio';
-import AddBoxIcon from "@material-ui/icons/AddBox";
-
-/*
-const styles = {
-    root: {
-        color: green[600],
-        '&$checked': {
-            color: green[500],
-        },
-    },
-    checked: {},
-};
-
- */
+import AddBoxIcon from '@material-ui/icons/AddBox';
 
 export default function AddClub(props) {
     const [open, setOpen] = React.useState(false);
     const [clubName, setClubName] = React.useState("");
-    const [privateOrNot, setPrivateOrNot] = React.useState(false);
+    const [privateOrNot, setPrivateOrNot] = React.useState("");
     const [description, setDescription] = React.useState(   "");
-
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -39,28 +25,46 @@ export default function AddClub(props) {
         setOpen(false);
     };
 
-    const onChangeClubName = (e) => {
-        setClubName(e.target.value);
+    const handleRadioChange = (event) => {
+        setPrivateOrNot(event.target.value);
     };
 
-    const onChangePrivate= (e) => {
-        setPrivateOrNot(e.target.value);
+    const onChangeClubName = (e) => {
+        setClubName(e.target.value);
     };
 
     const onChangeDescription = (e) => {
         setDescription(e.target.value);
     };
 
-    const handleAddClub = (props) => {
+    const checkAddClub =()=>{
+        if(description!=="" && clubName!=="" && privateOrNot!==""){
+            console.log(privateOrNot==="yes")
+            let bool;
+            if(privateOrNot==="yes"){
+                bool=true;
+            }else{
+                bool=false;
+            }
+            console.log(bool)
+            handleAddClub(bool);
+        }else{
+            alert("All fields must be filled.")
+        }
+    }
+
+    const handleAddClub = (private_value) => {
         let myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer "+AuthService.getCurrentUser());
         myHeaders.append("Content-Type", "application/json");
 
+
         let raw = JSON.stringify({
             "clubName":clubName,
-            "privatee":privateOrNot,
             "description":description,
-            "memberId":AuthService.getCurrentUserId()});
+            "username":AuthService.getCurrentUserName(),
+            "privatee":private_value
+           });
 
         let requestOptions = {
             method: 'POST',
@@ -69,18 +73,16 @@ export default function AddClub(props) {
             redirect: 'follow'
         };
 
-        fetch("http://localhost:8089/api/club/", requestOptions)
+        fetch("http://localhost:8089/api/club/add", requestOptions)
             .then(response => response.text())
             .then(result => {
-                console.log(privateOrNot)
-                console.log(AuthService.getCurrentUser())
-                console.log(AuthService.getCurrentUserId())
                 if (result.slice(10, 23) !== "invalid_token") {
-                    if(JSON.parse(result).status !==401 && JSON.parse(result).status!==500){
+                    if(JSON.parse(result).status !==400 && JSON.parse(result).status!==500){
                         alert("Added successfully")
+                        window.location.reload()
                     }
                     else {
-                        alert("There is a problem")
+                        alert("Club name is already used")
                     }
                 } else {
                     this.props.history.push("/");
@@ -94,7 +96,6 @@ export default function AddClub(props) {
         <div>
             <td> <Button onClick={handleClickOpen} style={{marginLeft:"17%"}}> <AddBoxIcon color="primary"/> </Button></td>
             <Dialog
-
                 disableBackdropClick disableEscapeKeyDown open={open} onClose={handleClose}>
                 <DialogContent>
                     <Typography
@@ -109,16 +110,24 @@ export default function AddClub(props) {
                                 onChange={onChangeClubName}
                             />
                         </form></TableCell>
-
-                        <TableCell><form noValidate autoComplete="off">
-                            <TextField
-                                style={{backgroundColor:"white"}}
-                                id="standard-basic"
-                                label="Private(true/false)"
-                                value={privateOrNot}
-                                onChange={onChangePrivate}
-                            />
-                        </form></TableCell></TableRow><br/><br/>
+                        <TableCell><Typography>Private:</Typography></TableCell>
+                       <div><td><Typography>Yes</Typography></td>
+                           <td><Radio
+                            checked={privateOrNot === "yes"}
+                            onChange={handleRadioChange}
+                            value="yes"
+                            name="radio-button-demo"
+                            aria-label="Yes"
+                           /></td></div>
+                        <div><td><Typography> No</Typography></td>
+                        <td><Radio
+                            checked={privateOrNot === "no"}
+                            onChange={handleRadioChange}
+                            value="no"
+                            name="radio-button-demo"
+                            aria-label="No"
+                        /></td></div>
+                    </TableRow>
                     <Typography
                         style={{marginLeft:"5%"}}>Description</Typography>
                     <textarea  style={{marginLeft:"5%"}} rows="7" cols="50"
@@ -126,7 +135,7 @@ export default function AddClub(props) {
 
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleAddClub} color="primary">
+                    <Button onClick={()=>checkAddClub()} color="primary">
                         Add
                     </Button>
                     <Button onClick={handleClose} color="primary">
@@ -137,20 +146,3 @@ export default function AddClub(props) {
         </div>
     );
 }
-
-/*
- <Radio
-                            checked={privateOrNot === true}
-                            onChange={this.handleChange}
-                            value={privateOrNot}
-                            name="radio-button-demo"
-                            aria-label="True"
-                        />
-                        <Radio
-                            checked={privateOrNot === false}
-                            onChange={this.handleChange}
-                            value={privateOrNot}
-                            name="radio-button-demo"
-                            aria-label="False"
-                        />
- */

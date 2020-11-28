@@ -1,20 +1,31 @@
 package com.ratecommentservice.service;
 
+import com.ratecommentservice.kafka.Producer;
 import com.ratecommentservice.model.Book;
 import com.ratecommentservice.model.Rate;
+import com.ratecommentservice.payload.KafkaMessage;
 import com.ratecommentservice.payload.RateRequest;
 import com.ratecommentservice.repository.BookRepository;
 import com.ratecommentservice.repository.RateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 public class RateServiceImpl implements RateService {
+    private static final String RATE_TOPIC = "new-rate";
     private RateRepository rateRepository;
     private BookRepository bookRepository;
+    private Producer producer;
+    @Autowired
+    public void setProducer(Producer producer) {
+        this.producer = producer;
+    }
+
     @Autowired
     public void setRateRepository(RateRepository rateRepository){this.rateRepository=rateRepository;}
     @Autowired
@@ -55,12 +66,15 @@ public class RateServiceImpl implements RateService {
 
         book.getRates().add(rate);
         book.setAverageRate(book.calAv());
+        Map<String, String> message= new HashMap<String, String>();
+        message.put("book",book.getBookid());
+        message.put("rate",book.getAverageRate().toString());
+
+        KafkaMessage kafkaMessage = new KafkaMessage(RATE_TOPIC,message);
+        producer.publishNewRate(kafkaMessage);
         bookRepository.save(book);
+
         return rateRepository.save(rate);
-
-
-
-
     }
 
     @Override

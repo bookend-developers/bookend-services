@@ -34,6 +34,7 @@ public class ClubService {
     public List<Club> getMyClubs(String username){
         Member member=memberRepository.findByUserName(username);
         return clubRepository.findByOwner(member);
+
     }
     public List<Invitation> getMemberInvitations(String username){
         Member member = memberRepository.findByUserName(username);
@@ -48,8 +49,12 @@ public class ClubService {
         return postRepository.findByClubId(clubId);
     }
 
+
     public Club saveClub(NewClubRequest newClubRequest){
         Member owner = memberRepository.findByUserName(newClubRequest.getUsername());
+        if(clubRepository.findAll().stream().anyMatch(club -> club.getClubName().toLowerCase().matches(newClubRequest.getClubName().toLowerCase()))){
+            return null;
+        }
         Club club = new Club();
         club.setClubName(newClubRequest.getClubName());
         club.setDescription(newClubRequest.getDescription());
@@ -58,21 +63,32 @@ public class ClubService {
         return clubRepository.save(club);
     }
 
-    public void newMember(NewClubMemberRequest newClubMemberRequest,String username){
+    public boolean newMember(NewClubMemberRequest newClubMemberRequest,String username){
         Member member = memberRepository.findByUserName(username);
         if(member== null){
             member = new Member(newClubMemberRequest.getMemberId(),username);
         }
+
         Club club = clubRepository.findById(newClubMemberRequest.getClubId()).get();
+        if(club.getOwner().getUserName().equals(username)){
+            return false;
+        }
+        if(club.getMembers().stream().anyMatch(m-> m.getUserName().toLowerCase().matches(username.toLowerCase()))){
+            return false;
+        }
         member.getClubs().add(club);
         club.getMembers().add(member);
         memberRepository.save(member);
         clubRepository.save(club);
+        return true;
 
     }
 
     public Invitation invitePerson(InvitationRequest invitationRequest){
         Member invitedPerson = memberRepository.findByUserName(invitationRequest.getInvitedPersonUserName());
+        if(invitedPerson==null){
+            return null;
+        }
         Club club = clubRepository.findById(invitationRequest.getClubId()).get();
         if(invitationRepository.findByClubAndInvitedPerson(club,invitedPerson)!=null){
             return null;

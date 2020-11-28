@@ -1,5 +1,6 @@
 package com.bookend.shelfservice.model;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
@@ -18,9 +19,14 @@ public class Tag {
         this.tag = tag;
     }
 
-    public Tag() {
+    public Tag(String id, String tag) {
+        this.id = id;
+        this.tag = tag;
     }
 
+    public Tag() {
+    }
+    @JsonGetter
     public String getTag() {
         return tag;
     }

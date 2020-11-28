@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
+
 @RequestMapping("/api/profile")
+
 public class ProfileController {
     private UserDetailServiceImpl userDetailService;
     private UserService userService;

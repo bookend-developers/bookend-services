@@ -20,6 +20,7 @@ export default class Register extends Component {
             user_email:"",
             user_name: "",
             user_password: "",
+            check_password:""
         };
     }
 
@@ -40,15 +41,40 @@ export default class Register extends Component {
             redirect: 'follow'
         };
 
-        return fetch("http://localhost:9191/oauth/sign-up", requestOptions)
+        return fetch("http://localhost:9191/api/oauth/sign-up", requestOptions)
             .then(response => response.text())
             .then(result => {
-                if(result!=="user registered. need confirmation"){
+                if(JSON.parse(result).message==="user registered. need confirmation"){
                     alert("\n" +JSON.parse(result).message)
                 }else{
-                    alert(result)
+                    alert(JSON.parse(result).message)
                 }
             })
+    }
+
+    handleControl=()=>{
+        if(this.state.user_name!=="" && this.state.user_email!=="" && this.state.user_password!=="" && this.state.check_password!=="") {
+            if(!(this.state.user_email.includes(".com",0) && this.state.user_email.includes("@",0))){
+                alert("Invalid email");
+            }
+            if(this.state.user_password.length>=8){
+                if(/[A-Z]/.test(this.state.user_password) && /\d/.test(this.state.user_password)){
+                    if(this.state.user_password === this.state.check_password){
+                        this.handleSignUp(this.state.user_name,this.state.user_email,this.state.user_password)
+                    }else{
+                        alert("The passwords you entered did not match, please try again..")
+                    }
+                }else{
+                    alert("Your password must be at least 8 characters and also must contains at least one upper letter and one number")
+                }
+            }else{
+                alert("Your password must be at least 8 characters and also must contains at least one upper letter and one number")
+            }
+        }
+        else{
+            alert("All fields must be filled!!");
+        }
+
     }
 
     onChangeUsername(e) {
@@ -69,11 +95,17 @@ export default class Register extends Component {
         });
     }
 
+    onChangeCheckPassword =(e)=> {
+        this.setState({
+            check_password: e.target.value
+        });
+    }
+
     render() {
         return (
             <div className="col-md-12">
                 <div className="card card-container">
-                    <Paper style={{backgroundColor:"#F8F9F9",marginTop:"5%",marginLeft:"35%",width:"30%"}}>
+                    <Paper style={{backgroundColor:"#F8F9F9",marginTop:"2%",marginLeft:"35%",width:"30%"}}>
                         <Typography style={{textAlign:"center"}}>REGISTER</Typography>
                         <img
                             style={{marginLeft:"30%",width:"40%"}}
@@ -120,24 +152,32 @@ export default class Register extends Component {
                                     value={this.state.user_password}
                                     onChange={this.onChangePassword}
                                 />
+                            </div><br/>
+                            <div className="form-group">
+                                <TextField
+                                    required
+                                    style={{backgroundColor:"white"}}
+                                    variant="outlined"
+                                    id="standard-password-input"
+                                    label="Confirm Password"
+                                    type="password"
+                                    autoComplete="current-password"
+                                    value={this.state.check_password}
+                                    onChange={this.onChangeCheckPassword}
+                                />
                             </div>
                         </form>
 
                         <Button
                             //component={Link} to={"/Home"}
-                            onClick={()=>{
-                                if(this.state.user_name!=="" && this.state.user_email!=="" && this.state.user_password!=="")
-                            {this.handleSignUp(this.state.user_name,this.state.user_email,this.state.user_password)}
-                                else{
-                                    alert("All fields must be filled!!")
-                                }}}
-                            style={{marginTop:"5%",marginLeft:"26%"}}
+                            onClick={()=> this.handleControl()}
+                            style={{marginTop:"5%",marginLeft:"20%"}}
                             variant="outlined">Sign up</Button>
                         <Button
                             component={Link} to={"/"}
                             style={{marginTop:"5%",marginLeft:"5%"}}
                             variant="outlined"
-                        >Sıgn In</Button>
+                        >Back to Sıgn In</Button>
                         <ActivationLinkForRegister/>
                     </Paper>
                 </div>

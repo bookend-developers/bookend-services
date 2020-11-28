@@ -30,6 +30,7 @@ public class Comment {
     }
 
     public Comment() {
+        this.date = LocalDateTime.now();
     }
 
     public Long getCommentId() {

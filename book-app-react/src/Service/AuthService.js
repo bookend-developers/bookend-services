@@ -19,7 +19,7 @@ class AuthService {
         return fetch("http://localhost:9191/oauth/token", requestOptions)
             .then(response => response.text())
             .then(result => {
-                if (result) {
+                if (JSON.parse(result).error !== "unauthorized") {
                     localStorage.setItem("user", result.slice(17,53));
                     console.log(result.slice(2,7))
                 }

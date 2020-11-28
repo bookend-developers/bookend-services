@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import TableCell from '@material-ui/core/TableCell';
 import Button from '@material-ui/core/Button';
-import {Link, Redirect} from "react-router-dom";
+import {Link, Location, Redirect} from "react-router-dom";
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
@@ -12,7 +12,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Menu from '@material-ui/core/Menu';
 import AuthService from "../Service/AuthService";
-import {TableRow} from "@material-ui/core";
 
 
 export default class ButtonAppBar extends React.Component {
@@ -22,7 +21,7 @@ export default class ButtonAppBar extends React.Component {
             userReady:false,
             anchorEl:null,
             open : Boolean(this.anchorEl),
-            redirect:null,
+            redirect:false,
             user:""
         };
         this.handleClose=this.handleClose.bind(this);
@@ -78,8 +77,13 @@ export default class ButtonAppBar extends React.Component {
                                   open={Boolean(this.state.anchorEl)}
                                   onClose={this.handleClose}
                               >
+                                  <div style={{marginLeft:"12%",fontWeight:"bold"}}>{AuthService.getCurrentUserName()}</div>
                                   <MenuItem><Button component={Link} to={"/home"}>Home</Button></MenuItem>
                                   <MenuItem><Button component={Link} to={"/profile/"+AuthService.getCurrentUserName()}>Profile</Button></MenuItem>
+                              <MenuItem> <Button
+                                  component={Link} to={"/"}
+                                  onClick={()=>{AuthService.logout();this.setState({userReady:false})}}
+                                  >Logout</Button></MenuItem>
                               </Menu>
                           </div>
                       ):null}

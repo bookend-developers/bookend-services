@@ -64,6 +64,7 @@ export default class Rate extends React.Component {
                 if (result.slice(10,23)!=="invalid_token") {
                     if (JSON.parse(result).status !== 400) {
                         alert("The rate is added successfully")
+                        window.location.reload()
                     } else {
                         alert(JSON.parse(result).message)
                     }
@@ -123,7 +124,6 @@ export default class Rate extends React.Component {
                     </form></TableCell>
                     <TableCell><Button onClick={()=>{if(this.state.rate<=5){this.giveRate()}else{alert("The rate must not be greater than 5")}}}
                                        style={{backgroundColor:"#E6B0AA"}}>Give</Button></TableCell>
-                    <TableCell><Button onClick={this.showAverageRate} style={{backgroundColor:"#E5E7E9"}}>Refresh</Button></TableCell>
                 </TableRow>
             </div>
         );

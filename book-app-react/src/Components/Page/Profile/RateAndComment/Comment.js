@@ -49,6 +49,7 @@ export default class Comments extends React.Component {
                     if (result.slice(2, 9) === "message") {
                         console.log(result.slice(2, 10))
                         alert("\n" + JSON.parse(result).message)
+                        window.location.reload();
                     } else {
                         alert("Not found")
                     }

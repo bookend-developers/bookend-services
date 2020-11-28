@@ -38,26 +38,16 @@ public class AdminController {
     )
     @PostMapping("/new")
     public Book adminBook(@RequestBody BookRequest bookRequest){
-        Book newBook= new Book();
-        if(bookRequest.getBookName()==null){
+        if(bookRequest.getBookName()==null  || bookRequest.getBookName().equals("")){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Book name field cannot be empty.");
         }
-        newBook.setBookName(bookRequest.getBookName());
-        if(bookRequest.getAuthor()==null){
+
+        if(bookRequest.getAuthor()==null || bookRequest.getAuthor().equals("")){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Author field cannot be empty.");
         }
-        newBook.setAuthor(bookRequest.getAuthor());
-        newBook.setDescription(bookRequest.getDescription());
-        Genre genre = genreService.findByGenre(bookRequest.getGenre());
-        if(genre == null){
-            genre = genreService.addNewGenre(bookRequest.getGenre());
-        }
-        newBook.setGenre(genre);
-        newBook.setAuthorid(bookRequest.getAuthorid());
-        newBook.setPage(bookRequest.getPage());
-        newBook.setVerified(Boolean.TRUE);
-        newBook.setISBN(bookRequest.getISBN());
-        Book addedBook =bookService.saveOrUpdate(newBook);
+
+        bookRequest.setVerified(true);
+        Book addedBook =bookService.save(bookRequest);
         if(addedBook==null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Book already exists.");
         }
@@ -114,6 +104,9 @@ public class AdminController {
     @PostMapping("/genre")
     public Genre updateGenre(@RequestBody Genre genre){
         Genre updatedGenre = genreService.findById(genre.getId());
+        if(genreService.findByGenre(genre.getGenre())!=null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Genre already exist.");
+        }
         if(updatedGenre!=null){
            return genreService.update(genre);
         }

@@ -6,6 +6,7 @@ import Paper from "@material-ui/core/Paper";
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 import {Typography} from "@material-ui/core";
+import ForgetPassword from "./ForgetPassword";
 
 export default class Login extends Component {
 
@@ -49,16 +50,22 @@ export default class Login extends Component {
     }
 
     handleLogin() {
-        AuthService.login(this.state.username,this.state.password).then((res)=>{
-            if(res.slice(2,7)!=="error") {
-                console.log(res)
-                this.props.history.push("/admin");
-                window.location.reload();
-            }else{
-                alert("\n" +
-                    "You entered an incorrect username and password")
-            }
-        })
+        if(this.state.password==="" || this.state.username===""){
+            alert("Password and username fields must be filled.")
+        }else {
+            AuthService.login(this.state.username, this.state.password).then((res) => {
+                if (JSON.parse(res).error === "invalid_grant" ) {
+                    alert("\n" +
+                        "You entered an incorrect username and password.");
+                } else if(JSON.parse(res).error === "unauthorized"){
+                   alert("Email confirmation is required.")
+                }else{
+                    console.log(res)
+                    this.props.history.push("/home");
+                    window.location.reload();
+                }
+            })
+        }
     }
 
     onChangeUsername(e) {
@@ -116,14 +123,15 @@ export default class Login extends Component {
                     </form>
                        <Button
                         //component={Link} to={"/Home"}
-                        onClick={()=>this.handleTwoMethods()}
-                        style={{marginTop:"5%",marginLeft:"30%"}}
+                        onClick={()=> {this.handleTwoMethods()}}
+                        style={{marginTop:"5%",marginLeft:"27%"}}
                         variant="outlined">LOGIN</Button>
                     <Button
                         component={Link} to={"/register"}
                         style={{marginTop:"5%",marginLeft:"5%"}}
                         variant="outlined"
                     >Sıgn Up</Button>
+                      <ForgetPassword/>
                     </Paper>
                 </div>
             </div>

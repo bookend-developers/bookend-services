@@ -51,6 +51,7 @@ export default class RateAndComments extends React.Component {
                 if (result.slice(10,23)!=="invalid_token") {
                     if (result.slice(2, 9) === "message") {
                         alert("\n" + JSON.parse(result).message)
+                        window.location.reload();
                     } else {
                         alert("Not found")
                     }

@@ -18,7 +18,7 @@ public class MessageListener {
     MemberService memberService;
 
     @KafkaListener(topics = "user-registered",
-            groupId ="bookclub")
+            groupId ="bookend-bookclubservice")
     public void saveUser(String message) {
         System.out.println(message);
         ObjectMapper mapper = new ObjectMapper();

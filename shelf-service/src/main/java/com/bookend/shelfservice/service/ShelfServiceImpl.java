@@ -18,6 +18,13 @@ public class ShelfServiceImpl implements ShelfService {
     private ShelfRepository shelfRepository;
     private TagRepository tagRepository;
     @Autowired
+    public void setTagRepository(TagRepository tagRepository) {
+        this.tagRepository = tagRepository;
+    }
+
+
+
+    @Autowired
     public void setShelfRepository(ShelfRepository shelfRepository) {
         this.shelfRepository = shelfRepository;
     }
@@ -33,22 +40,24 @@ public class ShelfServiceImpl implements ShelfService {
     }
 
     @Override
-    public Shelf saveOrUpdate(ShelfRequest shelfRequest,String username) {
+    public Shelf saveOrUpdate(ShelfRequest shelfRequest, String username) {
         List<Shelf> shelves = shelfRepository.findShelvesByUsername(username);
-        shelfRequest.getTags().stream().forEach(tag ->{
-            if(tagRepository.findByTag(tag.getTag())==null){
-                tag = tagRepository.save(tag);
+        if (!shelves.isEmpty()) {
+            if (shelves.stream().anyMatch(s -> s.getShelfname().toLowerCase().matches(shelfRequest.getShelfname().toLowerCase()))) {
+                return null;
             }
-        });
-        if(shelves.stream().anyMatch(s -> s.getShelfname().toLowerCase().matches(shelfRequest.getShelfname().toLowerCase()))){
-            return null;
+                if (shelfRequest.getTags() == null || shelfRequest.getTags().isEmpty()) {
+                    return shelfRepository.save(new Shelf(shelfRequest.getShelfname(),username));
+                }
+                List<Tag> tags = shelfRequest.getTags()
+                        .stream()
+                        .map(t -> tagRepository.findByTag(t))
+                        .collect(Collectors.toList());
+                return shelfRepository.save(new Shelf(shelfRequest.getShelfname(), username, tags));
+            }
+        return null;
         }
 
-
-
-
-        return shelfRepository.save(new Shelf(shelfRequest.getShelfname(),username,shelfRequest.getTags()));
-    }
 
     @Override
     public List<Shelf> findShelvesByUsername(String username) {

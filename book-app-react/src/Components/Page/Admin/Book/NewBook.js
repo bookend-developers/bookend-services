@@ -6,7 +6,11 @@ import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 import {Typography} from "@material-ui/core";
 import TableCell from "@material-ui/core/TableCell";
-import AuthorList from "./AuthorList";
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
+import TableRow from "@material-ui/core/TableRow";
+import TablePagination from "@material-ui/core/TablePagination";
+import DialogActions from "@material-ui/core/DialogActions";
 import AuthService from "../../../../Service/AuthService";
 
 
@@ -14,28 +18,77 @@ export default class NewBook extends Component {
 
     constructor(props) {
         super(props);
-        this.handleNewBook=this.handleNewBook.bind(this);
-        this.onChangeAuthorName = this.onChangeAuthorName.bind(this);
-        this.onChangeBookName = this.onChangeBookName.bind(this);
-        this.onChangePageNumber = this.onChangePageNumber.bind(this);
-        this.onChangeISBN = this.onChangeISBN.bind(this)
-        this.onChangeGenre = this.onChangeGenre.bind(this)
-        this.onChangeAuthorId = this.onChangeAuthorId.bind(this)
-
-
         this.state = {
             book_name:"",
             author_name: "",
             author_id: "",
             genre: "",
-            page: "",
+            book_page: 0,
             description: "",
             ISBN: "",
+            page: 0,
+            rowsPerPage: 5,
+            authors: [],
+            open: false,
         };
+        this.handleNewBook=this.handleNewBook.bind(this);
+        this.onChangeAuthorName = this.onChangeAuthorName.bind(this);
+        this.onChangeBookName = this.onChangeBookName.bind(this);
+        this.onChangePageNumber = this.onChangePageNumber.bind(this);
+        this.onChangeISBN = this.onChangeISBN.bind(this);
+        this.onChangeGenre = this.onChangeGenre.bind(this)
+        this.onChangeAuthorId = this.onChangeAuthorId.bind(this)
+    }
+
+    handleClickOpen = () => {
+        this.setState({open: true});
+    };
+
+    handleClose = () => {
+        this.setState({open: false});
+    };
+
+
+    handleChangePage = (event, newPage) => {
+        this.setState({page: newPage});
+    };
+
+    handleChangeRowsPerPage = (event) => {
+        this.setState({rowsPerPage: parseInt(event.target.value, 10)})
+        this.setState({page: 0});
+    };
+
+    loadAuthors = () => {
+        let myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + AuthService.getCurrentUser());
+
+        let requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+
+        fetch("http://localhost:8085/api/author", requestOptions)
+            .then(response => response.text())
+            .then(result => {
+                if (result.slice(10, 23) !== "invalid_token") {
+                    if(JSON.parse(result).status !== 500){
+                        this.setState({authors: JSON.parse(result)})
+                        console.log(this.state.authors)
+                    }
+                    else{
+                        alert("Something went wrong.")
+                    }
+
+                } else {
+                    this.props.history.push("/");
+                    window.location.reload();
+                }
+            })
     }
     componentDidMount(){
-        console.log(this.props.location.state.selectedAuthorName)
-
+        this.loadAuthors();
+        
     }
     handleNewBook(page,genre,description,bookName,author,author_id,ISBN) {
         let myHeaders = new Headers();
@@ -43,7 +96,8 @@ export default class NewBook extends Component {
         myHeaders.append("Content-Type", "application/json");
 
         let raw = JSON.stringify(
-            {"page":page,
+            {
+                "page":page,
                 "genre":genre,
                 "description":description,
                 "bookName":bookName,
@@ -58,7 +112,7 @@ export default class NewBook extends Component {
             redirect: 'follow'
         };
 
-        return fetch("http://localhost:8082/api/book/admin/new", requestOptions)
+       fetch("http://localhost:8082/api/book/admin/new", requestOptions)
             .then(response => response.text())
             .then(result => {
                 if(JSON.parse(result).bookName===bookName){
@@ -83,7 +137,7 @@ export default class NewBook extends Component {
 
     onChangePageNumber(e) {
         this.setState({
-            page: e.target.value
+            book_page: e.target.value
         });
     }
     onChangeGenre(e) {
@@ -91,7 +145,7 @@ export default class NewBook extends Component {
             genre: e.target.value
         });
     }
-    onChangeDescription(e) {
+    onChangeDescription = (e)=> {
         this.setState({
             description: e.target.value
         });
@@ -107,15 +161,31 @@ export default class NewBook extends Component {
         });
     }
 
+    checkValidation =()=>{
+        if(this.state.book_name!=="" && this.state.genre!=="" && this.state.book_page!=="" && this.state.ISBN!=="" && this.state.author!=="" && this.state.description!=="") {
+            if ((/^\d+$/.test(this.state.ISBN)) && (/^\d+$/.test(this.state.book_page))) {
+                if(this.state.ISBN.length===13) {
+                    this.handleNewBook(this.state.book_page, this.state.genre, this.state.description, this.state.book_name, this.state.author_name, this.state.author_id, this.state.ISBN)
+                }else{
+                    alert("The length of the ISBN must be 13")
+                }
+            }else{
+                alert("ISBN or book page must contain only digits.")
+            }
+
+        }else{
+            alert("All fields must be filled!!")
+        }
+    }
 
     render() {
+
         return (
             <div className="col-md-12">
                 <div className="card card-container">
-                    <Paper style={{backgroundColor:"#F8F9F9",marginTop:"2%",marginLeft:"25%",width:"50%"}}>
-                        <Typography style={{textAlign:"center"}}>New Book</Typography>
-
-                        <form onSubmit={this.handleSignUp} style={{marginTop:"5%",marginLeft:"30%"}}>
+                    <Paper style={{backgroundColor:"#F8F9F9",marginTop:"1.5%",marginLeft:"25%",width:"50%"}}>
+                        <Typography style={{marginLeft:"40%"}}>New Book</Typography>
+                        <form style={{marginTop:"5%",marginLeft:"30%"}}>
                             <div className="form-group">
                                 <TextField
                                     style={{backgroundColor:"white"}}
@@ -130,7 +200,6 @@ export default class NewBook extends Component {
 
                             </div>
 
-                            {this.props.location.state.selectedAuthorName !== "" ?
                             <td><div className="form-group">
 
                                 <TextField
@@ -138,28 +207,48 @@ export default class NewBook extends Component {
                                     style={{backgroundColor:"white"}}
                                     label="Author"
                                     variant="outlined"
-                                    value={this.props.location.state.selectedAuthorName}
+                                    value = {this.state.author_name}
                                     defaultValue={"Author"}
                                     InputProps={{
                                         readOnly: true,
                                     }}
                                 />
-                            </div></td>: <td><div className="form-group">
+                            </div></td>
 
-                                    <TextField
-                                        id="standard-read-only-input"
-                                        style={{backgroundColor:"white"}}
-                                        label="Author"
-                                        variant="outlined"
-                                        defaultValue={"Author"}
-
-                                        InputProps={{
-                                            readOnly: true,
-                                        }}
-                                    />
-                                </div></td>}
-
-                            <td><div ><AuthorList/></div></td><br/>
+                            <td><div ><td><Button
+                                onClick={this.handleClickOpen}
+                                style={{marginLeft: "17%",marginTop: "35%", backgroundColor: "#E5E7E9"}}
+                            >Authors</Button></td>
+                                <Dialog
+                                    disableBackdropClick disableEscapeKeyDown open={this.state.open} onClose={this.handleClose}>
+                                    <DialogContent>
+                                        <Typography
+                                            style={{marginLeft: "35%"}}>Authors</Typography>
+                                        <Paper>
+                                            {(this.state.rowsPerPage > 0
+                                                ? this.state.authors.slice(this.state.page * this.state.rowsPerPage,this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
+                                                : this.state.authors).map((row)=>
+                                                <TableRow>
+                                                    <TableCell><div><Link
+                                                        onClick={()=>this.setState({author_name:row.name,author_id:row.id})}>{row.name}
+                                                    </Link></div></TableCell>
+                                                </TableRow>
+                                            )}
+                                            <TablePagination
+                                                count={50}
+                                                page={this.state.page}
+                                                onChangePage={this.handleChangePage}
+                                                rowsPerPage={this.state.rowsPerPage}
+                                                onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                                            />
+                                        </Paper>
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={this.handleClose} color="primary">
+                                            Close
+                                        </Button>
+                                    </DialogActions>
+                                </Dialog></div></td><br/>
 
                             <div className="form-group">
                                 <TextField
@@ -170,6 +259,7 @@ export default class NewBook extends Component {
                                     label="ISBN13"
                                     value={this.state.ISBN}
                                     onChange={this.onChangeISBN}
+                                    inputProps={{ maxLength: 13, minLength:13 }}
                                 />
                             </div><br/>
                             <div className="form-group">
@@ -189,8 +279,8 @@ export default class NewBook extends Component {
                                     style={{backgroundColor:"white"}}
                                     variant="outlined"
                                     id="input-with-icon-textfield"
-                                    label="Page"
-                                    value={this.state.page}
+                                    label="Book Page"
+                                    value={this.state.book_page}
                                     onChange={this.onChangePageNumber}
                                 />
                             </div><br/>
@@ -201,17 +291,12 @@ export default class NewBook extends Component {
                             style={{marginLeft:"22%"}}>Description:</Typography>
                         <textarea  style={{marginLeft:"22%"}} rows="7" cols="50" value={this.state.description} onChange={this.onChangeDescription} />
                         <Button
-                            onClick={()=>{
-                                if(this.state.book_name!=="" && this.state.genre!=="" && this.state.page!=="" && this.state.ISBN!=="" && this.state.author!=="" && this.state.description!=="")
-                                {this.handleNewBook(this.state.book_name,this.state.genre,this.state.page,this.state.ISBN,this.props.location.state.selectedAuthorName,this.props.location.state.selectedAuthorId,this.state.description)}
-                                else{
-                                    alert("All fields must be filled!!")
-                                }}}
-                            style={{marginTop:"5%",marginLeft:"26%"}}
+                            onClick={()=>{this.checkValidation()}}
+                            style={{marginTop:"3%",marginLeft:"33%",backgroundColor:"#5DADE2",color:"white"}}
                             variant="outlined">Add</Button>
                         <Button
                             component={Link} to={"/admin"}
-                            style={{marginTop:"5%",marginLeft:"5%"}}
+                            style={{marginTop:"3%",marginLeft:"5%",backgroundColor:"#C0392B",color:"white"}}
                             variant="outlined"
                         >Cancel</Button>
 

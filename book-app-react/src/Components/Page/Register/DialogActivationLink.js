@@ -31,7 +31,7 @@ export default function DialogSelect(props) {
             redirect: 'follow'
         };
 
-        fetch("http://"+activationLink, requestOptions)
+        fetch("http://"+activationLink.trim(), requestOptions)
             .then(response => response.text())
             .then(result => {
                 if(result!=="Confirmation completed"){

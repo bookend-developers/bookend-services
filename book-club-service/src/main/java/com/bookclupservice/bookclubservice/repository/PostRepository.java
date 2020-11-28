@@ -12,7 +12,6 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post,Long> {
 
     List<Post> findByWriter(Member writer);
-
     List<Post> findByClubId(Long clubId);
     Post findPostById(Long postId);
 
