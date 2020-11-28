@@ -59,12 +59,8 @@ public class SortedLists {
         return id;
     }
     public SortedLists add(Book book){
-        if(!isExists(book,sortedByComment)){
-            sortedByComment.add(book);
-        }
-        if(!isExists(book,sortedByRate)){
-            sortedByRate.add(book);
-        }
+        sortedByComment.add(book);
+        sortedByRate.add(book);
         return sort();
 
     }
@@ -76,9 +72,6 @@ public class SortedLists {
             sortedByComment.add(book);
         }
         return sort();
-    }
-    private boolean isExists(Book book, List<Book> books){
-        return books.contains(book);
     }
     public SortedLists sort(){
 
@@ -97,24 +90,21 @@ public class SortedLists {
 
     }
     public SortedLists remove(Book book, String type){
-        if(type.equals("rate")){
-            Iterator<Book> rateIterator = sortedByRate.iterator();
-             while(rateIterator.hasNext()){
-                 Book b = rateIterator.next();
-                 if(b.getId().equals(book.getId())){
-                     rateIterator.remove();
-                 }
+        Iterator<Book> rateIterator = sortedByRate.iterator();
+         while(rateIterator.hasNext()){
+             Book b = rateIterator.next();
+             if(b.getId().equals(book.getId())){
+                 rateIterator.remove();
              }
-        }
-        if (type.equals("comment")){
-            Iterator<Book> commentIterator = sortedByComment.iterator();
-            while(commentIterator.hasNext()){
-                Book b = commentIterator.next();
-                if(b.getId().equals(book.getId())){
-                    commentIterator.remove();
-                }
+         }
+        Iterator<Book> commentIterator = sortedByComment.iterator();
+        while(commentIterator.hasNext()){
+            Book b = commentIterator.next();
+            if(b.getId().equals(book.getId())){
+                commentIterator.remove();
             }
         }
+
         return this;
     }
 
