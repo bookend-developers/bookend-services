@@ -19,9 +19,11 @@ class AuthService {
         return fetch("http://localhost:9191/oauth/token", requestOptions)
             .then(response => response.text())
             .then(result => {
-                if (JSON.parse(result).error !== "unauthorized") {
+                console.log(JSON.parse(result).username)
+                if (JSON.parse(result).error !== "unauthorized" && !result.includes("error")) {
                     localStorage.setItem("user", result.slice(17,53));
-                    console.log(result.slice(2,7))
+                    localStorage.setItem("username", JSON.parse(result).username);
+
                 }
                 return result;
             })
@@ -39,11 +41,11 @@ class AuthService {
             redirect: 'follow'
         };
 
-        return fetch("http://localhost:9191/oauth/check_token?token="+token, requestOptions)
-            .then(response => response.json())
+       return fetch("http://localhost:9191/oauth/check_token?token="+token, requestOptions)
+            .then(response => response.text())
             .then(result => {
-                if (result.user_name!="undefined") {
-                    localStorage.setItem("userName", result.user_name);
+                if (JSON.parse(result).user_name!=="undefined") {
+                    localStorage.setItem("userName", JSON.parse(result).user_name);
                 }
                 return result;
             })
@@ -71,13 +73,13 @@ class AuthService {
 
     logout() {
         localStorage.removeItem("user");
-        localStorage.removeItem("userName");
+        localStorage.removeItem("username");
         localStorage.removeItem("userId");
     }
 
     getCurrentUserName() {
-        console.log(localStorage.getItem('userName'));
-        return localStorage.getItem('userName');
+        console.log(localStorage.getItem('username'));
+        return localStorage.getItem('username');
 
     }
 

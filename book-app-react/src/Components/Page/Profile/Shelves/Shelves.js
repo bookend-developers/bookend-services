@@ -5,13 +5,13 @@ import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import AuthService from "../../../../Service/AuthService";
 import {Typography} from "@material-ui/core";
-import TextField from "@material-ui/core/TextField";
+import TableHead from "@material-ui/core/TableHead";
 import { Link } from 'react-router-dom';
 import TablePagination from "@material-ui/core/TablePagination";
 import Table from "@material-ui/core/Table";
+import Chip from '@material-ui/core/Chip';
+import DoneIcon from '@material-ui/icons/Done';
 import AddNewShelf from "./AddNewShelf";
-import AddNewTag from "./AddNewTag";
-
 
 export default class NewShelf extends React.Component {
 
@@ -101,21 +101,25 @@ export default class NewShelf extends React.Component {
             <div style={{flexGrow: 1}}>
                 <Paper style={{marginLeft:"25%",width:"50%"}}>
 
-                    <Table style={{marginLeft:"32%",width:"35%",marginTop:"2%"}}>
+                    <Table style={{marginLeft:"32%",width:"50%",marginTop:"2%"}}>
                         <td><Typography
                             style={{marginLeft:"10%",marginTop:"5%"}}
                         >Shelves
                         </Typography></td>
                         <td><AddNewShelf/></td>
                     </Table>
+                    <TableHead>
+                        <TableCell>Shelf Name</TableCell>
+                        <TableCell>Tags</TableCell>
+                    </TableHead>
                     {(this.state.rowsPerPage > 0
                         ? this.state.shelvesData.slice(this.state.page * this.state.rowsPerPage,this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
                         : this.state.shelvesData).map((row)=>
                         <TableRow >
-                            <TableCell style={{marginLeft: "2%"}}>Shelf Name:</TableCell>
                             <TableCell><div>{row.shelfname}</div></TableCell>
-                            <TableCell style={{marginLeft: "2%"}}>Tags:</TableCell>
-                            <TableCell><div>{row.tags.map(tag => <div> {tag.tag}</div>)}</div></TableCell>
+                            <TableCell><div>{row.tags.map(tag =>
+                                <Chip label={tag.tag}/>
+                                )}</div></TableCell>
                             <TableCell><div><Link
                                 to={{
                                     pathname: "/shelf/"+AuthService.getCurrentUserName()+"/"+row.shelfname,

@@ -4,15 +4,9 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import TextField from "@material-ui/core/TextField";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
 import AuthService from "../../../../Service/AuthService";
 import {Typography} from "@material-ui/core";
-import Radio from '@material-ui/core/Radio';
 import AddBoxIcon from "@material-ui/icons/AddBox";
-import {Link} from "react-router-dom";
-import Table from "@material-ui/core/Table";
-import AddNewTag from "./AddNewTag";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
@@ -71,7 +65,7 @@ export default class AddNewShelf extends React.Component {
         console.log(this.state.genreName)
         let raw = JSON.stringify({
             "shelfname":this.state.shelfName,
-            "tags":["kfjd"],
+            "tags":this.state.genreName,
            });
 
         let requestOptions = {

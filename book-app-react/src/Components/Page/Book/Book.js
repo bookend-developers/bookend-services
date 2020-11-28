@@ -64,7 +64,7 @@ export default class Book extends React.Component {
                         style={{marginLeft:"30%",marginTop:"5%"}}
                     ><TableCell><div>{this.state.selectedBook.bookName}</div></TableCell></Typography>
                     <img
-                        style={{marginLeft:"30%",width:"40%"}}
+                        style={{marginLeft:"30%",width:"40%",height:250}}
                         src="https://www.virago.co.uk/wp-content/uploads/2018/07/missingbook.png"
                         alt="book-img"
                         className="book-img-card"

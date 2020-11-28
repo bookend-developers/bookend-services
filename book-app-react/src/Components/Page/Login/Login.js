@@ -21,13 +21,26 @@ export default class Login extends Component {
         this.state = {
             username: "",
             password: "",
-            newLog:"",
+            newLog:false,
             redirect:false,
         };
     }
 
     handleProfileUserName(){
-        AuthService.handleUserName(AuthService.getCurrentUser()).then(r => console.log(r));
+        AuthService.handleUserName(AuthService.getCurrentUser())
+            .then(response => response.json());
+          /*  .then((result) =>{
+                if(this.state.newLog===true) {
+                    if (result.includes("ROLE_ADMIN")) {
+                        this.props.history.push("/admin");
+                        window.location.reload();
+                    } else {
+                        this.props.history.push("/home");
+                        window.location.reload();
+                    }
+                }
+
+            });*/
 
     }
 
@@ -45,8 +58,8 @@ export default class Login extends Component {
 
     handleTwoMethods(){
         this.handleLogin();
-        this.handleProfileUserName();
-        this.handleCurrentUserId();
+        //this.handleProfileUserName();
+        //this.handleCurrentUserId();
     }
 
     handleLogin() {
@@ -54,18 +67,24 @@ export default class Login extends Component {
             alert("Password and username fields must be filled.")
         }else {
             AuthService.login(this.state.username, this.state.password).then((res) => {
-                if (JSON.parse(res).error === "invalid_grant" ) {
+                if (JSON.parse(res).error === "invalid_grant") {
                     alert("\n" +
                         "You entered an incorrect username and password.");
                 } else if(JSON.parse(res).error === "unauthorized"){
                    alert("Email confirmation is required.")
                 }else{
                     console.log(res)
-                    this.props.history.push("/home");
-                    window.location.reload();
+                    if(res.includes("ROLE_USER")){
+                        this.props.history.push("/home");
+                        window.location.reload();
+                    }else {
+                        this.props.history.push("/admin");
+                        window.location.reload();
+                    }
                 }
             })
         }
+
     }
 
     onChangeUsername(e) {

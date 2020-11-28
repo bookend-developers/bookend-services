@@ -31,10 +31,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AutoGridNoWrap(props) {
     const classes = useStyles();
+
     return (
         <div className={classes.root}>
             <Button
-                component={ Link } to="/admin"
+                component={ Link } to="/home"
                 style={{marginLeft:"47%",marginTop:"2%",backgroundColor:"#E5E7E9"}}
             >Home</Button>
             <Paper className={classes.paper}>

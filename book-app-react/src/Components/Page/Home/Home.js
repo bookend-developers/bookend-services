@@ -13,6 +13,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import AllAuthor from "./AllAuthor";
 import TextField from "@material-ui/core/TextField";
 import Table from "@material-ui/core/Table";
+import Select from '@material-ui/core/Select';
 import Genre from "./Genre";
 
 export default class Home extends React.Component {
@@ -24,17 +25,19 @@ export default class Home extends React.Component {
             book: [],
             user: "",
             anchorEl:null,
-            anchorEl2:null,
             searchCategory:"",
-            bookSearch:"",
+            title:"",
+            genre:"",
             rateSort:false,
             commentSort:false,
+            sort:"",
         };
 
         this.handleOnClickProfile=this.handleOnClickProfile.bind(this);
         this.handleClose=this.handleClose.bind(this);
         this.handleSearchCategory=this.handleSearchCategory.bind(this);
         this.onChangeBookSearch = this.onChangeBookSearch.bind(this);
+        this.onChangeGenre = this.onChangeGenre.bind(this);
         this.handleSearchByBookName = this.handleSearchByBookName.bind(this);
         this.handleCurrentUserName = this.handleCurrentUserName.bind(this);
         this.handleListBook = this.handleListBook.bind(this);
@@ -49,21 +52,25 @@ export default class Home extends React.Component {
         this.setState({anchorEl:e.currentTarget});
     };
 
-    handleClick2 =(e)=>{
-        this.setState({anchorEl2:e.currentTarget})
-    }
 
     handleClose = () => {
         this.setState({anchorEl:null});
     };
 
-    handleClose2 = () => {
-        this.setState({anchorEl2:null});
-    };
+
+    handleSortChange =(e)=>{
+        this.setState({sort:e.target.value});
+    }
 
     onChangeBookSearch(e){
         this.setState({
-            bookSearch: e.target.value
+            title: e.target.value
+        });
+    }
+
+    onChangeGenre(e){
+        this.setState({
+            genre: e.target.value
         });
     }
 
@@ -92,15 +99,15 @@ export default class Home extends React.Component {
         };
         console.log(this.state.rateSort)
         console.log(this.state.commentSort)
-        fetch("http://localhost:8082/api/book?title="+this.state.bookSearch+"&rateSort="+this.state.rateSort+"&commentSort="+this.state.commentSort, requestOptions)
+        fetch("http://localhost:8082/api/book?title="+this.state.title+"&genre="+this.state.genre+"&rateSort="+this.state.rateSort+"&commentSort="+this.state.commentSort, requestOptions)
             .then(response => response.text())
             .then(result => {
                 if (result.slice(10,23)!=="invalid_token") {
-                    if(result!=="[]") {
+                    if(JSON.parse(result).status!==404) {
                         this.setState({book: JSON.parse(result)});
                         console.log(JSON.parse(result))
                     }else{
-                        alert("Book is not found for given title.")
+                        alert("There is no match")
                     }
                 }else{
                     this.props.history.push("/");
@@ -158,17 +165,11 @@ export default class Home extends React.Component {
             return(<div>
                 <AllAuthor/>
             </div>)
-        }if(this.state.searchCategory==="Genre"){
-            return(<div>
-                <Genre/>
-            </div>)
         }
-
-
 
         return (
             <div style={{flexGrow: 1}}>
-                <Table style={{marginLeft:"35%",width:"30%"}}>
+                <Table style={{marginLeft:"22%",width:"30%"}}>
                 <TableRow >
                     <TableCell><Button
                         style={{backgroundColor:"#FAE5D3"}} aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleClick}>
@@ -189,27 +190,42 @@ export default class Home extends React.Component {
                     <TextField
                         style={{backgroundColor:"white"}}
                         id="standard-basic"
-                        label="Title"
-                        value={this.state.bookSearch}
+                        label="Book Title"
+                        value={this.state.title}
                         onChange={this.onChangeBookSearch}
+                        style={{width:150}}
                     />
                 </form></TableCell>
+                    <TableCell><form noValidate autoComplete="off">
+                        <TextField
+                            style={{backgroundColor:"white"}}
+                            id="standard-basic"
+                            label="Genre"
+                            value={this.state.genre}
+                            onChange={this.onChangeGenre}
+                            style={{width:150}}
+                        />
+                    </form></TableCell>
                     <TableCell><Button style={{backgroundColor:"#FAE5D3"}} onClick={this.handleSearchByBookName}>Search</Button></TableCell>
-                    <TableCell><Button
-                        style={{backgroundColor:"#FAE5D3"}} aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleClick2}>
-                        Sort
-                    </Button>
-                        <Menu
-                            id="simple-menu"
-                            anchorEl={this.state.anchorEl2}
-                            keepMounted
-                            open={Boolean(this.state.anchorEl2)}
-                            onClose={this.handleClose2}
+                       <TableCell>
+                           <Select
+                            labelId="demo-customized-select-label"
+                            id="demo-customized-select"
+                            value={this.state.sort}
+                            onChange={this.handleSortChange}
+                            style={{width:150}}
                         >
-                            <MenuItem onClick={()=>{this.setState({rateSort:true,commentSort:false});
-                            this.handleSearchByBookName();}}>Sort By Rate</MenuItem>
-                            <MenuItem onClick={()=>this.setState({commentSort:true,rateSort:false})}>Sort By # of Comments</MenuItem>
-                        </Menu></TableCell>
+                            <MenuItem value="" onClick={()=>{this.setState({rateSort:false,commentSort:false});}}>
+                                <em>None</em>
+                            </MenuItem>
+                            <MenuItem value={"rate"} onClick={()=>{this.setState({rateSort:true,commentSort:false});}}>Sort By Rate</MenuItem>
+                            <MenuItem value={"comment"} onClick={()=>{this.setState({rateSort:false,commentSort:true});}}>Sort By Comment</MenuItem>
+                        </Select>
+                      </TableCell>
+                    <TableCell><Button
+                        style={{backgroundColor:"#FAE5D3"}} aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleSearchByBookName}>
+                        Sort
+                    </Button></TableCell>
                 </TableRow>
                 </Table>
                 <Paper style={{marginLeft:"27%",minWidth:400,maxWidth:800}}>
@@ -252,3 +268,29 @@ export default class Home extends React.Component {
         );
     }
 }
+
+/*
+
+ <Select
+                            style={{ marginTop:"2%",marginLeft:"4%"}}
+                            value={selectedChannel}
+                            onChange={handleChangeChannel}
+                            name="channel"
+                            displayEmpty
+                        >
+                            <MenuItem onClick={()=>{this.setState({rateSort:true,commentSort:false});
+                                }}>Sort By Rate</MenuItem>
+                            <MenuItem onClick={()=>this.setState({commentSort:true,rateSort:false})}>Sort By # of Comments</MenuItem>
+                            ))}
+
+                              <Menu
+                            id="simple-menu"
+                            anchorEl={this.state.anchorEl2}
+                            keepMounted
+                            open={Boolean(this.state.anchorEl2)}
+                            onClose={this.handleClose2}
+                        >
+                            <MenuItem onClick={()=>{this.setState({rateSort:true,commentSort:false});}}>Sort By Rate</MenuItem>
+                            <MenuItem onClick={()=>this.setState({commentSort:true,rateSort:false})}>Sort By # of Comments</MenuItem>
+                        </Menu>
+ */
