@@ -4,10 +4,14 @@ import com.bookend.authorizationserver.kafka.MessageProducer;
 import com.bookend.authorizationserver.model.Token;
 import com.bookend.authorizationserver.model.User;
 import com.bookend.authorizationserver.payload.*;
+import com.bookend.authorizationserver.repository.RoleRepository;
 import com.bookend.authorizationserver.repository.TokenRepository;
 import com.bookend.authorizationserver.repository.UserDetailRepository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import com.bookend.authorizationserver.model.Role;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -29,6 +33,8 @@ public class UserService {
     private TokenRepository tokenRepository;
     @Autowired
     private MessageProducer messageProducer;
+    @Autowired
+    private RoleRepository roleRepository;
 
 
     public SignUpResponse addUser(SignUpRequest signUpRequest){
@@ -89,6 +95,11 @@ public class UserService {
         }
         User user = confirmationToken.getUser();
         user.setEnabled(true);
+        Role role = roleRepository.findByName("ROLE_USER");
+        List<Role> roles = new ArrayList<>();
+        roles.add(role);
+        user.setRoles(roles);
+        userDetailRepository.save(user);
         tokenRepository.delete(confirmationToken);
         messageProducer.sendUserInformation(new KafkaUserRegistered(user.getId(),user.getUsername(),user.getEmail()));
         return  new ConfirmResponse("confirmed successfully",user.getUsername());
