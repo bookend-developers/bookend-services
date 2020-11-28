@@ -27,8 +27,6 @@ export default class Invitations extends React.Component {
             title:"",
             text:"",
             open:false,
-            propsClubId:0
-
         };
         this.handleAddComment = this.handleAddComment.bind(this);
     }
@@ -72,17 +70,17 @@ export default class Invitations extends React.Component {
             redirect: 'follow'
         };
 
-        fetch("http://localhost:8081/api/post/comment/new", requestOptions)
+        fetch("http://localhost:8089/api/club/post/comment", requestOptions)
             .then(response => response.text())
             .then(result => {
                 if (result.slice(10,23)!=="invalid_token") {
                     console.log(result)
-                    if(JSON.parse(result).message && JSON.parse(result).status !==500){
+                    if(JSON.parse(result).message && JSON.parse(result).status !==403){
                         alert("New comment shared")
+                        window.location.reload();
                     }else{
-                        alert("Sorry, there is a problem. Try again..")
+                        alert("Sorry, you are not a member")
                     }
-
                 }else{
                     this.props.history.push("/");
                     window.location.reload();
@@ -109,7 +107,12 @@ export default class Invitations extends React.Component {
                                    value={this.state.text} onChange={this.onChangeText} />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={()=>this.handleAddComment(this.state.propsPostId)} color="primary">
+                        <Button onClick={()=>
+                        {if(this.state.text !=="")
+                            this.handleAddComment(this.state.propsPostId);
+                        else{
+                            alert("The comment field must be filled")
+                        }}} color="primary">
                             Add
                         </Button>
                         <Button onClick={this.handleClose} color="primary">

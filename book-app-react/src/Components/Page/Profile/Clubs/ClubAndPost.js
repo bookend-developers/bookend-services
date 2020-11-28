@@ -7,13 +7,11 @@ import AuthService from "../../../../Service/AuthService";
 import {Typography} from "@material-ui/core";
 import { Link } from 'react-router-dom';
 import TablePagination from "@material-ui/core/TablePagination";
-import TableHead from "@material-ui/core/TableHead";
-import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import Table from "@material-ui/core/Table";
 import LockIcon from '@material-ui/icons/Lock';
 import AddPost from "./AddPost";
-import DialogContent from "@material-ui/core/DialogContent";
+import Members from "./Members";
 
 export default class ClubAndPost extends React.Component {
     constructor(props) {
@@ -129,15 +127,17 @@ export default class ClubAndPost extends React.Component {
                                 <Typography style={{textAlign:"center"}}>Owner: {this.props.location.state.selectedOwner}</Typography><br/>
                             </TableRow>
                             <TableRow>{Boolean(this.props.location.state.private).toString() === "false" ?
-                                <Typography style={{textAlign:"center"}}>
-                                    <Button
+                                <Table style={{width:"20%",marginLeft:"25%"}}>
+                                <TableRow>
+                                   <TableCell> <Button
                                         onClick={()=>{console.log(this.props.location.state.selectedClubId);
                                             this.handleJoin(this.props.location.state.selectedClubId)}}
                                         style={{
                                             backgroundColor: "#C0392B",
                                             color: "white",
-                                        }}>Join</Button>
-                                </Typography>:
+                                        }}>Join</Button></TableCell>
+                                 <Members data={this.props.location.state.selectedClubId}/>
+                               </TableRow></Table> :
                                 <Typography style={{textAlign:"center"}}>
                                     <LockIcon/>
                                 </Typography>
@@ -163,7 +163,8 @@ export default class ClubAndPost extends React.Component {
                                         <TableCell><div><Link
                                             to={{
                                                 pathname: "/club-post/"+row.id,
-                                                state: { postId:row.id,
+                                                state: {
+                                                    postId:row.id,
                                                     title: row.title,
                                                     owner: row.writer.userName,
                                                     text: row.text}

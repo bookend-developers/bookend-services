@@ -26,6 +26,7 @@ import AdminPage from "./Components/Page/Admin/AdminPage";
 import Shelves from "./Components/Page/Profile/Shelves/Shelves";
 import Post from "./Components/Page/Profile/Clubs/Post";
 import Reset from "./Components/Page/ResetPassword/Reset";
+import UserNewBook from "./Components/Page/Profile/NewBook/UserNewBook";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -48,6 +49,7 @@ ReactDOM.render(
               <Route path="/rate/comments" component={RateAndComments} />
               <Route path="/all-clubs" component={AllClubs} />
               <Route path="/admin-book-new" component={NewBook} />
+              <Route path="/user-book-new" component={UserNewBook} />
               <Route path="/admin-unverified" component={UnverifiedBooks} />
               <Route path="/admin-author-new" component={NewAuthor} />
               <Route path="/admin-genres" component={Genres} />

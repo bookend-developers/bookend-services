@@ -3,12 +3,8 @@ import Button from "@material-ui/core/Button";
 import TextField from '@material-ui/core/TextField';
 import Paper from "@material-ui/core/Paper";
 import { Link } from 'react-router-dom';
-import { Redirect } from 'react-router-dom';
 import {Typography} from "@material-ui/core";
-import TableCell from "@material-ui/core/TableCell";
 import AuthService from "../../../../Service/AuthService";
-
-
 
 export default class NewAuthor extends Component {
 
@@ -54,9 +50,8 @@ export default class NewAuthor extends Component {
             .then(result => {
                 if(JSON.parse(result).name === author_name){
                     alert("Added successfully.")
-
                 }else{
-                    alert(JSON.parse(result).message)
+                    alert("Author already exists.")
                 }
             })
     }
@@ -154,11 +149,11 @@ export default class NewAuthor extends Component {
                                 else{
                                     alert("All fields must be filled!!")
                                 }}}
-                            style={{marginTop:"5%",marginLeft:"26%"}}
+                            style={{marginTop:"5%",marginLeft:"33%",backgroundColor:"#148F77",color:"white"}}
                             variant="outlined">Add</Button>
                         <Button
                             component={Link} to={"/admin"}
-                            style={{marginTop:"5%",marginLeft:"5%"}}
+                            style={{marginTop:"5%",marginLeft:"5%",backgroundColor:"#C0392B",color:"white"}}
                             variant="outlined"
                         >Cancel</Button>
 

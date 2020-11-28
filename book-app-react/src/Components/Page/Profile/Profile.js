@@ -86,7 +86,7 @@ export default function AutoGridNoWrap(props) {
                                               aria-label="vertical contained primary button group"
                                               variant="contained"
                                               style={{textAlign:"center",marginTop:10,marginLeft:"32%"}}
-                                              component={Link} to="/admin-book-new">Add new Book</Button></TableRow>
+                                              component={Link} to="/user-book-new">Add new Book</Button></TableRow>
                         </Table>
                     </Grid>
                 </Grid>

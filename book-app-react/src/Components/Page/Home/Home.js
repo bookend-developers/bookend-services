@@ -4,7 +4,7 @@ import Button from "@material-ui/core/Button";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import AuthService from "../../../Service/AuthService";
-import {Typography} from "@material-ui/core";
+import {TableHead, Typography} from "@material-ui/core";
 import { Link } from 'react-router-dom';
 import TablePagination from "@material-ui/core/TablePagination";
 import PopOverShelf from "./PopOverShelf";
@@ -24,8 +24,11 @@ export default class Home extends React.Component {
             book: [],
             user: "",
             anchorEl:null,
+            anchorEl2:null,
             searchCategory:"",
-            bookSearch:""
+            bookSearch:"",
+            rateSort:false,
+            commentSort:false,
         };
 
         this.handleOnClickProfile=this.handleOnClickProfile.bind(this);
@@ -46,8 +49,16 @@ export default class Home extends React.Component {
         this.setState({anchorEl:e.currentTarget});
     };
 
+    handleClick2 =(e)=>{
+        this.setState({anchorEl2:e.currentTarget})
+    }
+
     handleClose = () => {
         this.setState({anchorEl:null});
+    };
+
+    handleClose2 = () => {
+        this.setState({anchorEl2:null});
     };
 
     onChangeBookSearch(e){
@@ -79,8 +90,9 @@ export default class Home extends React.Component {
             headers: myHeaders,
             redirect: 'follow'
         };
-
-        fetch("http://localhost:8082/api/book?title="+this.state.bookSearch, requestOptions)
+        console.log(this.state.rateSort)
+        console.log(this.state.commentSort)
+        fetch("http://localhost:8082/api/book?title="+this.state.bookSearch+"&rateSort="+this.state.rateSort+"&commentSort="+this.state.commentSort, requestOptions)
             .then(response => response.text())
             .then(result => {
                 if (result.slice(10,23)!=="invalid_token") {
@@ -183,19 +195,42 @@ export default class Home extends React.Component {
                     />
                 </form></TableCell>
                     <TableCell><Button style={{backgroundColor:"#FAE5D3"}} onClick={this.handleSearchByBookName}>Search</Button></TableCell>
+                    <TableCell><Button
+                        style={{backgroundColor:"#FAE5D3"}} aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleClick2}>
+                        Sort
+                    </Button>
+                        <Menu
+                            id="simple-menu"
+                            anchorEl={this.state.anchorEl2}
+                            keepMounted
+                            open={Boolean(this.state.anchorEl2)}
+                            onClose={this.handleClose2}
+                        >
+                            <MenuItem onClick={()=>{this.setState({rateSort:true,commentSort:false});
+                            this.handleSearchByBookName();}}>Sort By Rate</MenuItem>
+                            <MenuItem onClick={()=>this.setState({commentSort:true,rateSort:false})}>Sort By # of Comments</MenuItem>
+                        </Menu></TableCell>
                 </TableRow>
                 </Table>
-                <Paper style={{marginLeft:"27%",minWidth:400,maxWidth: 700}}>
+                <Paper style={{marginLeft:"27%",minWidth:400,maxWidth:800}}>
                     <Typography
                         style={{marginLeft:"30%",marginTop:"5%"}}
                     >Recommendations
                         </Typography>
+                    <TableHead>
+                        <TableCell>Book Name</TableCell>
+                        <TableCell>Genre</TableCell>
+                        <TableCell>Rate</TableCell>
+                        <TableCell>Number of Comments</TableCell>
+                    </TableHead>
                     {(this.state.rowsPerPage > 0
                         ? this.state.book.slice(this.state.page * this.state.rowsPerPage,this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
                         : this.state.book).map((row)=>
                         <TableRow >
-                            <TableCell><div>Book Name: {row.bookName}</div></TableCell>
-                            <TableCell style={{marginLeft: "2%"}}>Genre: {row.genre.genre}</TableCell>
+                            <TableCell><div>{row.bookName}</div></TableCell>
+                            <TableCell>{row.genre.genre}</TableCell>
+                            <TableCell>{row.rate}</TableCell>
+                            <TableCell>{row.comments.length}</TableCell>
                             <TableCell><PopOverShelf data={row.id}/></TableCell>
                             <TableCell><div><Link
                                 to={{

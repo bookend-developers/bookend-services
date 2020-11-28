@@ -14,7 +14,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import AuthService from "../../../../Service/AuthService";
 
 
-export default class NewBook extends Component {
+export default class UserNewBook extends Component {
 
     constructor(props) {
         super(props);
@@ -88,7 +88,7 @@ export default class NewBook extends Component {
     }
     componentDidMount(){
         this.loadAuthors();
-        
+
     }
     handleNewBook(page,genre,description,bookName,author,author_id,ISBN) {
         let myHeaders = new Headers();
@@ -112,13 +112,13 @@ export default class NewBook extends Component {
             redirect: 'follow'
         };
 
-       fetch("http://localhost:8082/api/book/admin/new", requestOptions)
+        fetch("http://localhost:8082/api/book/new", requestOptions)
             .then(response => response.text())
             .then(result => {
                 if(JSON.parse(result).bookName===bookName){
                     alert("Added successfully.")
                 }else{
-                    alert("Something went wrong:"+JSON.parse(result).message)
+                    alert("Something went wrong.")
                 }
             })
     }

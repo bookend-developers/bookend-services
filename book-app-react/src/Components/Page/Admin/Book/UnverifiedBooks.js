@@ -79,6 +79,7 @@ export default class UnverifiedBooks extends React.Component {
                 if (result.slice(10, 23) !== "invalid_token") {
                     if(JSON.parse(result).status !==401 && JSON.parse(result).status!==500){
                         alert("Verified successfully")
+                        window.location.reload();
                     }
                     else {
                         alert("There is a problem")
@@ -124,17 +125,7 @@ export default class UnverifiedBooks extends React.Component {
 
         return (
             <div style={{flexGrow: 1}}>
-                <Table style={{marginLeft:"42%",width:"20%",marginTop:"2%"}}>
-                    <td> <Button
-                        component={ Link } to="/home"
-                        style={{backgroundColor:"#E5E7E9"}}
-                    >Home</Button></td>
-                    <td> <Button
-                        component={ Link } to={"/profile/"+AuthService.getCurrentUserName()}
-                        style={{backgroundColor:"#E5E7E9"}}
-                    >Profile</Button></td>
-                </Table>
-                <Paper style={{marginLeft:"35%",minWidth:400,maxWidth: 500}}>
+                <Paper style={{marginLeft:"33%",marginTop:"2%",minWidth:400,maxWidth: 500}}>
                     <TableHead>
                         <TableCell>Book Name</TableCell>
                         <TableCell>Genre</TableCell>
@@ -152,13 +143,14 @@ export default class UnverifiedBooks extends React.Component {
                                 }}><Button style={{backgroundColor: "#5499C7", color: "white"}}>Show</Button>
                             </Link></div></TableCell>
                             <TableCell><div><Button
+                                onClick={()=>this.handleVerifyBook(row.id)}
+                                style={{backgroundColor:"#148F77",color:"white"}}>Verify</Button>
+                            </div></TableCell>
+                            <TableCell><div><Button
                                 onClick={()=>this.handleDeleteBook(row.id)}
                                 style={{backgroundColor: "#C0392B", color: "white"}}>Delete</Button>
                             </div></TableCell>
-                            <TableCell><div><Button
-                                onClick={()=>this.handleVerifyBook(row.id)}
-                                style={{backgroundColor: "#C0392B", color: "white"}}>Verify</Button>
-                            </div></TableCell>
+
                         </TableRow>
                     )}
                     <TablePagination

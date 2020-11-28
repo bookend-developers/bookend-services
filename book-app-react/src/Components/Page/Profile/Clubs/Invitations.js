@@ -13,8 +13,8 @@ import AddBoxIcon from "@material-ui/icons/AddBox";
 import {Link} from "react-router-dom";
 import TablePagination from "@material-ui/core/TablePagination";
 import Paper from "@material-ui/core/Paper";
-import CheckIcon from '@material-ui/icons/Check';
-import CloseIcon from '@material-ui/icons/Close';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 export default class Invitations extends React.Component {
 
@@ -113,7 +113,7 @@ export default class Invitations extends React.Component {
             .then(result => {
                 if (result.slice(10,23)!=="invalid_token") {
                     console.log(result)
-                    if(JSON.parse(result).message==="request sended successfully" && JSON.parse(result).status !==500){
+                    if(JSON.parse(result).message==="request sent successfully" && JSON.parse(result).status !==500){
                         alert("Your answer is sent")
                         window.location.reload();
                     }else{
@@ -151,24 +151,23 @@ export default class Invitations extends React.Component {
                                     <TableCell>
                                         <div>Owner: {row.club.owner.userName}</div>
                                     </TableCell>
-                                    <TableCell>
-                                        <Typography>Accept</Typography>
-                                    <Radio
-                                        checked={this.state.answer === "ACCEPT"}
-                                        onChange={this.handleChange}
-                                        value="ACCEPT"
-                                        name="radio-button-demo"
-                                        aria-label="Accept"
-                                    /></TableCell>
-                                   <TableCell>
-                                       <Typography>Reject</Typography>
-                                       <Radio
-                                        checked={this.state.answer === "REJECT"}
-                                        onChange={this.handleChange}
-                                        value="REJECT"
-                                        name="radio-button-demo"
-                                        aria-label="Reject"
-                                    /></TableCell>
+                                    <TableRow><TableCell>
+                                    <RadioGroup row aria-label="position" name="position" defaultValue="top">
+                                       <FormControlLabel
+                                            value="ACCEPT"
+                                            onChange={()=>this.setState({answer:"ACCEPT"})}
+                                            control={<Radio color="primary" />}
+                                            label="Accept"
+                                            labelPlacement="Accept"
+                                        />
+                                        <FormControlLabel
+                                            value="REJECT"
+                                            onChange={()=>this.setState({answer:"REJECT"})}
+                                            control={<Radio color="primary" />}
+                                            label="Reject"
+                                            labelPlacement="Reject"
+                                        />
+                                    </RadioGroup></TableCell></TableRow>
                                     <TableCell>
                                         <Button
                                             style={{backgroundColor:"#117A65",color:"white"}}

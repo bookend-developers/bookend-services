@@ -54,9 +54,11 @@ export default class UpdateGenre extends React.Component {
             .then(response => response.text())
             .then(result => {
                 if (result.slice(10, 23) !== "invalid_token") {
-                    if(JSON.parse(result).genre === genre){
+                    if(JSON.parse(result).genre === genre && JSON.parse(result).status!==400){
                         alert("Updated successfully")
                         window.location.reload();
+                    }else{
+                        alert(JSON.parse(result).message)
                     }
 
                 } else {
@@ -75,11 +77,7 @@ export default class UpdateGenre extends React.Component {
         return (
             <div>
                 <Button
-                    orientation="vertical"
-                    color="primary"
-                    aria-label="vertical contained primary button group"
-                    variant="contained"
-                    style={{textAlign:"center",marginTop:10,marginLeft:"38%"}}
+                    style={{textAlign:"center",marginTop:10,marginLeft:"38%",backgroundColor:"#148F77",color:"white"}}
                     onClick={this.handleClickOpen}>Update</Button>
 
                 <Dialog

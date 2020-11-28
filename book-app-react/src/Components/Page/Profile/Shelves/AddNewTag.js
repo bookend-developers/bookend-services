@@ -36,13 +36,11 @@ export default class Invitations extends React.Component {
             genreName:[],
             genres:[]
         };
-
     }
 
     onChangeGenreName = (e) => {
         this.setState({genreName:e.target.value});
     };
-
 
     componentDidMount() {
         let myHeaders = new Headers();

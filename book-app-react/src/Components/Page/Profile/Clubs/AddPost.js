@@ -81,11 +81,11 @@ export default class Invitations extends React.Component {
             .then(result => {
                 if (result.slice(10,23)!=="invalid_token") {
                     console.log(result)
-                    if(JSON.parse(result).message==="new post shared" && JSON.parse(result).status !==500){
+                    if(JSON.parse(result).message==="new post shared" && JSON.parse(result).status !==400){
                         alert("New post shared")
                         window.location.reload();
                     }else{
-                        alert("Sorry, there is a problem. Try again..")
+                        alert("You are not a member")
                     }
 
                 }else{

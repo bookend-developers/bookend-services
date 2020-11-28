@@ -125,7 +125,6 @@ export default class NewShelf extends React.Component {
                             <TableCell><Button
                                 onClick={()=>this.deleteShelf(row.id)}
                                 style={{backgroundColor:"#C0392B",color:"white"}}>Delete</Button></TableCell>
-                        <TableCell><AddNewTag/></TableCell>
 
                         </TableRow>
                     )}<TablePagination

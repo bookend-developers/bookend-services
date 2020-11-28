@@ -70,10 +70,11 @@ export default class InvitePerson extends React.Component {
             .then(result => {
                 if (result.slice(10,23)!=="invalid_token") {
                     console.log(result)
-                    if(JSON.parse(result).message==="request sended successfully" && JSON.parse(result).status !==500){
+                    if(JSON.parse(result).message==="request sent successfully" && JSON.parse(result).status !==400){
                         alert("The invitation is sent")
+                        window.location.reload();
                     }else{
-                        alert("Sorry, there is a problem. Try again..")
+                        alert("You must not sent an invitation to same person or member does not exist ")
                     }
 
                 }else{

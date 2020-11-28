@@ -68,9 +68,10 @@ export default class AddNewShelf extends React.Component {
         myHeaders.append("Authorization", "Bearer "+ AuthService.getCurrentUser());
         myHeaders.append("Content-Type", "application/json");
 
+        console.log(this.state.genreName)
         let raw = JSON.stringify({
             "shelfname":this.state.shelfName,
-            "tags":this.state.genreName,
+            "tags":["kfjd"],
            });
 
         let requestOptions = {
@@ -87,6 +88,7 @@ export default class AddNewShelf extends React.Component {
                         alert("\n" + result.message)
                     } else {
                         alert("New shelf created. Please refresh..")
+                        window.location.reload();
                     }
                 }
             )
@@ -102,6 +104,7 @@ export default class AddNewShelf extends React.Component {
             headers: myHeaders,
             redirect: 'follow'
         };
+
 
         fetch("http://localhost:8083/api/shelf/tags", requestOptions)
             .then(response => response.text())

@@ -72,13 +72,8 @@ export default class NewGenre extends React.Component {
 
         return (
             <div>
-                <Button
-                    orientation="vertical"
-                    color="primary"
-                    aria-label="vertical contained primary button group"
-                    variant="contained"
-                    style={{textAlign:"center",marginTop:10,marginLeft:"38%"}}
-                    onClick={this.handleClickOpen}>Add Genre</Button>
+                <td><Typography style={{marginLeft:"10%"}}>Genres</Typography></td>
+                <td> <Button onClick={this.handleClickOpen} style={{marginLeft:"35%"}}> <AddBoxIcon color="primary"/> </Button></td>
                 <Dialog
                     fullWidth={"xs"}
                     maxWidth={"xs"}

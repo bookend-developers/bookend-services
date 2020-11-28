@@ -54,14 +54,14 @@ export default function AutoGridNoWrap(props) {
                                               color="primary"
                                               aria-label="vertical contained primary button group"
                                               variant="contained"
-                                              style={{textAlign:"center",marginTop:10,marginLeft:"28%"}}
+                                              style={{textAlign:"center",marginTop:10,marginLeft:"32%"}}
                                               component={Link} to="/admin-book-new">Add new Book</Button></TableRow>
                             <TableRow><Button
                                 orientation="vertical"
                                 color="primary"
                                 aria-label="vertical contained primary button group"
                                 variant="contained"
-                                style={{textAlign:"center",marginTop:10,marginLeft:"36%"}}
+                                style={{textAlign:"center",marginTop:10,marginLeft:"30%"}}
                                 component={Link} to={"/admin-unverified"}>Unverified Book</Button>
                             </TableRow>
 
@@ -70,15 +70,14 @@ export default function AutoGridNoWrap(props) {
                                 color="primary"
                                 aria-label="vertical contained primary button group"
                                 variant="contained"
-                                style={{textAlign:"center",marginTop:10,marginLeft:"38%"}}
+                                style={{textAlign:"center",marginTop:10,marginLeft:"30%"}}
                                 component={Link} to={"/admin-author-new" }>Add new Author</Button>
-                            <NewGenre/>
                             <TableRow><Button
                                 orientation="vertical"
                                 color="primary"
                                 aria-label="vertical contained primary button group"
                                 variant="contained"
-                                style={{textAlign:"center",marginTop:10,marginLeft:"36%"}}
+                                style={{textAlign:"center",marginTop:10,marginLeft:"38%"}}
                                 component={Link} to={"/admin-genres"}>Genres</Button>
                             </TableRow>
                         </Table>

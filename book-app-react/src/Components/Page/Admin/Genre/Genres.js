@@ -73,20 +73,9 @@ export default class Genres extends React.Component {
 
         return (
             <div style={{flexGrow: 1}}>
-                <Table style={{marginLeft:"42%",width:"20%",marginTop:"2%"}}>
-                    <td> <Button
-                        component={ Link } to="/home"
-                        style={{backgroundColor:"#E5E7E9"}}
-                    >Home</Button></td>
-                    <td> <Button
-                        component={ Link } to={"/profile/"+AuthService.getCurrentUserName()}
-                        style={{backgroundColor:"#E5E7E9"}}
-                    >Profile</Button></td>
-                </Table>
-                <Paper style={{marginLeft:"35%",minWidth:400,maxWidth: 500}}>
-                    <TableHead>
-                        <TableCell>Genre</TableCell>
-                    </TableHead>
+                <Paper style={{marginLeft:"35%",marginTop:"2%",minWidth:400,maxWidth: 500}}>
+                    <TableCell><div><NewGenre/>
+                    </div></TableCell>
                     {(this.state.rowsPerPage > 0
                         ? this.state.genres.slice(this.state.page * this.state.rowsPerPage,this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
                         : this.state.genres).map((row)=>
@@ -97,10 +86,7 @@ export default class Genres extends React.Component {
                         </TableRow>
 
                     )}
-                    <TableRow >
-                        <TableCell><div><NewGenre/>
-                        </div></TableCell>
-                    </TableRow>
+
                     <TablePagination
                         count={50}
                         page={this.state.page}

@@ -8,6 +8,8 @@ import {Typography} from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import Rate from "./Rate";
 import Comment from "./Comment";
+import CheckIcon from '@material-ui/icons/Check';
+import CloseIcon from '@material-ui/icons/Close';
 
 export default class Book extends React.Component {
     constructor(props) {
@@ -56,7 +58,7 @@ export default class Book extends React.Component {
         return (
             <div style={{flexGrow: 1}}>
                 <Grid container spacing={3}>
-                <Grid item xs={12} sm={6} style={{marginLeft:"10%",maxWidth: 500}}>
+                <Grid item xs={12} sm={6} style={{marginLeft:"8%",maxWidth: 550}}>
                     <Paper>
                     <Typography
                         style={{marginLeft:"30%",marginTop:"5%"}}
@@ -69,13 +71,17 @@ export default class Book extends React.Component {
                     />
 
                         <TableRow >
-                            <TableCell><div>Author : {this.state.selectedBook.authorid}</div></TableCell>
+                            <TableCell><div>Author : {this.state.selectedBook.author}</div></TableCell>
                             <TableCell><div>Genre : {this.state.bookGenre.genre}</div></TableCell>
                             <TableCell><div>Page : {this.state.selectedBook.page}</div></TableCell>
                         </TableRow>
                         <TableRow >
                             <TableCell><div>ISBN : {this.state.selectedBook.isbn}</div></TableCell>
-                            <TableCell><div>Verified : {this.state.selectedBook.verified}</div></TableCell>
+                            <TableCell><div>Verified :
+                                { Boolean(this.state.selectedBook.verified).toString()==="true"?
+                                     <CheckIcon color="secondary" style={{marginTop:"1%"}}/>:
+                                    <CloseIcon color="secondary" style={{marginTop:"1%"}}/>
+                            }</div></TableCell>
                         </TableRow>
                             <Typography>
                                 <TableCell><div>{this.state.selectedBook.description}</div></TableCell>
