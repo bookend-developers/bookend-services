@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -37,6 +38,7 @@ public class AdminController {
     }
     )
     @PostMapping("/new")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Book adminBook(@RequestBody BookRequest bookRequest){
         if(bookRequest.getBookName()==null  || bookRequest.getBookName().equals("")){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Book name field cannot be empty.");
@@ -60,6 +62,7 @@ public class AdminController {
     }
     )
     @DeleteMapping("/{bookid}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void delete(@PathVariable("bookid") String bookId){
         bookService.delete(bookId);
 
@@ -72,6 +75,7 @@ public class AdminController {
     }
     )
     @PostMapping("/new/genre")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Genre addGenre(@RequestParam String genre){
         if(genre.equals("")){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Genre must be filled.");
@@ -84,6 +88,7 @@ public class AdminController {
         }
     }
     @GetMapping("/unverified")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<Book> listUnverified(){
         return bookService.findBookByVerifiedIsFalse();
     }
@@ -98,10 +103,12 @@ public class AdminController {
 
     }
     @GetMapping("/genres")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<Genre> listGenres(){
         return genreService.findAll();
     }
     @PostMapping("/genre")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Genre updateGenre(@RequestBody Genre genre){
         Genre updatedGenre = genreService.findById(genre.getId());
         if(genreService.findByGenre(genre.getGenre())!=null){
