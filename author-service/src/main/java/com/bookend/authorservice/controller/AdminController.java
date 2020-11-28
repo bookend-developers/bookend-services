@@ -11,11 +11,9 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -45,8 +43,7 @@ public class AdminController {
     }
     )
     @PostMapping("/new")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public Author newAuthor(@RequestBody AuthorRequest author, Principal principal)  {
+    public Author newAuthor(@RequestBody AuthorRequest author)  {
 
         Author newAuthor = new Author();
         if(author.getName()==null){
@@ -54,6 +51,7 @@ public class AdminController {
         }
         newAuthor.setName(author.getName());
         newAuthor.setBiography(author.getBiography());
+
         newAuthor.setBirthDate(LocalDate.parse(author.getBirthDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.US)));
 
         if(author.getDateOfDeath()==""){
