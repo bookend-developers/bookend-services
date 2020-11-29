@@ -1,8 +1,10 @@
 server:
   port: 9191
+  error:
+    include-message:
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/bookend-authorization-service?useUnicode=true&useLegacyDatetimeCode=false&serverTimezone=Turkey
+    url: jdbc:mysql://localhost:3307/bookend-authorization-service?useUnicode=true&useLegacyDatetimeCode=false&serverTimezone=Turkey
     username: root
     password: 1234
     driver-class-name: com.mysql.jdbc.Driver
@@ -11,6 +13,7 @@ spring:
     hibernate:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: true

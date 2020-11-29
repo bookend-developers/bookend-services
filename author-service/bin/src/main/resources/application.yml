@@ -1,0 +1,27 @@
+server:
+  port: 8085
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: author-service
+  datasource:
+    kafka:
+      producer:
+        properties:
+          spring:
+            json:
+              add:
+                type:
+                  headedrs: false
+        value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+security:
+  oauth2:
+    resource:
+      token-info-uri: http://localhost:9191/oauth/check_token
+
+    client:
+      client-id: mobile
+      client-secret: pin

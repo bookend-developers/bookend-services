@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/book-service/Book-service.iml" filepath="$PROJECT_DIR$/book-service/Book-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/author-service/author-service.iml" filepath="$PROJECT_DIR$/author-service/author-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/authorization-server/authorization-server.iml" filepath="$PROJECT_DIR$/authorization-server/authorization-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/book-club-service/book-club-service.iml" filepath="$PROJECT_DIR$/book-club-service/book-club-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mail-service/mail-service.iml" filepath="$PROJECT_DIR$/mail-service/mail-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/message-service/message-service.iml" filepath="$PROJECT_DIR$/message-service/message-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rate-comment-service/rate-comment-service.iml" filepath="$PROJECT_DIR$/rate-comment-service/rate-comment-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/shelf-service/shelf-service.iml" filepath="$PROJECT_DIR$/shelf-service/shelf-service.iml" />
+    </modules>
+  </component>
+</project>
