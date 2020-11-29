@@ -127,7 +127,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> findByAuthor(String author) {
-        return bookRepository.findByAuthor(author);
+        return bookRepository.findByAuthorid(author);
     }
 
     @Override

@@ -37,7 +37,7 @@ public class Listener {
           Book book= new Book(msg.get("book"),author);
           bookService.save(book);
           author.getBookList().add(book);
-          authorService.saveOrUpdate(author);
+          authorService.update(author);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         } catch (IOException e) {

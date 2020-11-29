@@ -74,6 +74,7 @@ public class Post {
         this.writer = writer;
     }
 
-
-
+    public Post() {
+        this.date= LocalDateTime.now();
+    }
 }

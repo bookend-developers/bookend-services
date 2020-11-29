@@ -21,7 +21,7 @@ public class MailListener {
     UserService userService;
 
     @KafkaListener(topics = "confirmation-mail",
-            groupId ="confirm-mail")
+            groupId ="mailservice")
     public void consumeConfirmMail(String message) {
         System.out.println(message);
         ObjectMapper mapper = new ObjectMapper();
@@ -36,7 +36,7 @@ public class MailListener {
     }
 
     @KafkaListener(topics = "Mail",
-            groupId ="mail")
+            groupId ="mailservice")
     public void consumeBook(String message) {
         System.out.println(message);
         ObjectMapper mapper = new ObjectMapper();

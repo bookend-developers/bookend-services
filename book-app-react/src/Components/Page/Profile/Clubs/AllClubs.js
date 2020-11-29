@@ -63,9 +63,7 @@ export default class AllClubs extends React.Component {
     }
 
     render() {
-        if (!this.state.all_clubs) {
-            return <div>didn't get a club</div>;
-        }
+
         if(this.state.chosen==="My"){
             return(<div>
                 <MyClubs/>

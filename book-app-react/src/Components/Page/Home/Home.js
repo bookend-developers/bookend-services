@@ -183,7 +183,7 @@ export default class Home extends React.Component {
                     onClose={this.handleClose}
                 >
                     <MenuItem onClick={()=>this.handleSearchCategory("Book Name")}>Book</MenuItem>
-                    <MenuItem onClick={()=>this.handleSearchCategory("Genre")}>Genre</MenuItem>
+
                     <MenuItem onClick={()=>this.handleSearchCategory("Author Name")}>Author</MenuItem>
                 </Menu></TableCell>
                 <TableCell><form noValidate autoComplete="off">

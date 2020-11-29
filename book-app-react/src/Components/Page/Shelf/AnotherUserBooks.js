@@ -90,7 +90,7 @@ export default class Books extends React.Component {
                         : this.state.bookFromShelf).map((row)=>
                         <TableRow >
                             <TableCell><div>{row.bookName}</div></TableCell>
-                            <TableCell><div>{row.genre}</div></TableCell>
+                            <TableCell><div>{row.genre.genre}</div></TableCell>
                             <TableCell><div><Link
                                 to={{
                                     pathname: "/book/"+row.id,

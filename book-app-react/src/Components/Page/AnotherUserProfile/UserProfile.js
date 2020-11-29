@@ -67,7 +67,7 @@ export default class UserProfile extends React.Component {
             redirect: 'follow'
         };
 
-        fetch("http://localhost:9191/api/profile/"+this.props.location.state.selectedUser, requestOptions)
+        fetch("http://localhost:9191/api/profile/full/"+this.props.location.state.selectedUser, requestOptions)
             .then(response => response.text())
             .then(result => {
                 if (result.slice(10,23)!=="invalid_token") {

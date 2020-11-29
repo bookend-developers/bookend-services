@@ -52,9 +52,7 @@ public class ClubController {
     @GetMapping("/{clubid}/members")
     public List<Member> getClubMembers(@PathVariable("clubid") Long clubId){
         Club club = clubService.findByID(clubId);
-        if(club ==null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Club not found.");
-        }
+
         return club.getMembers();
     }
     @ApiOperation(value = "Get Clubs of the user", response = Club.class)
@@ -201,6 +199,11 @@ public class ClubController {
         clubService.sendComment(commentRequest);
 
         return ResponseEntity.ok(new MessageResponse("new comment shared"));
+    }
+
+    @GetMapping("/clubs")
+    public List<Club> getMyMembershipClub(OAuth2Authentication auth){
+        return clubService.getMembershipClub( auth.getName());
     }
 
 }

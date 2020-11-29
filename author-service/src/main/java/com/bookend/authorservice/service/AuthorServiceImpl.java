@@ -25,6 +25,10 @@ public class AuthorServiceImpl implements AuthorService {
         return authorRepository.findAuthorById(id);
     }
 
+    @Override
+    public Author update(Author author) {
+        return authorRepository.save(author);
+    }
 
 
     @Override
@@ -35,7 +39,7 @@ public class AuthorServiceImpl implements AuthorService {
                     .filter(a -> a.getBirthDate().isEqual(author.getBirthDate()))
                     .collect(Collectors.toList());
             if(filteredByBirth.size()!=0){
-                if(!author.getDateOfDeath().equals("")){
+                if(!(author.getDateOfDeath()==null)){
                     List<Author> filteredByDeath = filteredByBirth.stream()
                             .filter(auth -> auth.getDateOfDeath().isEqual(author.getDateOfDeath()))
                             .collect(Collectors.toList());
@@ -48,6 +52,7 @@ public class AuthorServiceImpl implements AuthorService {
 
         return authorRepository.save(author);
     }
+
 
     @Override
     public List<Author> getAll() {

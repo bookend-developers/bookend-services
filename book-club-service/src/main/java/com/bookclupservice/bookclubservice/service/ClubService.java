@@ -123,7 +123,7 @@ public class ClubService {
     public void savePost(NewPostRequest newPostRequest, OAuth2Authentication auth) throws NotMemberExpection {
         Club club = clubRepository.findById(newPostRequest.getClubId()).get();
         Member writer = memberRepository.findByUserName((String) auth.getPrincipal());
-        if(club.getMembers().contains(writer)){
+        if(club.getMembers().contains(writer) || club.getOwner().getUserName().equals(writer.getUserName())){
             Post post = new Post();
             post.setClub(club);
             post.setText(newPostRequest.getText());
@@ -145,4 +145,8 @@ public class ClubService {
         messageProducer.sendCommentRequest(commentRequest);
     }
 
+    public List<Club> getMembershipClub(String name) {
+        Member member = memberRepository.findByUserName(name);
+        return member.getClubs();
+    }
 }

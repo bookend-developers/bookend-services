@@ -56,10 +56,11 @@ export default class MembershipClubs extends React.Component {
             redirect: 'follow'
         };
 
-        fetch("http://localhost:8089/api/club/"+AuthService.getCurrentUserName()+"/clubs", requestOptions)
+        fetch("http://localhost:8089/api/club/clubs", requestOptions)
             .then(response => response.text())
             .then(result => {
                 if (result.slice(10,23)!=="invalid_token") {
+
                     this.setState({membership_clubs:JSON.parse(result)});
                     console.log(AuthService.getCurrentUserId())
                     console.log(this.state.membership_clubs)
