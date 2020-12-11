@@ -17,12 +17,12 @@ import com.bookend.kafkaservice.kafka.Consumer;
 @RequestMapping("/kafka")
 public class KafkaController {
 
-	private Consumer consumer;
+	private Consumer consumer= new Consumer();;
 	private List<String> displayList = new ArrayList<>();
 	
     @GetMapping("/displayEvents")
     public List<String> getBookInfo() {
-    	consumer = new Consumer();
+
     	displayList = consumer.getDisplayList();	
     	System.out.print("??");
     	

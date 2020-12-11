@@ -9,8 +9,9 @@ import org.springframework.kafka.annotation.KafkaListener;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.stereotype.Component;
 
-
+@Component
 public class Consumer {
 	
 	public Consumer() {
@@ -19,7 +20,7 @@ public class Consumer {
 	}
 
 
-	List<String> displayList = new ArrayList<>();
+	private static List<String> displayList = new ArrayList<>();
 	
     public List<String> getDisplayList() {
 		return displayList;
@@ -30,7 +31,7 @@ public class Consumer {
 	}
 
 	@KafkaListener(topics = "adding-book",
-            groupId ="bookend-authorservice")
+            groupId ="bookend")
     public void consumeBook(String message) {
         System.out.println(message);
         ObjectMapper mapper = new ObjectMapper();
@@ -50,19 +51,19 @@ public class Consumer {
     }
     
     @KafkaListener(topics = "deleting-book",
-            groupId ="bookend-authorservice")
+            groupId ="bookend")
     public void deleteBook(String message){
 
         System.out.println(message);
         String[] splited = message.split("\"");
-        String bookId = splited[1];
+        String bookId = message;
         String display = "bookend-authorservice --> delete book with book id= "+bookId;
         displayList.add(display);
 
     }
     
     @KafkaListener(topics = "new-comment",
-            groupId ="bookend-bookservice")
+            groupId ="bookend")
     public void newComment(String message){
 
         System.out.println(message);
@@ -82,7 +83,7 @@ public class Consumer {
     }
     
     @KafkaListener(topics = "new-rate",
-            groupId ="bookend-bookservice")
+            groupId ="bookend")
     public void newRate(String message){
 
         System.out.println(message);
@@ -103,11 +104,11 @@ public class Consumer {
     
     
     @KafkaListener(topics = "deleting-book",
-            groupId ="bookend-rate-commentservice")
+            groupId ="bookend")
     public void consumeBoook(String message) {
         System.out.println(message);
         String[] splited = message.split("\"");
-        String bookId = (splited[1]);
+        String bookId = message;
         String display = "bookend-rate-commentservice --> delete rates and comments of book with id "+bookId;
         displayList.add(display);
     }
