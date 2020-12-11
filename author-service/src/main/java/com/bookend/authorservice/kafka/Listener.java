@@ -1,4 +1,6 @@
 package com.bookend.authorservice.kafka;
+import com.bookend.authorservice.kafka.Producer;
+import com.bookend.authorservice.model.KafkaMessage;
 
 import com.bookend.authorservice.model.Author;
 import com.bookend.authorservice.model.Book;
@@ -11,12 +13,14 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 @Component
 public class Listener {
     private BookService bookService;
     private AuthorService authorService;
+    private Producer producer;
     @Autowired
     public void setBookService(BookService bookService) {
         this.bookService = bookService;
@@ -38,6 +42,15 @@ public class Listener {
           bookService.save(book);
           author.getBookList().add(book);
           authorService.update(author);
+          
+          //To display kafka events!!!!! .... author's .. book has been succesfully saved to author service
+         /* Map<String, String> message2= new HashMap<String, String>();
+          message2.put("author",author.getName());
+          message2.put("bookId",book.getBookId());
+          message2.put("service", "author-service");
+          KafkaMessage kafkaMessage = new KafkaMessage(KAFKA_TOPIC,message); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+          producer.bookPublished(kafkaMessage);*/
+          
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         } catch (IOException e) {

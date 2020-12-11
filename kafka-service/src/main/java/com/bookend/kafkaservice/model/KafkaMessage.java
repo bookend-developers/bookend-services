@@ -1,4 +1,5 @@
-package com.bookend.authorservice.model;
+package com.bookend.kafkaservice.model;
+
 
 public class KafkaMessage<T> {
     private String topic;
