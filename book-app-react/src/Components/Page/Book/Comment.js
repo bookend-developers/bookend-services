@@ -7,9 +7,6 @@ import AuthService from "../../../Service/AuthService";
 import {Typography} from "@material-ui/core";
 import { Link } from 'react-router-dom';
 import TablePagination from "@material-ui/core/TablePagination";
-import TableHead from "@material-ui/core/TableHead";
-import Box from "@material-ui/core/Box";
-import TextField from "@material-ui/core/TextField";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -99,7 +96,9 @@ export default class Comment extends React.Component {
                     this.props.history.push("/");
                     window.location.reload();
                 }
-            })
+            }).catch((err)=> {
+            alert("Comment service temporarily is offline for maintenance.")
+        })
     }
 
     showComment(){
@@ -121,7 +120,9 @@ export default class Comment extends React.Component {
                     this.props.history.push("/");
                     window.location.reload();
                 }
-            })
+            }).catch((err)=> {
+            alert("Comment service temporarily is offline for maintenance.")
+        })
     }
     componentDidMount() {
         this.showComment();
@@ -173,7 +174,7 @@ export default class Comment extends React.Component {
                     </TableRow>
                 )}
                 <TablePagination
-                    count={50}
+                    count={this.state.commentData.length}
                     page={this.state.page}
                     onChangePage={this.handleChangePage}
                     rowsPerPage={this.state.rowsPerPage}

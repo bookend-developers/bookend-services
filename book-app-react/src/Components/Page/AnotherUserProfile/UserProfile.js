@@ -58,7 +58,9 @@ export default class UserProfile extends React.Component {
                     this.props.history.push("/");
                     window.location.reload();
                 }
-            })
+            }).catch((err)=> {
+            alert("Shelf service temporarily is offline for maintenance.")
+        })
     }
 
     handleUserInfo(){
@@ -76,7 +78,9 @@ export default class UserProfile extends React.Component {
                     this.props.history.push("/");
                     window.location.reload();
                 }
-            })
+            }).catch((err)=> {
+            alert("Authorization service temporarily is offline for maintenance.")
+        })
     }
 
     componentDidMount() {

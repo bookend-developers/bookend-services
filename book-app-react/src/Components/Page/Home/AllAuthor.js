@@ -89,7 +89,9 @@ export default class AllAuthor extends React.Component {
                     this.props.history.push("/");
                     window.location.reload();
                 }
-            })
+            }).catch((err)=> {
+            alert("Author service temporarily is offline for maintenance.")
+        })
     }
 
     componentDidMount() {
@@ -112,7 +114,9 @@ export default class AllAuthor extends React.Component {
                     this.props.history.push("/");
                     window.location.reload();
                 }
-            })
+            }).catch((err)=> {
+            alert("Author service temporarily is offline for maintenance.")
+        })
 
     }
 
@@ -183,7 +187,7 @@ export default class AllAuthor extends React.Component {
                         </TableRow>
                     )}
                     <TablePagination
-                        count={50}
+                        count={this.state.author.length}
                         page={this.state.page}
                         onChangePage={this.handleChangePage}
                         rowsPerPage={this.state.rowsPerPage}

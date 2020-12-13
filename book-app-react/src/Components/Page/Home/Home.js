@@ -113,7 +113,9 @@ export default class Home extends React.Component {
                     this.props.history.push("/");
                     window.location.reload();
                 }
-            })
+            }).catch((err)=> {
+            alert("Book service temporarily is offline for maintenance.")
+        })
     }
 
     handleListBook(){
@@ -136,7 +138,9 @@ export default class Home extends React.Component {
                     this.props.history.push("/");
                     window.location.reload();
                 }
-            })
+            }).catch((err)=> {
+            alert("Book service temporarily is offline for maintenance.")
+        })
     }
 
     handleCurrentUserName(){
@@ -236,7 +240,7 @@ export default class Home extends React.Component {
                     <TableHead>
                         <TableCell>Book Name</TableCell>
                         <TableCell>Genre</TableCell>
-                        <TableCell>Rate</TableCell>
+                        <TableCell>Rating</TableCell>
                         <TableCell>Number of Comments</TableCell>
                     </TableHead>
                     {(this.state.rowsPerPage > 0
@@ -257,7 +261,7 @@ export default class Home extends React.Component {
                         </TableRow>
                     )}
                     <TablePagination
-                        count={50}
+                        count={this.state.book.length}
                         page={this.state.page}
                         onChangePage={this.handleChangePage}
                         rowsPerPage={this.state.rowsPerPage}
@@ -269,28 +273,3 @@ export default class Home extends React.Component {
     }
 }
 
-/*
-
- <Select
-                            style={{ marginTop:"2%",marginLeft:"4%"}}
-                            value={selectedChannel}
-                            onChange={handleChangeChannel}
-                            name="channel"
-                            displayEmpty
-                        >
-                            <MenuItem onClick={()=>{this.setState({rateSort:true,commentSort:false});
-                                }}>Sort By Rate</MenuItem>
-                            <MenuItem onClick={()=>this.setState({commentSort:true,rateSort:false})}>Sort By # of Comments</MenuItem>
-                            ))}
-
-                              <Menu
-                            id="simple-menu"
-                            anchorEl={this.state.anchorEl2}
-                            keepMounted
-                            open={Boolean(this.state.anchorEl2)}
-                            onClose={this.handleClose2}
-                        >
-                            <MenuItem onClick={()=>{this.setState({rateSort:true,commentSort:false});}}>Sort By Rate</MenuItem>
-                            <MenuItem onClick={()=>this.setState({commentSort:true,rateSort:false})}>Sort By # of Comments</MenuItem>
-                        </Menu>
- */
