@@ -32,16 +32,22 @@ public class AuthorServiceImpl implements AuthorService {
 
 
     @Override
-    public Author saveOrUpdate(Author author) {
+    public Author save(Author author) {
         List<Author> authors = authorRepository.findByName(author.getName());
-        if(authors.size()!=0){
+        if(authors != null || authors.size()!=0){
             List<Author> filteredByBirth = authors.stream()
                     .filter(a -> a.getBirthDate().isEqual(author.getBirthDate()))
                     .collect(Collectors.toList());
             if(filteredByBirth.size()!=0){
-                if(!(author.getDateOfDeath()==null)){
+                if((author.getDateOfDeath()!=null)){
                     List<Author> filteredByDeath = filteredByBirth.stream()
-                            .filter(auth -> auth.getDateOfDeath().isEqual(author.getDateOfDeath()))
+                            .filter(auth -> {if(auth.getDateOfDeath()!=null){
+                                return auth.getDateOfDeath().isEqual(author.getDateOfDeath());
+                            }else{
+                                return false;
+                            }
+
+                            })
                             .collect(Collectors.toList());
                     if(filteredByDeath.size()!=0){
                         return null;

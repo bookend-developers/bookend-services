@@ -7,7 +7,7 @@ import java.util.List;
 public interface AuthorService {
     Author getById(String id);
     Author update(Author author);
-    Author saveOrUpdate(Author author);
+    Author save(Author author);
     List<Author> getAll();
     List<Author> search(String title);
 

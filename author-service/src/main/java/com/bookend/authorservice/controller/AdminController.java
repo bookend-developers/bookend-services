@@ -1,7 +1,6 @@
 package com.bookend.authorservice.controller;
 
 import com.bookend.authorservice.model.Author;
-import com.bookend.authorservice.model.Book;
 import com.bookend.authorservice.payload.AuthorRequest;
 import com.bookend.authorservice.service.AuthorService;
 import com.bookend.authorservice.service.BookService;
@@ -9,18 +8,14 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.Locale;
 
 @RestController
@@ -61,7 +56,7 @@ public class AdminController {
         }else{
             newAuthor.setDateOfDeath(LocalDate.parse(author.getDateOfDeath(), DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.US)));
         }
-        Author addedAuthor = authorService.saveOrUpdate(newAuthor);
+        Author addedAuthor = authorService.save(newAuthor);
         if(addedAuthor==null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Author already exists.");
 
