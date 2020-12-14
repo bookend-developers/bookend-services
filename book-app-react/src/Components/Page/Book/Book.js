@@ -48,7 +48,9 @@ export default class Book extends React.Component {
                     this.props.history.push("/");
                     window.location.reload();
                 }
-            })
+            }).catch((err)=> {
+            alert("Book service temporarily is offline for maintenance.")
+        })
 
     }
 

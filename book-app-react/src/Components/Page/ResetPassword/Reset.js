@@ -78,7 +78,9 @@ export default class Login extends Component {
                 }else{
                     alert(JSON.parse(result).message)
                 }
-            })
+            }).catch((err)=> {
+            alert("Authorization service temporarily is offline for maintenance.")
+        })
 
     }
 

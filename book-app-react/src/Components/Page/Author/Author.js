@@ -52,7 +52,9 @@ export default class Author extends React.Component {
                     this.props.history.push("/");
                     window.location.reload();
                 }
-            })
+            }).catch((err)=> {
+            alert("Author service temporarily is offline for maintenance.")
+        })
     }
 
     handleBookOfShelves(){
@@ -75,7 +77,9 @@ export default class Author extends React.Component {
                     this.props.history.push("/");
                     window.location.reload();
                 }
-            })
+            }).catch((err)=> {
+            alert("Book service temporarily is offline for maintenance.")
+        })
     }
 
     componentDidMount() {
@@ -129,7 +133,7 @@ export default class Author extends React.Component {
                                 </TableRow>
                             )}
                             <TablePagination
-                                count={50}
+                                count={this.state.booksOfAuthor.length}
                                 page={this.state.page}
                                 onChangePage={this.handleChangePage}
                                 rowsPerPage={this.state.rowsPerPage}

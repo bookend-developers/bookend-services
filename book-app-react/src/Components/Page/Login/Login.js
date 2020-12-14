@@ -29,19 +29,6 @@ export default class Login extends Component {
     handleProfileUserName(){
         AuthService.handleUserName(AuthService.getCurrentUser())
             .then(response => response.json());
-          /*  .then((result) =>{
-                if(this.state.newLog===true) {
-                    if (result.includes("ROLE_ADMIN")) {
-                        this.props.history.push("/admin");
-                        window.location.reload();
-                    } else {
-                        this.props.history.push("/home");
-                        window.location.reload();
-                    }
-                }
-
-            });*/
-
     }
 
     handleCurrentUserId(){
@@ -82,6 +69,8 @@ export default class Login extends Component {
                         window.location.reload();
                     }
                 }
+            }).catch((err)=> {
+                alert("Authorization service temporarily is offline for maintenance.")
             })
         }
 
