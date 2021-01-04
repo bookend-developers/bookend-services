@@ -1,5 +1,6 @@
 package com.bookend.authorservice.controller;
 
+import com.bookend.authorservice.exception.AuthorNotFound;
 import com.bookend.authorservice.model.Author;
 import com.bookend.authorservice.model.Book;
 import com.bookend.authorservice.payload.AuthorRequest;
@@ -42,10 +43,13 @@ public class AuthorController {
     })
     @GetMapping("/{authorid}")
     public Author getAuthorInfo(@PathVariable("authorid") String authorId) {
-        Author author= authorService.getById(authorId);
-        if(author==null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Author is not found");
+        Author author= null;
+        try {
+            author = authorService.getById(authorId);
+        } catch (AuthorNotFound authorNotFound) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, authorNotFound.getMessage());
         }
+
         return author;
 
     }
@@ -77,9 +81,11 @@ public class AuthorController {
     })
     @GetMapping("/books")
     public List<Book> getAuthorBooks(@RequestParam String authorid){
-        Author author = authorService.getById(authorid);
-        if(author== null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"The author does not exist.");
+        Author author = null;
+        try {
+            author = authorService.getById(authorid);
+        } catch (AuthorNotFound authorNotFound) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,authorNotFound.getMessage());
         }
         return author.getBookList();
     }

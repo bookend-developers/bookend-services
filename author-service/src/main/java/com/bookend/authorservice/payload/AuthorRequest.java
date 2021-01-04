@@ -3,6 +3,7 @@ package com.bookend.authorservice.payload;
 import com.bookend.authorservice.model.Book;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AuthorRequest {
@@ -15,9 +16,9 @@ public class AuthorRequest {
     public AuthorRequest() {
     }
 
-    public AuthorRequest(String name, List<Book> bookList, String biography, String birthDate, String dateOfDeath) {
+    public AuthorRequest(String name, String biography, String birthDate, String dateOfDeath) {
         this.name = name;
-        this.bookList = bookList;
+        this.bookList = new ArrayList<>();
         this.biography = biography;
         this.birthDate = birthDate;
         this.dateOfDeath = dateOfDeath;

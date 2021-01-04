@@ -26,6 +26,7 @@ public class Author {
 
     public Author(String id, String name) {
         this.id = id;
+        this.bookList = new ArrayList<Book>();
         this.name = name;
     }
 

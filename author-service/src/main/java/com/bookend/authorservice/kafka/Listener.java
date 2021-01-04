@@ -1,5 +1,6 @@
 package com.bookend.authorservice.kafka;
 
+import com.bookend.authorservice.exception.AuthorNotFound;
 import com.bookend.authorservice.model.Author;
 import com.bookend.authorservice.model.Book;
 import com.bookend.authorservice.service.AuthorService;
@@ -42,6 +43,8 @@ public class Listener {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (AuthorNotFound authorNotFound) {
+            authorNotFound.printStackTrace();
         }
 
     }

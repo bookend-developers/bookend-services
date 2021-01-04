@@ -1,14 +1,19 @@
 package com.bookend.authorservice.service;
 
+import com.bookend.authorservice.exception.AuthorAlreadyExists;
+import com.bookend.authorservice.exception.MandatoryFieldException;
+import com.bookend.authorservice.exception.AuthorNotFound;
 import com.bookend.authorservice.model.Author;
+import com.bookend.authorservice.payload.AuthorRequest;
 import com.bookend.authorservice.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.management.Query;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,8 +26,12 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Author getById(String id) {
-        return authorRepository.findAuthorById(id);
+    public Author getById(String id) throws AuthorNotFound {
+        Author author = authorRepository.findAuthorById(id);
+        if(author == null) {
+            throw new AuthorNotFound("Author does not exist.");
+        }
+        return author;
     }
 
     @Override
@@ -32,7 +41,27 @@ public class AuthorServiceImpl implements AuthorService {
 
 
     @Override
-    public Author save(Author author) {
+    public Author save(AuthorRequest request) throws AuthorAlreadyExists, MandatoryFieldException {
+        Author author = new Author();
+        if(request.getName()==null || request.getName() == ""){
+            throw new MandatoryFieldException("Author's name cannot be empty.");
+        }
+        author.setName(request.getName());
+        if(request.getBiography()==null || request.getBiography()== ""){
+            throw new MandatoryFieldException("Author's biography cannot be empty.");
+        }
+        author.setBiography(request.getBiography());
+        if(request.getBirthDate()==null || request.getBirthDate() == ""){
+            throw new MandatoryFieldException("Author's birthday cannot be empty.");
+        }
+        author.setBirthDate(LocalDate.parse(request.getBirthDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.US)));
+
+        if(request.getDateOfDeath()=="" || request.getDateOfDeath() == null){
+            author.setDateOfDeath(null);
+        }else{
+            author.setDateOfDeath(LocalDate.parse(request.getDateOfDeath(), DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.US)));
+        }
+
         List<Author> authors = authorRepository.findByName(author.getName());
         if(authors != null || authors.size()!=0){
             List<Author> filteredByBirth = authors.stream()
@@ -41,16 +70,30 @@ public class AuthorServiceImpl implements AuthorService {
             if(filteredByBirth.size()!=0){
                 if((author.getDateOfDeath()!=null)){
                     List<Author> filteredByDeath = filteredByBirth.stream()
-                            .filter(auth -> {if(auth.getDateOfDeath()!=null){
-                                return auth.getDateOfDeath().isEqual(author.getDateOfDeath());
-                            }else{
-                                return false;
-                            }
-
+                            .filter(auth -> {
+                                if(auth.getDateOfDeath()!=null){
+                                    return auth.getDateOfDeath().isEqual(author.getDateOfDeath());
+                                }else{
+                                    return false;
+                                }
                             })
                             .collect(Collectors.toList());
                     if(filteredByDeath.size()!=0){
-                        return null;
+                        throw new AuthorAlreadyExists("Author already exists.");
+                    }
+                }
+                else{
+                    List<Author> filteredByDeath = filteredByBirth.stream()
+                            .filter(auth -> {
+                                if(auth.getDateOfDeath()==null){
+                                    return true;
+                                }else{
+                                    return false;
+                                }
+                            })
+                            .collect(Collectors.toList());
+                    if(filteredByDeath.size()!=0){
+                        throw new AuthorAlreadyExists("Author already exists.");
                     }
                 }
             }
