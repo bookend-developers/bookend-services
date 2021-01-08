@@ -103,22 +103,7 @@ public class BookServiceImpl implements BookService {
         return bookRepository.save(book);
     }
 
-    @Override
-    public List<Book> getBooksofShelf(Long shelfID, String accessToken) {
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("Authorization", "Bearer "+accessToken);
-        HttpEntity<String> entity = new HttpEntity<>("body", headers);
-        ResponseEntity<String[]> responseEntity =restTemplate.exchange("http://localhost:8083/api/shelf/{shelfid}", HttpMethod.GET, entity, String[].class,shelfID);
-        List<String> bookIDs = Arrays.asList(responseEntity.getBody());
-        List<Book> books=new ArrayList<>(bookIDs.size());
-        for(int i=0;i<bookIDs.size();i++){
-            Book book = bookRepository.findBookById(bookIDs.get(i));
-            books.add(book);
-        }
-        return books;
-    }
+
 
     @Override
     public List<Book> getAll() {
