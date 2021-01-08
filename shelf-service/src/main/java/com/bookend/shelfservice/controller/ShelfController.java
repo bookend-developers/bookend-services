@@ -3,6 +3,7 @@ package com.bookend.shelfservice.controller;
 import com.bookend.shelfservice.model.ShelfsBook;
 import com.bookend.shelfservice.model.Shelf;
 import com.bookend.shelfservice.model.Tag;
+import com.bookend.shelfservice.payload.BookRequest;
 import com.bookend.shelfservice.payload.ShelfRequest;
 import com.bookend.shelfservice.service.BookService;
 import com.bookend.shelfservice.service.ShelfService;
@@ -50,9 +51,10 @@ public class ShelfController {
     )
     @PostMapping("/{shelfid}/{bookid}")
     public ShelfsBook addBookToShelf(@PathVariable("shelfid") String shelfID,
-                                     @PathVariable("bookid") String bookID){
+                                     @PathVariable("bookid") String bookId,
+                                     @RequestBody BookRequest book){
         Shelf shelf = shelfService.getById(Long.valueOf(shelfID));
-        ShelfsBook shelfsBook = bookService.saveOrUpdate(new ShelfsBook(bookID, shelf));
+        ShelfsBook shelfsBook = bookService.saveOrUpdate(new ShelfsBook(book.getBookid(),book.getBookName(), shelf));
         if(shelfsBook== null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Book is already added to the Shelf.");
         }
@@ -78,14 +80,14 @@ public class ShelfController {
         return newShelf ;
 
     }
-    @ApiOperation(value = "Get book ids in the shelf", response = String.class)
+    @ApiOperation(value = "Get book  in the shelf", response = String.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved list"),
             @ApiResponse(code = 401, message = "You are not authorized to view the resource")
     }
     )
     @GetMapping("/{shelfid}")
-    public List<String> getBooks(@PathVariable("shelfid")  String shelfID){
+    public List<ShelfsBook> getBooks(@PathVariable("shelfid")  String shelfID){
 
 
         return shelfService.getBooks(Long.valueOf(shelfID));
