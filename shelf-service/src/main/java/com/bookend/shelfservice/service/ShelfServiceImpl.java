@@ -71,11 +71,8 @@ public class ShelfServiceImpl implements ShelfService {
     }
 
     @Override
-    public List<String> getBooks(Long id) {
-        List<String> bookIDs = getById(id).getShelfsBooks()
-                                            .stream()
-                                            .map(ShelfsBook::getBookID)
-                                            .collect(Collectors.toList());
+    public List<ShelfsBook> getBooks(Long id) {
+        List<ShelfsBook> bookIDs = getById(id).getShelfsBooks();
 
         return bookIDs;
     }

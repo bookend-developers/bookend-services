@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 
@@ -80,18 +81,8 @@ public class BookController {
 
 
     }
-    @ApiOperation(value = "Get books in the shelf", response = Book.class)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully retrieved book list"),
-            @ApiResponse(code = 401, message = "You are not authorized to view books.")
-    })
-    @GetMapping("/user/shelf/{shelfid}")
-    public List<Book> getBooksofShelf(@PathVariable("shelfid") String shelfID, OAuth2Authentication auth){
-        final OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) auth.getDetails();
 
-        String accessToken = details.getTokenValue();
-        return bookService.getBooksofShelf(Long.valueOf(shelfID),accessToken);
-    }
+
     @ApiOperation(value = "Get books of a specific author", response = Book.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved book list"),
