@@ -11,11 +11,11 @@ public class MemberService {
     @Autowired
     MemberRepository memberRepository;
 
-    public void save(Long id, String userName){
+    public Member save(Long id, String userName){
         Member member = new Member();
         member.setId(id);
         member.setUserName(userName);
-        memberRepository.save(member);
+        return memberRepository.save(member);
     }
     public Member find(String username){
         return memberRepository.findByUserName(username);
