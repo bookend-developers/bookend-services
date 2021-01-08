@@ -34,7 +34,6 @@ public class Listener {
         try {
           Map<String,String> msg = mapper.readValue(message,Map.class);
           Author author = authorService.getById(msg.get("author"));
-
           Book book= new Book(msg.get("book"),author);
           bookService.save(book);
           author.getBookList().add(book);

@@ -1,7 +1,6 @@
 package com.bookclupservice.bookclubservice.kafka;
 
 import com.bookclupservice.bookclubservice.payload.KafkaUserRegistered;
-import com.bookclupservice.bookclubservice.service.ClubService;
 import com.bookclupservice.bookclubservice.service.MemberService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

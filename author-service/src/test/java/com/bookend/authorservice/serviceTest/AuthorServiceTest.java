@@ -32,7 +32,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-
 public class AuthorServiceTest {
     @Mock
     private AuthorRepository authorRepository;
@@ -104,7 +103,7 @@ public class AuthorServiceTest {
     }
     @MockitoSettings(strictness = Strictness.WARN)
     @Test
-    void shouldSaveWhenAuthorRequestDeathDateIsNullAndNameBirthdayHaveMatch() throws MandatoryFieldException, AuthorAlreadyExists {
+    void shouldSaveIfAuthorRequestDeathDateIsNullAndNameBirthdayHaveMatchButDeathDayIsDifferent() throws MandatoryFieldException, AuthorAlreadyExists {
        final Author toBeSaved = new Author("ajsdhj23k","Ahmet Umit","He is ..", LocalDate.parse("1990-02-11"),null);
         final Author author = new Author("ajsdhj23e","Ahmet Umit","Long", LocalDate.parse("1998-02-11"),LocalDate.parse("2002-02-07"));
         final Author author1 = new Author("ajsdhj24e","Ahmet Umit","Umit was born..", LocalDate.now(),LocalDate.now());
@@ -117,7 +116,7 @@ public class AuthorServiceTest {
         verify(authorRepository).save(any(Author.class));
     }
     @Test
-    void shouldNotSaveWhenAuthorRequestDeathDateIsNullAndNameBirthDayDeathDayHaveMatch(){
+    void shouldNotSaveIfAuthorRequestDeathDateIsNullAndNameBirthDayDeathDayAreSameWithRequest(){
         final Author author = new Author("ajsdhj23e","Ahmet Umit","Long", LocalDate.parse("1998-02-11"),null);
         final Author author1 = new Author("ajsdhj24e","Ahmet Umit","Umit was born..", LocalDate.now(),null);
         final List<Author> authors = Arrays.asList(author,author1);
@@ -130,7 +129,7 @@ public class AuthorServiceTest {
     }
     @MockitoSettings(strictness = Strictness.LENIENT)
     @Test
-    void shouldSaveWhenAuthorRequestDeathDateIsNotNullAndNameBirthdayHaveMatch() throws MandatoryFieldException, AuthorAlreadyExists {
+    void shouldSaveIfAuthorRequestDeathDateIsNotNullAndNameBirthdayHaveMatchButDeathDayIsDifferent() throws MandatoryFieldException, AuthorAlreadyExists {
 
         final Author toBeSaved = new Author("ajsdhj23k","Ahmet Umit","He is ..", LocalDate.parse("1998-02-11"),LocalDate.parse("2002-02-08"));
         final Author author = new Author("ajsdhj23e","Ahmet Umit","Long", LocalDate.parse("1998-02-11"),LocalDate.parse("2002-02-07"));
@@ -144,7 +143,7 @@ public class AuthorServiceTest {
         verify(authorRepository).save(any(Author.class));
     }
     @Test
-    void shouldNotSaveWhenAuthorRequestDeathDateIsNotNullAndNameBirthDayDeathDayHaveMatch()  {
+    void shouldNotSaveIfAuthorRequestDeathDateIsNotNullAndNameBirthDayDeathDayAreSameWithRequest()  {
 
         final Author author = new Author("ajsdhj23e","Ahmet Umit","Long", LocalDate.parse("1998-02-11"),LocalDate.parse("2002-02-07"));
         final Author author1 = new Author("ajsdhj24e","Ahmet Umit","Umit was born..", LocalDate.now(),null);
@@ -158,7 +157,7 @@ public class AuthorServiceTest {
     }
 
     @Test
-    void shouldSaveWhenAuthorRequestOnlyNameHasMatch() throws MandatoryFieldException, AuthorAlreadyExists {
+    void shouldSaveWhenAuthorRequestOnlyNameHasMatchAndOtherFieldsAreDifferent() throws MandatoryFieldException, AuthorAlreadyExists {
         final Author toBeSaved = new Author("ajsdhj23k","Ahmet Umit","He is ..", LocalDate.parse("1990-04-14"),LocalDate.parse("2000-12-28"));
         final Author author = new Author("ajsdhj23e","Ahmet Umit","Long", LocalDate.parse("1998-02-11"),LocalDate.parse("2002-02-07"));
         final Author author1 = new Author("ajsdhj24e","Ahmet Umit","Umit was born..", LocalDate.now(),LocalDate.now());
@@ -172,7 +171,7 @@ public class AuthorServiceTest {
     }
     @MockitoSettings(strictness = Strictness.WARN)
     @Test
-    void shouldSaveWhenAuthorRequestNameAndBirthdayHaveMatch() throws MandatoryFieldException, AuthorAlreadyExists {
+    void shouldSaveWhenAuthorRequestNameAndBirthdayHaveMatchAndDeathDayIsDifferent() throws MandatoryFieldException, AuthorAlreadyExists {
         final Author s =new Author("ajsdhj23k","Ahmet Umit","He is ..", LocalDate.parse("1990-02-12"),LocalDate.parse("2000-12-28"));
         final Author toBeSaved = new Author("Ahmet Umit","He is ..", LocalDate.parse("1990-02-12"),LocalDate.parse("2000-12-28"));
         final Author author = new Author("ajsdhj23e","Ahmet Umit","Long", LocalDate.parse("1998-02-11"),LocalDate.parse("2002-02-07"));

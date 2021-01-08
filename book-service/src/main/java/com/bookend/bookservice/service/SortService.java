@@ -6,9 +6,9 @@ import com.bookend.bookservice.model.SortedLists;
 public interface SortService {
 
     void add(Book book);
-    void add(Book book,String type);
-    SortedLists sort();
+
+
     SortedLists sort(String type);
     SortedLists findOne();
-    SortedLists remove(Book book,String type);
+    SortedLists remove(Book book);
 }
