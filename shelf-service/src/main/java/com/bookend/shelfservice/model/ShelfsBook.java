@@ -14,6 +14,8 @@ public class ShelfsBook {
     private Long id;
     @Column(name = "bookId")
     private String bookID;
+    @Column(name = "bookName")
+    private String bookName;
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     private Shelf shelf;
@@ -47,8 +49,9 @@ public class ShelfsBook {
     public ShelfsBook() {
     }
 
-    public ShelfsBook(String bookID, Shelf shelf) {
+    public ShelfsBook(String bookID, String bookName, Shelf shelf) {
         this.bookID = bookID;
+        this.bookName = bookName;
         this.shelf = shelf;
     }
 }
