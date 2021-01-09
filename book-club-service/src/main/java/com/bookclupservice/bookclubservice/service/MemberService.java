@@ -12,12 +12,12 @@ public class MemberService {
     MemberRepository memberRepository;
 
     public Member save(Long id, String userName){
+        if(id==null || userName==null)
+            throw new IllegalArgumentException("id and username must not be null");
         Member member = new Member();
         member.setId(id);
         member.setUserName(userName);
         return memberRepository.save(member);
     }
-    public Member find(String username){
-        return memberRepository.findByUserName(username);
-    }
+
 }

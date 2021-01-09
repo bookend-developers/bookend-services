@@ -5,6 +5,13 @@ public class NewClubMemberRequest {
     private Long clubId;
     private Long memberId;
 
+    public NewClubMemberRequest(Long clubId, Long memberId) {
+        this.clubId = clubId;
+        this.memberId = memberId;
+    }
+    public NewClubMemberRequest() {
+
+    }
     public Long getClubId() {
         return clubId;
     }

@@ -7,6 +7,16 @@ public class NewClubRequest {
     private String username;
     private boolean privatee;
 
+    public NewClubRequest() {
+    }
+
+    public NewClubRequest(String clubName, String description, String username, boolean privatee) {
+        this.clubName = clubName;
+        this.description = description;
+        this.username = username;
+        this.privatee = privatee;
+    }
+
     public String getClubName() {
         return clubName;
     }

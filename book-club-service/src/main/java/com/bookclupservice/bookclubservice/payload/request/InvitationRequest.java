@@ -5,6 +5,14 @@ public class InvitationRequest {
     private Long clubId;
     private String invitedPersonUserName;
 
+    public InvitationRequest(Long clubId, String invitedPersonUserName) {
+        this.clubId = clubId;
+        this.invitedPersonUserName = invitedPersonUserName;
+    }
+
+    public InvitationRequest() {
+    }
+
     public Long getClubId() {
         return clubId;
     }

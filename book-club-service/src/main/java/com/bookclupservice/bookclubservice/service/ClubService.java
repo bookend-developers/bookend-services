@@ -1,5 +1,6 @@
 package com.bookclupservice.bookclubservice.service;
 
+import com.bookclupservice.bookclubservice.expection.ClubAllreadyExistExpection;
 import com.bookclupservice.bookclubservice.expection.NotMemberExpection;
 import com.bookclupservice.bookclubservice.kafka.MessageProducer;
 import com.bookclupservice.bookclubservice.model.*;
@@ -33,18 +34,28 @@ public class ClubService {
 
     public List<Club> getMyClubs(String username){
         Member member=memberRepository.findByUserName(username);
+        if(member == null){
+            throw new IllegalArgumentException("There is no such member with that username");
+        }
         return clubRepository.findByOwner(member);
 
     }
     public List<Invitation> getMemberInvitations(String username){
         Member member = memberRepository.findByUserName(username);
+        if(member == null){
+            throw new IllegalArgumentException("There is no such member with that username");
+        }
         return invitationRepository.findInvitationsByInvitedPerson(member);
     }
 
     public List<Post> getWriterPosts(String username){
         Member member = memberRepository.findByUserName(username);
+        if(member == null){
+            throw new IllegalArgumentException("There is no such member with that username");
+        }
         return postRepository.findByWriter(member);
     }
+
     public List<Post> getClubPosts(Long clubId){
         return postRepository.findByClubId(clubId);
     }
@@ -52,8 +63,11 @@ public class ClubService {
 
     public Club saveClub(NewClubRequest newClubRequest){
         Member owner = memberRepository.findByUserName(newClubRequest.getUsername());
+        if(owner == null){
+            throw new IllegalArgumentException("There is no such member with that username");
+        }
         if(clubRepository.findAll().stream().anyMatch(club -> club.getClubName().toLowerCase().matches(newClubRequest.getClubName().toLowerCase()))){
-            return null;
+            throw new ClubAllreadyExistExpection("club allready exist with that clubname");
         }
         Club club = new Club();
         club.setClubName(newClubRequest.getClubName());
@@ -66,7 +80,7 @@ public class ClubService {
     public boolean newMember(NewClubMemberRequest newClubMemberRequest,String username){
         Member member = memberRepository.findByUserName(username);
         if(member== null){
-            member = new Member(newClubMemberRequest.getMemberId(),username);
+            return false;
         }
 
         Club club = clubRepository.findById(newClubMemberRequest.getClubId()).get();
@@ -87,11 +101,11 @@ public class ClubService {
     public Invitation invitePerson(InvitationRequest invitationRequest){
         Member invitedPerson = memberRepository.findByUserName(invitationRequest.getInvitedPersonUserName());
         if(invitedPerson==null){
-            return null;
+            throw new IllegalArgumentException("member not exist with that username");
         }
         Club club = clubRepository.findById(invitationRequest.getClubId()).get();
         if(invitationRepository.findByClubAndInvitedPerson(club,invitedPerson)!=null){
-            return null;
+            throw new IllegalArgumentException("this user allready invited to this club");
         }
         Invitation invitation = new Invitation();
         invitation.setClub(club);
@@ -102,7 +116,10 @@ public class ClubService {
         return newInvitation;
     }
     public void replyInvitation(InvitationReply invitationReply){
-        Invitation invitation = invitationRepository.findById(invitationReply.getInvitationId()).get();
+        Invitation invitation = invitationRepository.findById(invitationReply.getInvitationId()).orElse(null);
+        if(invitation==null){
+            throw new IllegalArgumentException("Invitation does not exist with given id");
+        }
         Club club = invitation.getClub();
         MailRequest mailRequest;
         if(invitationReply.geteInvitationReply().equals(EInvitationReply.ACCEPT)){
@@ -120,9 +137,15 @@ public class ClubService {
         invitationRepository.delete(invitation);
     }
 
-    public void savePost(NewPostRequest newPostRequest, OAuth2Authentication auth) throws NotMemberExpection {
-        Club club = clubRepository.findById(newPostRequest.getClubId()).get();
-        Member writer = memberRepository.findByUserName((String) auth.getPrincipal());
+    public Post savePost(NewPostRequest newPostRequest, String principal) throws NotMemberExpection {
+        Club club = clubRepository.findById(newPostRequest.getClubId()).orElse(null);
+        Member writer = memberRepository.findByUserName(principal);
+        if(club==null){
+            throw new IllegalArgumentException("club does not exist with given id");
+        }
+        if(writer==null){
+            throw new IllegalArgumentException("writer does not exist with given id");
+        }
         if(club.getMembers().contains(writer) || club.getOwner().getUserName().equals(writer.getUserName())){
             Post post = new Post();
             post.setClub(club);
@@ -130,16 +153,21 @@ public class ClubService {
             post.setTitle(newPostRequest.getTitle());
             post.setWriter(writer);
 
-            postRepository.save(post);
+            return postRepository.save(post);
         }else
             throw new NotMemberExpection("user doesn't belong to club");
-
     }
     public Post findPostByID(Long postID){
-        return postRepository.findPostById(postID);
+        Post post = postRepository.findPostById(postID);
+        if(post==null)
+            throw new IllegalArgumentException("post not exist with this id");
+        return post;
     }
     public Club findByID(Long clubId){
-        return clubRepository.findClubById(clubId);
+        Club club = clubRepository.findClubById(clubId);
+        if(club==null)
+            throw new IllegalArgumentException("club not exist with this id");
+        return club;
     }
     public void sendComment(CommentRequest commentRequest){
         messageProducer.sendCommentRequest(commentRequest);
@@ -147,6 +175,8 @@ public class ClubService {
 
     public List<Club> getMembershipClub(String name) {
         Member member = memberRepository.findByUserName(name);
+        if(member==null)
+            throw new IllegalArgumentException("member not exist with this id");
         return member.getClubs();
     }
 }
