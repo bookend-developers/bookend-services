@@ -15,6 +15,8 @@ public class UserService {
     EmailMailSender emailMailSender;
 
     public User save(Long id,String email){
+        if(id==null || email ==null)
+            throw new IllegalArgumentException("email or id can not be null");
         User user = new User();
         user.setEmail(email);
         user.setId(id);

@@ -8,6 +8,14 @@ public class SignUpRequest {
     private String password;
     private String email;
 
+    public SignUpRequest(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+    public SignUpRequest() {
+
+    }
     public String getUsername() {
         return username;
     }

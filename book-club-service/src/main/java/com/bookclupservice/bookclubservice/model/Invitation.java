@@ -16,6 +16,14 @@ public class Invitation {
     @ManyToOne
     private Member invitedPerson;
 
+    public Invitation() {
+    }
+    public Invitation(Long id, Club club, Member invitedPerson) {
+        this.id=id;
+        this.invitedPerson=invitedPerson;
+        this.club=club;
+    }
+
     public Long getId() {
         return id;
     }

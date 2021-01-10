@@ -163,7 +163,7 @@ public class ClubController {
     @PostMapping("/new-post")
     public ResponseEntity<?> sharePost(@RequestBody NewPostRequest newPostRequest,OAuth2Authentication auth){
         try {
-            clubService.savePost(newPostRequest,auth);
+            clubService.savePost(newPostRequest,(String) auth.getPrincipal());
         } catch (NotMemberExpection notMemberExpection) {
             return ResponseEntity.badRequest().body(new MessageResponse(notMemberExpection.getMessage()));
         }

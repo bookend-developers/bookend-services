@@ -2,6 +2,7 @@ package com.bookclupservice.bookclubservice.model;
 
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -37,6 +38,21 @@ public class Club {
     private List<Member> postMembers;
 
     private boolean isPrivate;
+
+    public Club() {
+    }
+
+    public Club(Long id, String clubName, String description, Member owner, boolean isPrivate){
+        this.id=id;
+        this.clubName=clubName;
+        this.description=description;
+        this.owner=owner;
+        this.isPrivate=isPrivate;
+        this.members=new ArrayList<>();
+        this.posts=new ArrayList<>();
+        this.postMembers=new ArrayList<>();
+
+    }
 
     public Long getId() {
         return id;
