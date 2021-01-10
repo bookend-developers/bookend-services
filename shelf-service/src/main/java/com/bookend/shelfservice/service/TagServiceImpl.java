@@ -1,5 +1,7 @@
 package com.bookend.shelfservice.service;
 
+import com.bookend.shelfservice.exception.ShelfNotFound;
+import com.bookend.shelfservice.exception.TagNotFound;
 import com.bookend.shelfservice.model.Tag;
 import com.bookend.shelfservice.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Tag saveAndUpdate(String tag) {
-        if(tagRepository.findByTag(tag)==null){
+        if(tagRepository.findByTag(tag)!=null){
             return null;
         }
         return tagRepository.save(new Tag(tag));
@@ -29,8 +31,12 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Tag findByID(String id) {
-        return tagRepository.findTagById(id);
+    public Tag findByID(String id) throws TagNotFound {
+        Tag tag = tagRepository.findTagById(id);
+        if(tag == null) {
+            throw new TagNotFound("Tag does not exist.");
+        }
+        return tag;
     }
 
     @Override

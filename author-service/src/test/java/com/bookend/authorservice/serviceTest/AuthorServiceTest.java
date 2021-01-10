@@ -90,7 +90,7 @@ public class AuthorServiceTest {
         verify(authorRepository, never()).save(any(Author.class));
     }
     @Test
-    void authorIsNotSavedIfAuthorIsAlreadyExists(){
+    void authorIsNotSavedIfAuthorAlreadyExists(){
         final Author author = new Author("ajsdhj23e","Ahmet Umit","Long", LocalDate.parse("1998-02-11"),LocalDate.parse("2002-02-07"));
         final Author author1 = new Author("ajsdhj24e","Ahmet Umit","Umit was born..", LocalDate.now(),LocalDate.now());
         final List<Author> authors = Arrays.asList(author,author1);

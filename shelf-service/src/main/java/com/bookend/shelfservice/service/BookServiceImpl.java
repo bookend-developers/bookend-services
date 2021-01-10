@@ -1,5 +1,7 @@
 package com.bookend.shelfservice.service;
 
+import com.bookend.shelfservice.exception.NotFoundException;
+import com.bookend.shelfservice.exception.ShelfsBookNotFound;
 import com.bookend.shelfservice.model.Shelf;
 import com.bookend.shelfservice.model.ShelfsBook;
 import com.bookend.shelfservice.repository.BookRepository;
@@ -23,8 +25,12 @@ public class BookServiceImpl implements BookService {
         this.bookRepository=bookRepository;
     }
     @Override
-    public ShelfsBook getById(String id) {
-        return bookRepository.findBookById(Long.valueOf(id));
+    public ShelfsBook getById(String id) throws ShelfsBookNotFound {
+        ShelfsBook shelfsBook = bookRepository.findBookById(Long.valueOf(id));
+        if(shelfsBook == null){
+            throw new ShelfsBookNotFound("Shelf's books not found..");
+        }
+        return shelfsBook;
     }
 
 
@@ -38,15 +44,25 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void delete(String bookId,String shelfID) {
+    public void delete(String bookId,String shelfID) throws NotFoundException {
         Shelf shelf = shelfRepository.findShelfById(Long.valueOf(shelfID));
+        if(shelf==null){
+            throw new NotFoundException("Shelf does not exist");
+        }
         ShelfsBook shelfsBook = bookRepository.findByBookIDAndShelf(bookId,shelf);
+        if(shelfsBook == null){
+            throw new NotFoundException("Shelf's book does not exist");
+        }
+
         bookRepository.delete(shelfsBook);
     }
 
     @Override
-    public void deleteFromShelves(String bookid) {
+    public void deleteFromShelves(String bookid) throws NotFoundException {
         List<ShelfsBook> shelfsBooks = bookRepository.findShelfsBookByBookID(bookid);
+        if(shelfsBooks == null || shelfsBooks.isEmpty()){
+            throw new NotFoundException("The list of shelfs books does not exist");
+        }
         shelfsBooks.forEach(shelfsBook -> bookRepository.delete(shelfsBook));
     }
 }

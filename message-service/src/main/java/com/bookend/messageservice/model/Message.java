@@ -21,6 +21,14 @@ public class Message implements Comparable<Message> {
 
 	}
 
+	public Message(String id,String sender, String receiver, String subject, String text, Date sendDate) {
+		super();
+		this.sender = sender;
+		this.receiver = receiver;
+		this.subject = subject;
+		this.text = text;
+		this.sendDate = sendDate;
+	}
 	public Message(String sender, String receiver, String subject, String text, Date sendDate) {
 		super();
 		this.sender = sender;

@@ -1,5 +1,8 @@
 package com.bookend.shelfservice.controller;
 
+import com.bookend.shelfservice.exception.MandatoryFieldException;
+import com.bookend.shelfservice.exception.NotFoundException;
+import com.bookend.shelfservice.exception.ShelfNotFound;
 import com.bookend.shelfservice.model.ShelfsBook;
 import com.bookend.shelfservice.model.Shelf;
 import com.bookend.shelfservice.model.Tag;
@@ -52,7 +55,8 @@ public class ShelfController {
     @PostMapping("/{shelfid}/{bookid}")
     public ShelfsBook addBookToShelf(@PathVariable("shelfid") String shelfID,
                                      @PathVariable("bookid") String bookId,
-                                     @RequestBody BookRequest book){
+                                     @RequestBody BookRequest book) throws ShelfNotFound {
+
         Shelf shelf = shelfService.getById(Long.valueOf(shelfID));
         ShelfsBook shelfsBook = bookService.saveOrUpdate(new ShelfsBook(book.getBookid(),book.getBookName(), shelf));
         if(shelfsBook== null){
@@ -71,7 +75,7 @@ public class ShelfController {
     )
     @PostMapping("/new")
     public Shelf newShelf(@RequestBody ShelfRequest shelfRequest,
-                          OAuth2Authentication auth){
+                          OAuth2Authentication auth) throws MandatoryFieldException {
         Shelf newShelf =shelfService.saveOrUpdate(shelfRequest,auth.getName());
         if(newShelf== null){
 
@@ -87,9 +91,8 @@ public class ShelfController {
     }
     )
     @GetMapping("/{shelfid}")
-    public List<ShelfsBook> getBooks(@PathVariable("shelfid")  String shelfID){
 
-
+    public List<ShelfsBook> getBooks(@PathVariable("shelfid")  String shelfID) throws ShelfNotFound {
         return shelfService.getBooks(Long.valueOf(shelfID));
 
     }
@@ -125,7 +128,7 @@ public class ShelfController {
     }
     )
     @DeleteMapping("/delete/{shelfid}")
-    public void deleteShelf(@PathVariable("shelfid")  String shelfID,OAuth2Authentication auth){
+    public void deleteShelf(@PathVariable("shelfid")  String shelfID,OAuth2Authentication auth) throws ShelfNotFound, NotFoundException {
         Shelf shelf = shelfService.getById(Long.valueOf(shelfID));
         if(!shelf.getUsername().equals(auth.getName())){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,"The action is forbidden.");
@@ -141,7 +144,7 @@ public class ShelfController {
     )
     @DeleteMapping("/delete/{shelfid}/{bookid}")
     public void deleteBook(@PathVariable("bookid") String bookId,
-                           @PathVariable("shelfid")  String shelfID,OAuth2Authentication auth){
+                           @PathVariable("shelfid")  String shelfID,OAuth2Authentication auth) throws ShelfNotFound, NotFoundException {
         Shelf shelf = shelfService.getById(Long.valueOf(shelfID));
         if(!shelf.getUsername().equals(auth.getName())){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,"The action is forbidden.");

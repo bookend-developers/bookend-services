@@ -30,9 +30,7 @@ public class Shelf {
     }
 
 
-    public void setShelfsBooks(List<ShelfsBook> shelfsBooks) {
-        this.shelfsBooks = shelfsBooks;
-    }
+    public void setShelfsBooks(List<ShelfsBook> shelfsBooks) { this.shelfsBooks = shelfsBooks; }
 
     public Long getId() {
         return id;
@@ -71,6 +69,15 @@ public class Shelf {
         this.shelfsBooks = new ArrayList<>();
         this.tags = tags;
     }
+
+    public Shelf(Long id,String shelfname, String username, List<Tag> tags) {
+        this.id = id;
+        this.shelfname = shelfname;
+        this.username = username;
+        this.shelfsBooks = new ArrayList<>();
+        this.tags = tags;
+    }
+
 
     public Shelf(String shelfname, String username) {
         this.shelfname = shelfname;
