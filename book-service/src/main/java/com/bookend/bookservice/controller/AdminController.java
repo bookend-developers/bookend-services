@@ -80,15 +80,16 @@ public class AdminController {
     @PostMapping("/new/genre")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Genre addGenre(@RequestParam String genre){
-        if(genre.equals("")){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Genre must be filled.");
-        }
-        if(genreService.findByGenre(genre)==null){
+
+        try {
             return genreService.addNewGenre(genre);
+        } catch (AlreadyExist alreadyExist) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,alreadyExist.getMessage());
+        } catch (MandatoryFieldException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,e.getMessage());
         }
-        else{
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Genre already exists.");
-        }
+
+
     }
     @GetMapping("/unverified")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -119,15 +120,14 @@ public class AdminController {
     @PostMapping("/genre")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Genre updateGenre(@RequestBody Genre genre){
-        Genre updatedGenre = genreService.findById(genre.getId());
-        if(genreService.findByGenre(genre.getGenre())!=null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Genre already exist.");
-        }
-        if(updatedGenre!=null){
-           return genreService.update(genre);
-        }
-        else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Cant found genre.");
+        try {
+            return genreService.update(genre);
+        } catch (MandatoryFieldException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,e.getMessage());
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
+        } catch (AlreadyExist alreadyExist) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,alreadyExist.getMessage());
         }
     }
 }

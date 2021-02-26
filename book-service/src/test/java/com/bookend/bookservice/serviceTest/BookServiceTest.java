@@ -15,10 +15,11 @@ import com.bookend.bookservice.service.GenreService;
 import com.bookend.bookservice.service.SortService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-//import org.junit.runner.RunWith;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -38,6 +39,8 @@ import static org.mockito.Mockito.*;
 public class BookServiceTest {
     private static final String BOOK_TOPIC = "adding-book";
     private static final String DELETE_TOPIC = "deleting-book";
+    @Spy
+    private BookServiceImpl bookServiceSpy;
     @Mock
     private BookRepository bookRepository;
     @Mock
@@ -307,8 +310,9 @@ public class BookServiceTest {
         final Book book1 = new Book("ash2jhs25",Integer.valueOf("141"),new Genre("5asd24dsdgf","Fiction"),".....","Cocuk Kalbi","Edmondo de Amicis","44afs34",true,"1254566891234");
         final Book book2 = new Book("ash2sdhs44",Integer.valueOf("360"),new Genre("5asd25dfgf","Journal"),".....","Günlükler","Sylvia Plath","45afs84",false,"1234567891129");
         final List<Book> books = Arrays.asList(book0,book1,book2);
-        BookServiceImpl bookspy = Mockito.spy(new BookServiceImpl());
-        Mockito.doReturn(books).when(bookspy).getAll();
+
+       // Mockito.doReturn(books).when(bookServiceSpy).getAll();
+        when(bookRepository.findAll(Sort.by(Sort.Direction.ASC,"bookName"))).thenReturn(books);
         final List<Book> expected = bookService.search(null,null,false,false);
         assertThat(expected).isNotNull();
         verify(sortService,never()).findOne();
@@ -337,8 +341,8 @@ public class BookServiceTest {
         final Book book1 = new Book("ash2jhs25",Integer.valueOf("141"),new Genre("5asd24dsdgf","Fiction"),".....","Cocuk Kalbi","Edmondo de Amicis","44afs34",true,"1254566891234");
         final Book book2 = new Book("ash2sdhs44",Integer.valueOf("360"),new Genre("5asd25dfgf","Journal"),".....","Günlükler","Sylvia Plath","45afs84",false,"1234567891129");
         final List<Book> books = Arrays.asList(book0,book1,book2);
-        BookServiceImpl bookspy = Mockito.spy(new BookServiceImpl());
-        Mockito.doReturn(books).when(bookService).getAll();
+        Mockito.doReturn(books).when(bookServiceSpy).getAll();
+        when(bookRepository.findAll(Sort.by(Sort.Direction.ASC,"bookName"))).thenReturn(books);
         final List<Book> expected = bookService.search("Ob",null,false,false);
         assertThat(expected).isNotNull();
         verify(sortService,never()).findOne();
@@ -351,8 +355,8 @@ public class BookServiceTest {
         final Book book1 = new Book("ash2jhs25",Integer.valueOf("141"),new Genre("5asd24dsdgf","Fiction"),".....","Cocuk Kalbi","Edmondo de Amicis","44afs34",true,"1254566891234");
         final Book book2 = new Book("ash2sdhs44",Integer.valueOf("360"),new Genre("5asd25dfgf","Journal"),".....","Günlükler","Sylvia Plath","45afs84",false,"1234567891129");
         final List<Book> books = Arrays.asList(book0,book1,book2);
-        BookServiceImpl bookspy = Mockito.spy(new BookServiceImpl());
-        Mockito.doReturn(books).when(bookspy).getAll();
+        Mockito.doReturn(books).when(bookServiceSpy).getAll();
+        when(bookRepository.findAll(Sort.by(Sort.Direction.ASC,"bookName"))).thenReturn(books);
         final List<Book> expected = bookService.search(null,"Classics",false,false);
         assertThat(expected).isNotNull();
         verify(sortService,never()).findOne();
@@ -364,8 +368,8 @@ public class BookServiceTest {
         final Book book1 = new Book("ash2jhs25",Integer.valueOf("141"),new Genre("5asd24dsdgf","Fiction"),".....","Cocuk Kalbi","Edmondo de Amicis","44afs34",true,"1254566891234");
         final Book book2 = new Book("ash2sdhs44",Integer.valueOf("360"),new Genre("5asd25dfgf","Journal"),".....","Günlükler","Sylvia Plath","45afs84",false,"1234567891129");
         final List<Book> books = Arrays.asList(book0,book1,book2);
-        BookServiceImpl bookspy = Mockito.spy(new BookServiceImpl());
-        Mockito.doReturn(books).when(bookspy).getAll();
+        Mockito.doReturn(books).when(bookServiceSpy).getAll();
+        when(bookRepository.findAll(Sort.by(Sort.Direction.ASC,"bookName"))).thenReturn(books);
         assertThrows(NotFoundException.class,()->{
             bookService.search("Kacıs",null,false,false);
         });
@@ -378,8 +382,8 @@ public class BookServiceTest {
         final Book book1 = new Book("ash2jhs25",Integer.valueOf("141"),new Genre("5asd24dsdgf","Fiction"),".....","Cocuk Kalbi","Edmondo de Amicis","44afs34",true,"1254566891234");
         final Book book2 = new Book("ash2sdhs44",Integer.valueOf("360"),new Genre("5asd25dfgf","Journal"),".....","Günlükler","Sylvia Plath","45afs84",false,"1234567891129");
         final List<Book> books = Arrays.asList(book0,book1,book2);
-        BookServiceImpl spy = Mockito.spy(new BookServiceImpl());
-        Mockito.doReturn(books).when(spy).getAll();
+        Mockito.doReturn(books).when(bookServiceSpy).getAll();
+        when(bookRepository.findAll(Sort.by(Sort.Direction.ASC,"bookName"))).thenReturn(books);
         assertThrows(NotFoundException.class,()->{
             bookService.search(null,"Science-Fiction",false,false);
         });
