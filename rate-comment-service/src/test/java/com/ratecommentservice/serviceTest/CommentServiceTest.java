@@ -2,6 +2,7 @@ package com.ratecommentservice.serviceTest;
 
 import com.ratecommentservice.exception.BookNotFound;
 import com.ratecommentservice.exception.CommentNotFound;
+import com.ratecommentservice.kafka.Producer;
 import com.ratecommentservice.model.Book;
 import com.ratecommentservice.model.Comment;
 import com.ratecommentservice.payload.CommentRequest;
@@ -14,6 +15,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,9 +38,10 @@ public class CommentServiceTest {
     private BookRepository bookRepository;
     @InjectMocks
     private CommentServiceImpl commentService;
-    @InjectMocks
+    @Mock
     private BookServiceImpl bookService;
-
+    @Mock
+    private Producer producer;
     @Test
     void shouldGetUserCommentsWithGivenUsername(){
         List<Comment> comments = new ArrayList<>();
@@ -113,28 +117,22 @@ public class CommentServiceTest {
         verify(commentRepository,times(1)).delete(any(Comment.class));
     }
 
-/* Bunu da anlamadımmmm
+    @MockitoSettings(strictness = Strictness.WARN)
     @Test
     void shouldSaveGivenBookAndCommentSuccessfully() throws BookNotFound {
-        Comment comment = new Comment();
-        String id = "5";
-        final Book book = new Book(id,"Yuzbasının Kızı");
-        final CommentRequest commreq= new CommentRequest("Very Good", id, "Yuzbasının Kızı");
-        given(bookService.findBookByBookID(commreq.getBookID())).willReturn(book);
-        //given(bookRepository.findBookByBookId(id)).willReturn(book);
 
-        comment.setBook(book);
-        comment.setComment(commreq.getComment());
-        comment.setUsername("huri");
+        final String id = "5dgf4dfg";
+        final String username = "huri";
+        final CommentRequest commreq= new CommentRequest("Very Good", id, "Yuzbasının Kızı");
+        final Book book = new Book(commreq.getBookID(),commreq.getBookname());
+
+        final Comment comment = new Comment(Long.valueOf(4564),book,username,commreq.getComment());
         given(commentRepository.save(any(Comment.class))).willReturn(comment);
+        given(bookService.findBookByBookID(commreq.getBookID())).willReturn(book);
         book.getComments().add(comment);
-        given(bookRepository.save(any(Book.class))).willReturn(book);
-        final Comment commentSaved = commentService.commentBook(commreq,  "huri");
-        //final Book bookSaved = bookService.save(book);
-        //assertThat(bookSaved).isNotNull();
+        final Comment commentSaved = commentService.commentBook(commreq,  username);
         assertThat(commentSaved).isNotNull();
-        //verify(bookRepository).save(any(Book.class));
         verify(commentRepository).save(any(Comment.class));
     }
-*/
+
 }

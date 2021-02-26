@@ -58,12 +58,16 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment commentBook(CommentRequest commentRequest, String username) throws BookNotFound {
+    public Comment commentBook(CommentRequest commentRequest, String username) {
         Comment comment = new Comment();
-        Book book = bookService.findBookByBookID(commentRequest.getBookID());
-        if(book == null){
+        Book book = null;
+        try {
+            book = bookService.findBookByBookID(commentRequest.getBookID());
+        } catch (BookNotFound bookNotFound) {
             book = bookService.save(new Book(commentRequest.getBookID(),commentRequest.getBookname()));
+
         }
+
         comment.setBook(book);
         comment.setComment(commentRequest.getComment());
         comment.setUsername(username);

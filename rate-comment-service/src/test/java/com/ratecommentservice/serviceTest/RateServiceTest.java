@@ -20,11 +20,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -43,6 +42,8 @@ public class RateServiceTest {
     private RateServiceImpl rateService;
     @Mock
     private Producer producer;
+    @Mock
+    private Book bookMock;
 
     private static final String RATE_TOPIC = "new-rate";
 
@@ -169,29 +170,29 @@ public class RateServiceTest {
         verify(rateRepository).save(any(Rate.class));
     }
 
-    /*--------------------------Bunu da anlamadım nedenini  ikisinin de null olma durumunu kontrol ediyom ---------------
-    Tek tek null olma durumu da sorunlu oldu
+
+
+    @MockitoSettings(strictness = Strictness.WARN)
     @Test
-    void shouldSaveGivenBookIsNull() throws BookNotFound, RateNotFound {
-        String id = "5";
+    void shouldSaveNonExistingRateWhenBookDoesNotExist() throws BookNotFound, RateNotFound {
+        final String id = "5";
+        final String username = "huri";
         final Long rateId = Long.valueOf(7);
-        Book book2 = new Book();
+
+        Book book = new Book();
         final RateRequest rateRequest = new RateRequest(3.0, id, "Yuzbasının Kızı");
         given(bookRepository.findBookByBookId(rateRequest.getBookId())).willReturn(null);
-        book2 = new Book(rateRequest.getBookId(),rateRequest.getBookname());
-        when(bookRepository.save(any(Book.class))).thenReturn(book2);
-        final Rate rate  = new Rate(book2,"huri",rateRequest.getRate());
-        //final Rate rate = new Rate(rateId,book2,"huri",3.0 );
-        given(rateRepository.findByBookAndUsername(book2,"huri")).willReturn(null);
-        when(rateRepository.save(new Rate(book2,"huri",rateRequest.getRate()))).thenReturn(rate);
+        book = new Book(rateRequest.getBookId(),rateRequest.getBookname());
+        Rate rate = new Rate(rateId,book,username,rateRequest.getRate());
+        book.setRates(new ArrayList(Arrays.asList(rate)));
 
-        book2.getRates().add(rate);
-        book2.setAverageRate(book2.calAv());
+        given(bookRepository.save(any(Book.class))).willReturn(book);
+        given(rateRepository.findByBookAndUsername(book,username)).willReturn(null);
+        given(rateRepository.save(any(Rate.class))).willReturn(rate);
 
-        //when(rateRepository.save(any(Rate.class))).thenReturn(rate);
 
-        final Rate saved = rateService.save(rateRequest, "huri");
+        final Rate saved = rateService.save(rateRequest, username);
         assertThat(saved).isNotNull();
-        verify(rateRepository).save(any(Rate.class));
-    }*/
+        verify(rateRepository,times(2)).save(any(Rate.class));
+    }
 }
