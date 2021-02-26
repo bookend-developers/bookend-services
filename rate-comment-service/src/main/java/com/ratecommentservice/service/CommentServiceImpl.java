@@ -1,5 +1,7 @@
 package com.ratecommentservice.service;
 
+import com.ratecommentservice.exception.BookNotFound;
+import com.ratecommentservice.exception.CommentNotFound;
 import com.ratecommentservice.kafka.Producer;
 import com.ratecommentservice.model.Book;
 import com.ratecommentservice.model.Comment;
@@ -47,13 +49,16 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<Comment> getBookComments(String bookId) {
+    public List<Comment> getBookComments(String bookId) throws BookNotFound {
         Book book = bookRepository.findBookByBookId(bookId);
+        if(book == null){
+            throw new BookNotFound("Book is not found..");
+        }
         return commentRepository.findByBook(book);
     }
 
     @Override
-    public Comment commentBook(CommentRequest commentRequest, String username) {
+    public Comment commentBook(CommentRequest commentRequest, String username) throws BookNotFound {
         Comment comment = new Comment();
         Book book = bookService.findBookByBookID(commentRequest.getBookID());
         if(book == null){
@@ -89,7 +94,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment findCommentId(Long commentId) {
-        return commentRepository.findByCommentId(commentId);
+    public Comment findCommentId(Long commentId) throws CommentNotFound {
+        Comment comment = commentRepository.findByCommentId(commentId);
+        if(comment == null){
+            throw new CommentNotFound("Comment is not found..");
+        }
+        return comment;
     }
 }

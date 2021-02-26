@@ -1,5 +1,7 @@
 package com.ratecommentservice.controller;
 
+import com.ratecommentservice.exception.BookNotFound;
+import com.ratecommentservice.exception.CommentNotFound;
 import com.ratecommentservice.model.Book;
 import com.ratecommentservice.model.Comment;
 import com.ratecommentservice.model.Rate;
@@ -40,7 +42,7 @@ public class CommentController {
     }
     )
     @GetMapping("/{bookid}")
-    public List<Comment> getBookComments(@PathVariable("bookid") String bookId){
+    public List<Comment> getBookComments(@PathVariable("bookid") String bookId) throws BookNotFound {
         return commentService.getBookComments(bookId);
     }
     @ApiOperation(value = "View user's comments ", response = Comment.class)
@@ -64,7 +66,7 @@ public class CommentController {
 
     @PostMapping("/new")
     public Comment commentBook(@RequestBody CommentRequest commentRequest
-            ,OAuth2Authentication auth){
+            ,OAuth2Authentication auth) throws BookNotFound {
         if(commentRequest.getBookID()==null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"The way you are trying to comment is not accepted.");
         }
@@ -86,7 +88,7 @@ public class CommentController {
     }
     )
     @DeleteMapping("/delete/{commentid}")
-    public ResponseEntity<?> deleteComment(@PathVariable("commentid") String commentId, OAuth2Authentication auth){
+    public ResponseEntity<?> deleteComment(@PathVariable("commentid") String commentId, OAuth2Authentication auth) throws CommentNotFound {
         Comment comment = commentService.findCommentId(Long.valueOf(commentId));
         if(comment==null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Comment not found.");
@@ -98,7 +100,7 @@ public class CommentController {
         return   ResponseEntity.ok(new MessageResponse("Comment deleted successfully."));
     }
     @GetMapping("/book/{bookid}")
-    public Book getBook(@PathVariable("bookid") String bookId){
+    public Book getBook(@PathVariable("bookid") String bookId) throws BookNotFound {
         Book book = bookService.findBookByBookID(bookId);
         if(book== null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Resource is not found");

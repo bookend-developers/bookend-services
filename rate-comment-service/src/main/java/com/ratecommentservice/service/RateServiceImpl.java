@@ -1,5 +1,7 @@
 package com.ratecommentservice.service;
 
+import com.ratecommentservice.exception.BookNotFound;
+import com.ratecommentservice.exception.RateNotFound;
 import com.ratecommentservice.kafka.Producer;
 import com.ratecommentservice.model.Book;
 import com.ratecommentservice.model.Rate;
@@ -40,10 +42,16 @@ public class RateServiceImpl implements RateService {
     }
 
     @Override
-    public Double getBookAverageRate(String bookID) {
+    public Double getBookAverageRate(String bookID) throws BookNotFound, RateNotFound {
         Book book = bookRepository.findBookByBookId(bookID);
-
-        return book.getAverageRate();
+        if(book == null){
+            throw new BookNotFound("Book is not found");
+        }
+        Double averageRate = book.getAverageRate();
+        if(averageRate == null){
+            throw new RateNotFound("Rate is not found");
+        }
+        return averageRate;
     }
 
     @Override
@@ -91,13 +99,24 @@ public class RateServiceImpl implements RateService {
     }
 
     @Override
-    public Rate findByRateID(Long rateId) {
-        return rateRepository.findByRateId(rateId);
+    public Rate findByRateID(Long rateId) throws RateNotFound {
+        Rate rate = rateRepository.findByRateId(rateId);
+        if(rate == null){
+            throw new RateNotFound("Rate is not found");
+        }
+        return rate;
     }
 
     @Override
-    public Rate findRateByBookIdandUsername(String bookId, String username) {
+    public Rate findRateByBookIdandUsername(String bookId, String username) throws BookNotFound, RateNotFound {
         Book book = bookRepository.findBookByBookId(bookId);
-        return rateRepository.findByBookAndUsername(book,username);
+        if(book == null){
+            throw new BookNotFound("Book is not found");
+        }
+        Rate rate = rateRepository.findByBookAndUsername(book,username);
+        if(rate == null){
+            throw new RateNotFound("Rate is not found");
+        }
+        return rate;
     }
 }
