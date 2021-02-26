@@ -1,27 +1,31 @@
 package com.bookend.authorservice.serviceTest;
 
 import com.bookend.authorservice.exception.AuthorAlreadyExists;
-import com.bookend.authorservice.exception.AuthorNotFound;
+import com.bookend.authorservice.exception.NotFoundException;
 import com.bookend.authorservice.exception.MandatoryFieldException;
 import com.bookend.authorservice.model.Author;
+import com.bookend.authorservice.model.Book;
 import com.bookend.authorservice.payload.AuthorRequest;
 import com.bookend.authorservice.repository.AuthorRepository;
-import com.bookend.authorservice.service.AuthorService;
+import com.bookend.authorservice.repository.BookRepository;
 import com.bookend.authorservice.service.AuthorServiceImpl;
+import com.bookend.authorservice.service.BookServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.filter;
@@ -35,10 +39,14 @@ import static org.mockito.Mockito.*;
 public class AuthorServiceTest {
     @Mock
     private AuthorRepository authorRepository;
+    @Mock
+    private BookServiceImpl bookService;
     @InjectMocks
     private AuthorServiceImpl authorService;
+    @Spy
+    private AuthorServiceImpl authorServiceSpy;
     @Test
-    void shouldGetAuthorSuccesfully() throws AuthorNotFound {
+    void shouldGetAuthorSuccesfully() throws NotFoundException {
         final String id = "ajsdhj23e";
         final Author author = new Author("ajsdhj23e","Ahmet Umit");
         given(authorRepository.findAuthorById(id)).willReturn(author);
@@ -50,16 +58,38 @@ public class AuthorServiceTest {
     void failToGetByIDIfIdDoesNotMatchAnyAuthor() {
         final String id = "ajsdhj23e";
         given(authorRepository.findAuthorById(id)).willReturn(null);
-        assertThrows(AuthorNotFound.class,()->{
+        assertThrows(NotFoundException.class,()->{
             authorService.getById(id);
         });
 
     }
     @Test
-    void shouldUpdateAuthor(){
+    void failToUpdateAuthorBooksIfAuthorIdDoesNotMatchAnyExistingAuthor(){
         final Author author = new Author("ajsdhj23e","Ahmet Umit");
-        given(authorRepository.save(author)).willReturn(author);
-        final Author expected = authorService.update(author);
+        final Book book = new Book("a4ds7dsf8vsd",author);
+        final Map<String,String> msg =  new HashMap<>();
+        msg.put("author","");
+        msg.put("book","a4ds7dsf8vsd");
+        when(authorRepository.findAuthorById(msg.get("author"))).thenReturn(null);
+        assertThrows(NotFoundException.class, ()->{
+            authorService.update(msg);
+        });
+        verify(authorRepository,never()).save(any(Author.class));
+
+    }
+    @MockitoSettings(strictness = Strictness.WARN)
+    @Test
+    void shouldUpdateAuthorBooks() throws MandatoryFieldException, NotFoundException {
+        final Author author = new Author("ajsdhj23e","Ahmet Umit");
+        final Book book = new Book("a4ds7dsf8vsd",author);
+        final Map<String,String> msg =  new HashMap<>();
+        msg.put("author","ajsdhj23e");
+        msg.put("book","a4ds7dsf8vsd");
+        given(bookService.save(any(Book.class))).willReturn(book);
+        when(authorRepository.findAuthorById(msg.get("author"))).thenReturn(author);
+        given(authorRepository.save(any(Author.class))).willReturn(author);
+        Mockito.doReturn(author).when(authorServiceSpy).getById(author.getId());
+        final Author expected = authorService.update(msg);
         assertThat(expected).isNotNull();
         verify(authorRepository).save(any(Author.class));
     }
@@ -169,22 +199,6 @@ public class AuthorServiceTest {
         assertThat(saved).isNotNull();
         verify(authorRepository).save(any(Author.class));
     }
-    @MockitoSettings(strictness = Strictness.WARN)
-    @Test
-    void shouldSaveWhenAuthorRequestNameAndBirthdayHaveMatchAndDeathDayIsDifferent() throws MandatoryFieldException, AuthorAlreadyExists {
-        final Author s =new Author("ajsdhj23k","Ahmet Umit","He is ..", LocalDate.parse("1990-02-12"),LocalDate.parse("2000-12-28"));
-        final Author toBeSaved = new Author("Ahmet Umit","He is ..", LocalDate.parse("1990-02-12"),LocalDate.parse("2000-12-28"));
-        final Author author = new Author("ajsdhj23e","Ahmet Umit","Long", LocalDate.parse("1998-02-11"),LocalDate.parse("2002-02-07"));
-        final Author author1 = new Author("ajsdhj24e","Ahmet Umit","Umit was born..", LocalDate.now(),LocalDate.now());
-        final List<Author> authors = Arrays.asList(author,author1);
-        when(authorRepository.findByName(toBeSaved.getName())).thenReturn(authors);
-        final AuthorRequest request = new AuthorRequest("Ahmet Umit","He is ..","1998-02-12","2000-12-28");
-        when(authorRepository.save(any(Author.class))).thenAnswer(invocation -> invocation.getArgument(0));
-        final Author saved = authorService.save(request);
-        assertThat(saved).isNotNull();
-        verify(authorRepository).save(any(Author.class));
-    }
-
 
     @Test
     void shouldReturnAllAuthor(){

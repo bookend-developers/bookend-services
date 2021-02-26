@@ -1,22 +1,18 @@
 package com.bookend.authorservice.controller;
 
-import com.bookend.authorservice.exception.AuthorNotFound;
+import com.bookend.authorservice.exception.NotFoundException;
 import com.bookend.authorservice.model.Author;
 import com.bookend.authorservice.model.Book;
-import com.bookend.authorservice.payload.AuthorRequest;
 import com.bookend.authorservice.service.AuthorService;
 import com.bookend.authorservice.service.BookService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,8 +42,8 @@ public class AuthorController {
         Author author= null;
         try {
             author = authorService.getById(authorId);
-        } catch (AuthorNotFound authorNotFound) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, authorNotFound.getMessage());
+        } catch (NotFoundException notFoundException) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, notFoundException.getMessage());
         }
 
         return author;
@@ -84,8 +80,8 @@ public class AuthorController {
         Author author = null;
         try {
             author = authorService.getById(authorid);
-        } catch (AuthorNotFound authorNotFound) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,authorNotFound.getMessage());
+        } catch (NotFoundException notFoundException) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, notFoundException.getMessage());
         }
         return author.getBookList();
     }

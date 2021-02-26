@@ -2,8 +2,9 @@ package com.bookend.authorservice.service;
 
 import com.bookend.authorservice.exception.AuthorAlreadyExists;
 import com.bookend.authorservice.exception.MandatoryFieldException;
-import com.bookend.authorservice.exception.AuthorNotFound;
+import com.bookend.authorservice.exception.NotFoundException;
 import com.bookend.authorservice.model.Author;
+import com.bookend.authorservice.model.Book;
 import com.bookend.authorservice.payload.AuthorRequest;
 import com.bookend.authorservice.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,28 +15,37 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 public class AuthorServiceImpl implements AuthorService {
-
+    private BookService bookService;
     private AuthorRepository authorRepository;
     @Autowired
     public void setAuthorRepository(AuthorRepository authorRepository) {
         this.authorRepository = authorRepository;
     }
+    @Autowired
+    public void setBookService(BookService bookService) {
+        this.bookService = bookService;
+    }
 
     @Override
-    public Author getById(String id) throws AuthorNotFound {
+    public Author getById(String id) throws NotFoundException {
         Author author = authorRepository.findAuthorById(id);
         if(author == null) {
-            throw new AuthorNotFound("Author does not exist.");
+            throw new NotFoundException("Author does not exist.");
         }
         return author;
     }
 
     @Override
-    public Author update(Author author) {
+    public Author update(Map<String,String> msg) throws NotFoundException, MandatoryFieldException {
+        Author author = getById(msg.get("author"));
+        Book book= new Book(msg.get("book"),author);
+        bookService.save(book);
+        author.getBookList().add(book);
         return authorRepository.save(author);
     }
 
