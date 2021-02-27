@@ -106,6 +106,18 @@ public class ShelfServiceTest {
         assertThat(saved).isNotNull();
         verify(shelfRepository).save(any(Shelf.class));
     }
+    @Test
+    void shouldReturnNullIfShelfAlreadyExist() throws ShelfNotFound, MandatoryFieldException {
+        List<Shelf> shelves = new ArrayList<>();
+        List<String> tagNames = new ArrayList<>();
+        tagNames.add("Romantic");
+        final ShelfRequest shelfRequest = new ShelfRequest("To Read",tagNames);
+        final Shelf shelf = new Shelf("To Read","eda");
+        shelves.add(shelf);
+        given(shelfRepository.findShelvesByUsername("eda")).willReturn(shelves);
+        final Shelf expected = shelfService.saveOrUpdate(shelfRequest, "eda");
+        assertEquals(null,expected);
+    }
 
     @Test
     void shouldReturnAllShelvesWithGivenUsername(){
@@ -154,6 +166,16 @@ public class ShelfServiceTest {
         assertEquals(books,expected);
     }
 
- 
+    @Test
+    void failToGetBooksIfShelfIsEmpty() throws ShelfNotFound, NullPointerException{
+        List<ShelfsBook> books = null;
+        final Long id = Long.valueOf(5);
+        final Shelf shelf = new Shelf(id,"Recently Read","eda", new ArrayList<Tag>());
+        shelf.setShelfsBooks(books);
+        given(shelfRepository.findShelfById(id)).willReturn(shelf);
+        assertThrows(NullPointerException.class,()->{
+            shelfService.getBooks(id);
+        });
+    }
 
 }

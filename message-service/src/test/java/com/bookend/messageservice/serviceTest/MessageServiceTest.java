@@ -169,6 +169,22 @@ public class MessageServiceTest {
             messageService.deleteMessage(msg,"huri");
         });
     }
+    @Test
+    void failToDeleteMessageIfMessageDoesNotExist() throws UserNotFound, MessageNotFound {
+        Message msg = new Message("sad","huri","didem","hi","how are you",new Date());
+        Message msg1 = new Message("ajsdhj23e","huri","didem","hi","how are you",new Date());
+        Message msg2 = new Message("ajsdhj45","didem","huri","hi","how are you",new Date());
+        List<Message> msg1List = new ArrayList<>();
+        List<Message> msg2List = new ArrayList<>();
+        msg1List.add(msg1);
+        msg2List.add(msg2);
+        given(messageRepository.findMessageBySender("huri")).willReturn(msg1List);
+        given(messageRepository.findMessageByReceiver("huri")).willReturn(msg2List);
+        given(messageRepository.findMessageById(msg.getId())).willReturn(null);
+        assertThrows(MessageNotFound.class,() -> {
+            messageService.deleteMessage(msg,"huri");
+        });
+    }
 
 
     @Test

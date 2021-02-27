@@ -68,6 +68,12 @@ public class TagServiceTest {
         assertThat(saved).isNotNull();
         verify(tagRepository).save(any(Tag.class));
     }
+    @Test
+    void shouldSaveandUpdateGivenTagSuccessfullyIfDoesNotExist(){
+        given(tagRepository.findByTag("Horror")).willReturn(null);
+        final Tag saved = tagService.saveAndUpdate("Horror");
+        verify(tagRepository).save(any(Tag.class));
+    }
 
     @Test
     void shouldReturnNullIfTagThatWillBeSavedAlreadyExists(){
