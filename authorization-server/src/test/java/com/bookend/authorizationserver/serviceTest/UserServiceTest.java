@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.server.ResponseStatusException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -131,23 +132,29 @@ public class UserServiceTest {
 
     }
     @Test
-    void shouldFindByUserNameIfNotExist(){
-        given(userDetailRepository.findUserByUsername(any(String.class))).willReturn(null);
-        User user = userService.findByUsername("username");
-        assertThat(user).isNull();
+    void shouldReturnNullWhenFindByUserNameIfNotExist(){
+        User user = new User();
+        user.setUsername("ekrem");
+        given(userDetailRepository.findUserByUsername("ekrem")).willReturn(null);
+        User expected = userService.findByUsername("ekrem");
+        assertThat(expected).isNull();
     }
     @Test
     void shouldFindByUserName(){
         User user = new User();
-        given(userDetailRepository.findUserByUsername(any(String.class))).willReturn(user);
-        User expected = userService.findByUsername("username");
+        user.setUsername("ekrem");
+        given(userDetailRepository.findUserByUsername("ekrem")).willReturn(user);
+        User expected = userService.findByUsername("ekrem");
+        assertEquals(expected,user);
         assertThat(expected).isNotNull();
     }
     @Test
     void shouldSaveUser(){
         User user = new User();
-        given(userDetailRepository.save(any(User.class))).willReturn(user);
+        user.setUsername("ekrem");
+        given(userDetailRepository.save(user)).willReturn(user);
         User expected = userService.save(user);
         assertThat(expected).isNotNull();
+        verify(userDetailRepository).save(any(User.class));
     }
 }
