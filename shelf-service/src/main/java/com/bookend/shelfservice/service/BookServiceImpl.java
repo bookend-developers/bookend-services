@@ -1,9 +1,11 @@
 package com.bookend.shelfservice.service;
 
+import com.bookend.shelfservice.exception.AlreadyExists;
 import com.bookend.shelfservice.exception.NotFoundException;
 import com.bookend.shelfservice.exception.ShelfsBookNotFound;
 import com.bookend.shelfservice.model.Shelf;
 import com.bookend.shelfservice.model.ShelfsBook;
+import com.bookend.shelfservice.payload.BookRequest;
 import com.bookend.shelfservice.repository.BookRepository;
 import com.bookend.shelfservice.repository.ShelfRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +37,11 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public ShelfsBook saveOrUpdate(ShelfsBook shelfsBook) {
+    public ShelfsBook saveOrUpdate(BookRequest book, Shelf shelf) throws AlreadyExists {
+        ShelfsBook shelfsBook = new ShelfsBook(book.getBookid(),book.getBookName(),shelf);
         List<ShelfsBook> books = bookRepository.findShelfsBookByShelf(shelfsBook.getShelf());
-        if(books.stream().anyMatch(book -> book.getBookID().matches(shelfsBook.getBookID()))){
-            return null;
+        if(books.stream().anyMatch(b -> b.getBookID().matches(shelfsBook.getBookID()))){
+            throw new AlreadyExists("The book is already added this shelf");
         }
         return bookRepository.save(shelfsBook);
     }

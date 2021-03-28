@@ -1,9 +1,12 @@
 package com.bookend.shelfservice.serviceTest;
 
+import com.bookend.shelfservice.exception.AlreadyExists;
 import com.bookend.shelfservice.exception.ShelfNotFound;
+import com.bookend.shelfservice.exception.ShelfsBookNotFound;
 import com.bookend.shelfservice.exception.TagNotFound;
 import com.bookend.shelfservice.model.Shelf;
 import com.bookend.shelfservice.model.Tag;
+import com.bookend.shelfservice.payload.GenreMessage;
 import com.bookend.shelfservice.repository.ShelfRepository;
 import com.bookend.shelfservice.repository.TagRepository;
 import com.bookend.shelfservice.service.ShelfServiceImpl;
@@ -22,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -61,27 +65,46 @@ public class TagServiceTest {
         assertEquals(tags,expected);
     }
     @Test
-    void shouldSaveGivenTagSuccessfully(){
-        final Tag tag = new Tag("dsfdsfd32","Horror");
-        given(tagRepository.save(tag)).willReturn(tag);
-        final Tag saved = tagService.save(tag);
+    void shouldUpdateTagWhenTagIDHasMatch() throws AlreadyExists {
+        final String id = "dsfdsfd32";
+        final String genre = "Horror";
+        GenreMessage message = new GenreMessage(id,genre);
+        final Tag tag = new Tag(id,"horor");
+        given(tagRepository.findTagById(message.getId())).willReturn(tag);
+        tag.setTag(genre);
+        given(tagRepository.save(any(Tag.class))).willReturn(tag);
+        final Tag saved = tagService.save(message);
         assertThat(saved).isNotNull();
         verify(tagRepository).save(any(Tag.class));
     }
     @Test
-    void shouldSaveandUpdateGivenTagSuccessfullyIfDoesNotExist(){
-        given(tagRepository.findByTag("Horror")).willReturn(null);
-        final Tag saved = tagService.saveAndUpdate("Horror");
+    void shouldUpdateTagWhenTagIDHasNotMatch() throws AlreadyExists {
+        final String id = "dsfdsfd32";
+        final String genre = "Horror";
+        GenreMessage message = new GenreMessage(id,genre);
+        final Tag tag = new Tag(id,"horor");
+        given(tagRepository.findTagById(message.getId())).willReturn(null);
+        tag.setTag(genre);
+        given(tagRepository.save(any(Tag.class))).willReturn(tag);
+        final Tag saved = tagService.save(message);
+        assertThat(saved).isNotNull();
         verify(tagRepository).save(any(Tag.class));
     }
-
     @Test
-    void shouldReturnNullIfTagThatWillBeSavedAlreadyExists(){
-        final Tag tag = new Tag("dsfdsfd32","Horror");
-        given(tagRepository.findByTag("Horror")).willReturn(tag);
-        final Tag saved = tagService.saveAndUpdate("Horror");
-        assertThat(saved).isNull();
+    void failToUpdateTagWhenTagNameAlreadyExists()  {
+        final String id = "dsfdsfd32";
+        final String genre = "Horror";
+        GenreMessage message = new GenreMessage(id,genre);
+        final Tag tag = new Tag(id,"horor");
+        given(tagRepository.findByTag(message.getGenre())).willReturn(tag);
+       assertThrows(AlreadyExists.class,()->{
+           tagService.save(message);
+       });
+
+        verify(tagRepository,never()).save(any(Tag.class));
     }
+
+
 
 
 }

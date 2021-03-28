@@ -10,6 +10,10 @@ public class MailRequest {
 
     private String text;
 
+    public MailRequest() {
+    }
+
+
     public Long getId() {
         return id;
     }

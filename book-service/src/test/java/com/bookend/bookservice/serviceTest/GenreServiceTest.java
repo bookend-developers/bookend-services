@@ -37,8 +37,10 @@ public class GenreServiceTest {
         final Genre genre = new Genre("5asd25dfgf","Journal");
         doReturn(null).when(genreServiceSpy).findByGenre(genre.getGenre());
         when(genreRepository.findByGenre(genre.getGenre())).thenReturn(null);
-        when(genreRepository.save(genre)).thenReturn(genre);
+        when(genreRepository.save(any(Genre.class))).thenReturn(genre);
         final Genre expected = genreService.addNewGenre(genre.getGenre());
+        assertEquals(expected,genre);
+        verify(genreRepository).save(any(Genre.class));
 
     }
     @MockitoSettings(strictness = Strictness.WARN)

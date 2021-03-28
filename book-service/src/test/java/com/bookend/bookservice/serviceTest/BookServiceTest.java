@@ -30,8 +30,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
@@ -153,15 +152,15 @@ public class BookServiceTest {
 
     }
     @Test
-    void shouldFailToSaveIfAuthorIsEmptyString(){
-        final BookRequest request = new BookRequest(Integer.valueOf("123"),"Classics","....",true,"Oblomov","","asfd54adsd","123654789123");
+    void shouldFailToSaveIfAuthorIDIsEmptyString(){
+        final BookRequest request = new BookRequest(Integer.valueOf("123"),"Classics","....",true,"Oblomov","Ivan Gonçarov","","123654789123");
         assertThrows(MandatoryFieldException.class,()->{
             bookService.save(request);
         });
     }
     @Test
-    void shouldFailToSaveIfAuthorIsNull(){
-        final BookRequest request = new BookRequest(Integer.valueOf("123"),"Classics","....",true,"Oblomov",null,"asfd54adsd","123654789123");
+    void shouldFailToSaveIfAuthorIDIsNull(){
+        final BookRequest request = new BookRequest(Integer.valueOf("123"),"Classics","....",true,"Oblomov","Ivan Gonçarov",null,"123654789123");
         assertThrows(MandatoryFieldException.class,()->{
             bookService.save(request);
         });
@@ -389,6 +388,35 @@ public class BookServiceTest {
         });
         verify(sortService,never()).findOne();
     }
+    @Test
+    void verifyBook() throws NotFoundException {
+        final String id = "ash2jhs45";
+        final Genre genre = new Genre("5asd23dfgf","Classics");
+        final Book book = new Book(Integer.valueOf("123"),genre,"...","Oblomov","Ivan Gonçarov","45afs34",false,"1234567891234");
+        given(bookRepository.findBookById(id)).willReturn(book);
+        book.setVerified(Boolean.TRUE);
+        given(bookRepository.save(any(Book.class))).willReturn(book);
+        final Book expected = bookService.verify(id);
+        assertTrue(expected.getVerified());
+    }
+    @Test
+    void failToVerifyWhenIDHaveNotMatch(){
+        final String id = "ash2jhs45";
+        given(bookRepository.findBookById(id)).willReturn(null);
+        assertThrows(NotFoundException.class,()->{
+            bookService.verify(id);
+        });
+    }
+    @Test
+    void updateBook(){
+        final String id = "ash2jhs45";
+        final Genre genre = new Genre("5asd23dfgf","Classics");
+        final Book book = new Book(Integer.valueOf("123"),genre,"...","Oblomov","Ivan Gonçarov","45afs34",false,"1234567891234");
+        given(bookRepository.save(any(Book.class))).willReturn(book);
+        final Book expected = bookService.update(book);
+        assertThat(expected).isNotNull();
+    }
+
 
 
 

@@ -21,6 +21,7 @@ public class MessageServiceImp implements MessageService{
 	private MessageRepository messageRepository;
 	@Autowired
 	public void setMessageRepository(MessageRepository messageRepository){
+
 		this.messageRepository=messageRepository;
 	}
 
@@ -76,7 +77,6 @@ public class MessageServiceImp implements MessageService{
 	}
 
 	@Override
-
 	public void deleteMessage(Message message, String username) throws UserNotFound, MessageNotFound {
 		List<Message> messagesFromSender = messageRepository.findMessageBySender(username);
 		List<Message> messagesFromReceiver = messageRepository.findMessageByReceiver(username);
@@ -87,7 +87,7 @@ public class MessageServiceImp implements MessageService{
 		if(msg == null){
 			throw new MessageNotFound("Message does not found..");
 		}
-		messageRepository.deleteMessage(message,username);
+		messageRepository.delete(message);
 	}
 	
 	public List<Message> findChatByUserName(String userName1,String userName2) throws MessageNotFound {

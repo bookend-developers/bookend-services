@@ -12,5 +12,5 @@ public interface MessageRepository extends MongoRepository<Message, String>  {
 	Message findMessageById(String id);
 	List<Message>  findMessageBySender(String sender);
 	List<Message> findMessageByReceiver(String receiver);
-	void deleteMessage(Message messageId, String username);
+
 }

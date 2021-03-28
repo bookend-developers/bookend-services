@@ -12,6 +12,11 @@ public class GenreMessage {
     public GenreMessage() {
     }
 
+    public GenreMessage(String id, String genre) {
+        this.id = id;
+        this.genre = genre;
+    }
+
     public GenreMessage(String genre) {
         this.genre = genre;
     }

@@ -63,7 +63,7 @@ public class BookServiceImpl implements BookService {
         if(bookRequest.getBookName()==null  || bookRequest.getBookName().equals("")){
             throw new MandatoryFieldException("Book name field cannot be empty.");
         }
-        if(bookRequest.getAuthor()==null || bookRequest.getAuthor().equals("")){
+        if(bookRequest.getAuthorid()==null || bookRequest.getAuthorid().equals("")){
             throw new MandatoryFieldException("Author field cannot be empty.");
         }
         if(bookRequest.getDescription()==null || bookRequest.getDescription().equals("")){
@@ -133,6 +133,13 @@ public class BookServiceImpl implements BookService {
         return bookRepository.save(book);
     }
 
+    @Override
+    public Book verify(String bookID) throws NotFoundException {
+        Book book = getById(bookID);
+        book.setVerified(Boolean.TRUE);
+        book = bookRepository.save(book);
+        return book;
+    }
 
 
     @Override

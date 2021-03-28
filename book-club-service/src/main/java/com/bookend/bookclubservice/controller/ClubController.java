@@ -86,7 +86,7 @@ public class ClubController {
     public List<Invitation> getMemberInvitations(@PathVariable("username") String username){
         return clubService.getMemberInvitations(username);
     }
-    @ApiOperation(value = "Get posts for specific user", response = Post.class)
+   /* @ApiOperation(value = "Get posts for specific user", response = Post.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved posts"),
             @ApiResponse(code = 401, message = "You are not authorized to view resource.")
@@ -94,7 +94,7 @@ public class ClubController {
     @GetMapping("/member/{username}/posts")
     public List<Post> getWriterPosts(@PathVariable("username") String username){
         return clubService.getWriterPosts(username);
-    }
+    }*/
     @ApiOperation(value = "Get  specific post", response = Post.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved post"),

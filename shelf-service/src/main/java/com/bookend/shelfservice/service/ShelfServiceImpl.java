@@ -1,5 +1,6 @@
 package com.bookend.shelfservice.service;
 
+import com.bookend.shelfservice.exception.AlreadyExists;
 import com.bookend.shelfservice.exception.MandatoryFieldException;
 import com.bookend.shelfservice.exception.NotFoundException;
 import com.bookend.shelfservice.exception.ShelfNotFound;
@@ -47,26 +48,27 @@ public class ShelfServiceImpl implements ShelfService {
     }
 
     @Override
-    public Shelf saveOrUpdate(ShelfRequest shelfRequest, String username) throws MandatoryFieldException {
+    public Shelf saveOrUpdate(ShelfRequest shelfRequest, String username) throws MandatoryFieldException, AlreadyExists {
         List<Shelf> shelves = shelfRepository.findShelvesByUsername(username);
         if(shelfRequest.getShelfname()==null || shelfRequest.getShelfname() == ""){
             throw new MandatoryFieldException("Shelf name cannot be empty.");
         }
+        if (!shelves.isEmpty()) {
+            if (shelves.stream().anyMatch(s -> s.getShelfname().equalsIgnoreCase(shelfRequest.getShelfname()))) {
+                throw new AlreadyExists("Shelf already exists");
+            }
+
+        }
         if (shelfRequest.getTags() == null || shelfRequest.getTags().isEmpty()) {
             return shelfRepository.save(new Shelf(shelfRequest.getShelfname(),username));
+
         }
         List<Tag> tags = shelfRequest.getTags()
                 .stream()
                 .map(t -> tagRepository.findByTag(t))
                 .collect(Collectors.toList());
-        if (!shelves.isEmpty()) {
-            if (shelves.stream().anyMatch(s -> s.getShelfname().toLowerCase().matches(shelfRequest.getShelfname().toLowerCase()))) {
-                return null;
-            }
-
-            }
         return shelfRepository.save(new Shelf(shelfRequest.getShelfname(), username, tags));
-        }
+    }
 
 
     @Override
@@ -77,17 +79,18 @@ public class ShelfServiceImpl implements ShelfService {
 
     @Override
     public void deleteShelf(Shelf shelf) throws NotFoundException {
+        if(shelfRepository.findShelfById(shelf.getId())==null){
+            throw new NotFoundException("Shelf does not exist!");
+        }
         shelfRepository.delete(shelf);
 
     }
 
     @Override
 
-    public List<ShelfsBook> getBooks(Long id) throws ShelfNotFound, NullPointerException {
+    public List<ShelfsBook> getBooks(Long id) throws ShelfNotFound{
         List<ShelfsBook> bookIDs = getById(id).getShelfsBooks();
-        if(bookIDs == null){
-            throw new NullPointerException();
-        }
+
         return bookIDs;
     }
 }

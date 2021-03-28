@@ -23,16 +23,6 @@ public class EmailMailSender {
         javaMailSender.send(email);
     }
 
-    public void sendMailtest(String toEmail, String subject, String message) {
-
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(toEmail);
-        mailMessage.setFrom("gradd.sschool@gmail.com");
-        mailMessage.setSubject(subject);
-        mailMessage.setText(message);
-
-        javaMailSender.send(mailMessage);
-    }
 
     public void sendMailRequestsMail(MailRequest mailRequest){
         User user = userRepository.findById(mailRequest.getId()).get();
@@ -43,7 +33,6 @@ public class EmailMailSender {
         mailMessage.setText(mailRequest.getText());
         sendEmail(mailMessage);
     }
-
     public void sendConfirmationMailRequestsMail(MailRequest mailRequest){
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(mailRequest.getEmail());
@@ -60,6 +49,5 @@ public class EmailMailSender {
         mailMessage.setText(mailRequest.getText());
         sendEmail(mailMessage);
     }
-
 
 }

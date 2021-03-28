@@ -1,5 +1,6 @@
 package com.bookend.shelfservice.service;
 
+import com.bookend.shelfservice.exception.AlreadyExists;
 import com.bookend.shelfservice.exception.MandatoryFieldException;
 import com.bookend.shelfservice.exception.NotFoundException;
 import com.bookend.shelfservice.exception.ShelfNotFound;
@@ -11,7 +12,7 @@ import java.util.List;
 
 public interface ShelfService {
     Shelf getById(Long id) throws ShelfNotFound;
-    Shelf saveOrUpdate(ShelfRequest shelfRequest, String username) throws MandatoryFieldException;
+    Shelf saveOrUpdate(ShelfRequest shelfRequest, String username) throws MandatoryFieldException, AlreadyExists;
     List<Shelf> findShelvesByUsername(String username);
     void deleteShelf(Shelf shelfID) throws NotFoundException;
     List<ShelfsBook> getBooks(Long id) throws ShelfNotFound;

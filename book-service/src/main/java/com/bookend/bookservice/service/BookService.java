@@ -12,6 +12,7 @@ public interface BookService {
     Book getById(String id) throws NotFoundException;
     Book save(BookRequest bookRequest) throws MandatoryFieldException, AlreadyExist;
     Book update(Book book);
+    Book verify(String bookID) throws NotFoundException;
     List<Book> getAll();
     List<Book> findByAuthor(String author) throws NotFoundException;
     List<Book> search(String title,String genre,boolean rateSort,boolean commentSort) throws NotFoundException;

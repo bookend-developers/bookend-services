@@ -102,14 +102,11 @@ public class AdminController {
     }
     @PostMapping("/verify/{bookid}")
     public Book verifyBook(@PathVariable("bookid") String bookId){
-        Book book = null;
         try {
-            book = bookService.getById(bookId);
+            return bookService.verify(bookId);
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
         }
-        book.setVerified(Boolean.TRUE);
-        return bookService.update(book);
 
     }
     @GetMapping("/genres")

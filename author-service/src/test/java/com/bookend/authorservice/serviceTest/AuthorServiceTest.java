@@ -136,7 +136,7 @@ public class AuthorServiceTest {
     void shouldSaveIfAuthorRequestDeathDateIsNullAndNameBirthdayHaveMatchButDeathDayIsDifferent() throws MandatoryFieldException, AuthorAlreadyExists {
        final Author toBeSaved = new Author("ajsdhj23k","Ahmet Umit","He is ..", LocalDate.parse("1990-02-11"),null);
         final Author author = new Author("ajsdhj23e","Ahmet Umit","Long", LocalDate.parse("1998-02-11"),LocalDate.parse("2002-02-07"));
-        final Author author1 = new Author("ajsdhj24e","Ahmet Umit","Umit was born..", LocalDate.now(),LocalDate.now());
+        final Author author1 = new Author("ajsdhj24e","Ahmet Umit","Umit was born..", LocalDate.now(),null);
         final List<Author> authors = Arrays.asList(author,author1);
         given(authorRepository.findByName(author.getName())).willReturn(authors);
         given(authorRepository.save(any(Author.class))).willReturn(toBeSaved);
@@ -162,8 +162,8 @@ public class AuthorServiceTest {
     void shouldSaveIfAuthorRequestDeathDateIsNotNullAndNameBirthdayHaveMatchButDeathDayIsDifferent() throws MandatoryFieldException, AuthorAlreadyExists {
 
         final Author toBeSaved = new Author("ajsdhj23k","Ahmet Umit","He is ..", LocalDate.parse("1998-02-11"),LocalDate.parse("2002-02-08"));
-        final Author author = new Author("ajsdhj23e","Ahmet Umit","Long", LocalDate.parse("1998-02-11"),LocalDate.parse("2002-02-07"));
-        final Author author1 = new Author("ajsdhj24e","Ahmet Umit","Umit was born..", LocalDate.now(),LocalDate.now());
+        final Author author = new Author("ajsdhj23e","Ahmet Umit","Long", LocalDate.parse("1998-02-11"),null);
+        final Author author1 = new Author("ajsdhj24e","Ahmet Umit","Umit was born..", LocalDate.now(),null);
         final List<Author> authors = Arrays.asList(author,author1);
         given(authorRepository.findByName(author.getName())).willReturn(authors);
         when(authorRepository.save(any(Author.class))).thenReturn(toBeSaved);

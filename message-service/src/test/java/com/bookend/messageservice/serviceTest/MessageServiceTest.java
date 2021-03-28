@@ -157,7 +157,7 @@ public class MessageServiceTest {
         given(messageRepository.findMessageByReceiver("huri")).willReturn(msgList2);
         given(messageRepository.findMessageById(msg.getId())).willReturn(msg);
         messageService.deleteMessage(msg,"huri");
-        verify(messageRepository,times(1)).deleteMessage(msg,"huri");
+        verify(messageRepository,times(1)).delete(msg);
     }
 
     @Test

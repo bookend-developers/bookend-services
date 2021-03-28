@@ -19,9 +19,10 @@ public class SortServiceImpl implements SortService {
 
 
     @Override
-    public void add(Book book) {
+    public SortedLists add(Book book) {
         SortedLists sortedLists = findOne();
-        sortedListRepo.save(sortedLists.add(book));
+        sortedLists = sortedListRepo.save(sortedLists.add(book));
+        return sortedLists;
 
     }
 
@@ -30,7 +31,8 @@ public class SortServiceImpl implements SortService {
     public SortedLists sort(String type) {
         SortedLists sortedLists = findOne();
         sortedLists.sortByType(type);
-        return sortedListRepo.save(sortedLists);
+        sortedLists = sortedListRepo.save(sortedLists);
+        return sortedLists;
     }
 
     @Override

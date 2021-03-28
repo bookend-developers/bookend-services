@@ -1,8 +1,6 @@
 package com.bookend.shelfservice.controller;
 
-import com.bookend.shelfservice.exception.MandatoryFieldException;
-import com.bookend.shelfservice.exception.NotFoundException;
-import com.bookend.shelfservice.exception.ShelfNotFound;
+import com.bookend.shelfservice.exception.*;
 import com.bookend.shelfservice.model.ShelfsBook;
 import com.bookend.shelfservice.model.Shelf;
 import com.bookend.shelfservice.model.Tag;
@@ -58,8 +56,10 @@ public class ShelfController {
                                      @RequestBody BookRequest book) throws ShelfNotFound {
 
         Shelf shelf = shelfService.getById(Long.valueOf(shelfID));
-        ShelfsBook shelfsBook = bookService.saveOrUpdate(new ShelfsBook(book.getBookid(),book.getBookName(), shelf));
-        if(shelfsBook== null){
+        ShelfsBook shelfsBook = null;
+        try {
+            shelfsBook = bookService.saveOrUpdate(book ,shelf);
+        } catch (AlreadyExists alreadyExists) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Book is already added to the Shelf.");
         }
         return shelfsBook;
@@ -76,10 +76,11 @@ public class ShelfController {
     @PostMapping("/new")
     public Shelf newShelf(@RequestBody ShelfRequest shelfRequest,
                           OAuth2Authentication auth) throws MandatoryFieldException {
-        Shelf newShelf =shelfService.saveOrUpdate(shelfRequest,auth.getName());
-        if(newShelf== null){
-
-           throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Shelfname is already in use.");
+        Shelf newShelf = null;
+        try {
+            newShelf = shelfService.saveOrUpdate(shelfRequest,auth.getName());
+        } catch (AlreadyExists alreadyExists) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Shelfname is already in use.");
         }
         return newShelf ;
 
@@ -92,8 +93,12 @@ public class ShelfController {
     )
     @GetMapping("/{shelfid}")
 
-    public List<ShelfsBook> getBooks(@PathVariable("shelfid")  String shelfID) throws ShelfNotFound {
-        return shelfService.getBooks(Long.valueOf(shelfID));
+    public List<ShelfsBook> getBooks(@PathVariable("shelfid")  String shelfID) {
+        try {
+            return shelfService.getBooks(Long.valueOf(shelfID));
+        } catch (ShelfNotFound shelfNotFound) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,shelfNotFound.getMessage());
+        }
 
     }
     @ApiOperation(value = "Get user's shelves", response = Shelf.class)
@@ -149,7 +154,9 @@ public class ShelfController {
         if(!shelf.getUsername().equals(auth.getName())){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,"The action is forbidden.");
         }
+
         bookService.delete(bookId,shelfID);
+
 
     }
     @ApiOperation(value = "List tags")
