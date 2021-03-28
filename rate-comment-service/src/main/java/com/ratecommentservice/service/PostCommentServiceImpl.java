@@ -1,5 +1,6 @@
 package com.ratecommentservice.service;
 
+import com.ratecommentservice.exception.PostCommentNotFound;
 import com.ratecommentservice.model.PostComment;
 import com.ratecommentservice.repository.PostCommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +19,20 @@ public class PostCommentServiceImpl implements PostCommentService {
     }
 
     @Override
-    public PostComment commentPost(PostComment comment) {
-        return commentRepository.save(comment);
+    public PostComment commentPost(PostComment comment) throws PostCommentNotFound {
+        PostComment postComment =  commentRepository.save(comment);
+        if(postComment == null){
+            throw new PostCommentNotFound("Post Comments are not found..");
+        }
+        return postComment;
     }
 
     @Override
-    public List<PostComment> getCommentsByPostID(Long postID) {
+    public List<PostComment> getCommentsByPostID(Long postID) throws PostCommentNotFound {
         List<PostComment> comments = commentRepository.findAllByPostIDOrderByDateAsc(postID);
+        if(comments.isEmpty() ){
+            throw new PostCommentNotFound("Post Comments are not found..");
+        }
         Collections.reverse(comments);
         return comments;
     }

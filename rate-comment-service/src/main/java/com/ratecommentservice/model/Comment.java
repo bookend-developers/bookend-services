@@ -29,6 +29,14 @@ public class Comment {
         this.date = LocalDateTime.now();
     }
 
+    public Comment(Long commentId, Book book, String username, String comment) {
+        this.commentId = commentId;
+        this.book = book;
+        this.username = username;
+        this.comment = comment;
+        this.date = LocalDateTime.now();
+    }
+
     public Comment() {
         this.date = LocalDateTime.now();
     }

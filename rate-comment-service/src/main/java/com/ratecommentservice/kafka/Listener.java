@@ -3,6 +3,7 @@ package com.ratecommentservice.kafka;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ratecommentservice.exception.PostCommentNotFound;
 import com.ratecommentservice.model.PostComment;
 import com.ratecommentservice.payload.PostCommentRequest;
 import com.ratecommentservice.service.CommentService;
@@ -60,6 +61,8 @@ public class Listener {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (PostCommentNotFound postCommentNotFound) {
+            postCommentNotFound.printStackTrace();
         }
 
 

@@ -1,6 +1,8 @@
 package com.ratecommentservice.controller;
 
 
+import com.ratecommentservice.exception.BookNotFound;
+import com.ratecommentservice.exception.RateNotFound;
 import com.ratecommentservice.model.Book;
 import com.ratecommentservice.model.Rate;
 import com.ratecommentservice.payload.MessageResponse;
@@ -44,7 +46,7 @@ public class RatingController {
     }
     )
     @GetMapping("/book/{bookId}")
-    public Double getBookRate(@PathVariable("bookId") String  bookId ){
+    public Double getBookRate(@PathVariable("bookId") String  bookId ) throws BookNotFound, RateNotFound {
         Double rate= rateService.getBookAverageRate(bookId);
         if(rate == null){
             return 0.0;
@@ -99,7 +101,7 @@ public class RatingController {
     }
     )
     @DeleteMapping("/delete/{rateid}")
-    public ResponseEntity<?> deleteRate(@PathVariable("rateid") String rateId, OAuth2Authentication auth){
+    public ResponseEntity<?> deleteRate(@PathVariable("rateid") String rateId, OAuth2Authentication auth) throws RateNotFound {
         Rate rate =rateService.findByRateID(Long.valueOf(rateId));
         if(rate==null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Comment not found.");

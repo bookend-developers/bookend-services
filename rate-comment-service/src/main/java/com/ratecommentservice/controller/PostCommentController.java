@@ -1,6 +1,7 @@
 package com.ratecommentservice.controller;
 
 
+import com.ratecommentservice.exception.PostCommentNotFound;
 import com.ratecommentservice.model.PostComment;
 
 import com.ratecommentservice.service.PostCommentService;
@@ -30,7 +31,7 @@ public class PostCommentController {
     }
     )
     @GetMapping("/{postid}")
-    public List<PostComment> getPostComments(@PathVariable("postid") Long postID){
+    public List<PostComment> getPostComments(@PathVariable("postid") Long postID) throws PostCommentNotFound {
         return commentService.getCommentsByPostID(postID);
     }
 }
