@@ -18,7 +18,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-
+/**
+ * BS-AC stands for BookService-AdminController
+ * CM stands for ControllerMethod
+ */
 @RestController
 @RequestMapping("/api/book/admin")
 public class AdminController {
@@ -33,6 +36,9 @@ public class AdminController {
     public void setBookService(BookService bookService){
         this.bookService=bookService;
     }
+    /**
+     * BS-AC-1 (CM_25)
+     */
     @ApiOperation(value = "Add new book", response = Book.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully added book"),
@@ -54,6 +60,9 @@ public class AdminController {
 
 
     }
+    /**
+     * BS-AC-2 (CM_26)
+     */
     @ApiOperation(value = "Delete the book")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully deleted book"),
@@ -70,6 +79,9 @@ public class AdminController {
         }
 
     }
+    /**
+     * BS-AC-3 (CM_27)
+     */
     @ApiOperation(value = "Add new genre", response = Genre.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully added genre"),
@@ -91,6 +103,9 @@ public class AdminController {
 
 
     }
+    /**
+     * BS-AC-4 (CM_28)
+     */
     @GetMapping("/unverified")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<Book> listUnverified(){
@@ -100,6 +115,9 @@ public class AdminController {
            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
         }
     }
+    /**
+     * BS-AC-5 (CM_29)
+     */
     @PostMapping("/verify/{bookid}")
     public Book verifyBook(@PathVariable("bookid") String bookId){
         try {
@@ -109,11 +127,17 @@ public class AdminController {
         }
 
     }
+    /**
+     * BS-AC-6 (CM_30)
+     */
     @GetMapping("/genres")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<Genre> listGenres(){
         return genreService.findAll();
     }
+    /**
+     * BS-AC-7 (CM_31)
+     */
     @PostMapping("/genre")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Genre updateGenre(@RequestBody Genre genre){

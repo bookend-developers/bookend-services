@@ -22,10 +22,13 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+/**
+ * RCS-RC stands for RateCommentService-RateController
+ * CM stands for ControllerMethod
+ */
 @RestController
 @RequestMapping("/api/rate")
-public class RatingController {
+public class RateController {
 
     private RateService rateService;
     @Autowired
@@ -38,7 +41,9 @@ public class RatingController {
         this.bookService = bookService;
     }
 
-
+    /**
+     * RCS-RC-1 (CM_48)
+     */
     @ApiOperation(value = "Get book's average rate value ", response = Double.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved rate"),
@@ -55,6 +60,9 @@ public class RatingController {
 
 
     }
+    /**
+     * RCS-RC-2 (CM_49)
+     */
     @ApiOperation(value = "View user's rates ", response = Rate.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved list"),
@@ -68,6 +76,9 @@ public class RatingController {
 
 
     }
+    /**
+     * RCS-RC-3 (CM_50)
+     */
     @ApiOperation(value = "Rate a specific book", response = Rate.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully rating the book"),
@@ -93,6 +104,9 @@ public class RatingController {
         return rateService.save(rateRequest,auth.getName());
 
     }
+    /**
+     * RCS-RC-4 (CM_51)
+     */
     @ApiOperation(value = "Delete a specific rate")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully deleted rate"),
@@ -112,6 +126,9 @@ public class RatingController {
         rateService.deleteRate(rate);
         return ResponseEntity.ok(new MessageResponse("Rate deleted successfully."));
     }
+    /**
+     * RCS-RC-5 (CM_52)
+     */
     @GetMapping("/sort/")
     public List<String> listBookIDs(){
         return bookService.findAll();

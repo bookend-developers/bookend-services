@@ -6,13 +6,11 @@ public class CommentRequest {
     private String comment;
     private Long postID;
     private String username;
-    private LocalDateTime localDateTime;
 
-    public CommentRequest(String comment, Long postID, String username, LocalDateTime localDateTime) {
+    public CommentRequest(String comment, Long postID, String username) {
         this.comment = comment;
         this.postID = postID;
         this.username = username;
-        this.localDateTime = localDateTime;
     }
 
     public CommentRequest() {
@@ -42,11 +40,4 @@ public class CommentRequest {
         this.username = username;
     }
 
-    public LocalDateTime getLocalDateTime() {
-        return localDateTime;
-    }
-
-    public void setLocalDateTime(LocalDateTime localDateTime) {
-        this.localDateTime = localDateTime;
-    }
 }

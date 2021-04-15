@@ -24,6 +24,10 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * BCS-CC stands for BookclubService-ClubController
+ * CM stands for ControllerMethod
+ */
 @RestController
 @RequestMapping("/api/club")
 public class ClubController {
@@ -32,6 +36,10 @@ public class ClubController {
     private ClubService clubService;
     @Autowired
     private MemberService memberService;
+
+    /**
+     * BCS-CC-1 (CM_12)
+     */
     @ApiOperation(value = "Get all clubs", response = Club.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved club list"),
@@ -45,6 +53,9 @@ public class ClubController {
                 .collect(Collectors.toList());
         return publicClubs;
     }
+    /**
+     * BCS-CC-2 (CM_13)
+     */
     @ApiOperation(value = "Get all members of club", response = Member.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved member list"),
@@ -57,6 +68,9 @@ public class ClubController {
 
         return club.getMembers();
     }
+    /**
+     * BCS-CC-3 (CM_14)
+     */
     @ApiOperation(value = "Get Clubs of the user", response = Club.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved club list"),
@@ -68,6 +82,9 @@ public class ClubController {
         return clubService.getMyClubs(username);
 
     }
+    /**
+     * BCS-CC-4 (CM_15)
+     */
     @ApiOperation(value = "Get Club's Post", response = Post.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved post list"),
@@ -77,6 +94,9 @@ public class ClubController {
     public List<Post> getClubPosts(@PathVariable("club-id") Long clubId){
         return clubService.getClubPosts(clubId);
     }
+    /**
+     * BCS-CC-5 (CM_16)
+     */
     @ApiOperation(value = "Get list of invitations of clubs for the user", response = Invitation.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved invitation list"),
@@ -95,6 +115,9 @@ public class ClubController {
     public List<Post> getWriterPosts(@PathVariable("username") String username){
         return clubService.getWriterPosts(username);
     }*/
+    /**
+     * BCS-CC-6 (CM_17)
+     */
     @ApiOperation(value = "Get  specific post", response = Post.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved post"),
@@ -105,7 +128,9 @@ public class ClubController {
         return clubService.findPostByID(postId);
     }
 
-
+    /**
+     * BCS-CC-7 (CM_18)
+     */
     @ApiOperation(value = "Add new club", response = ResponseEntity.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Club added successfully "),
@@ -120,6 +145,9 @@ public class ClubController {
         }
         return ResponseEntity.ok(club);
     }
+    /**
+     * BCS-CC-8 (CM_19)
+     */
     @ApiOperation(value = "Add new member to club", response = ResponseEntity.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully added member"),
@@ -135,7 +163,9 @@ public class ClubController {
         return ResponseEntity.ok(new MessageResponse("member added successfully"));
 
     }
-
+    /**
+     * BCS-CC-9 (CM_20)
+     */
     @ApiOperation(value = "Invite a user to the private club", response = ResponseEntity.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved posts"),
@@ -150,6 +180,9 @@ public class ClubController {
         }
         return ResponseEntity.ok(new MessageResponse("request sent successfully"));
     }
+    /**
+     * BCS-CC-10 (CM_21)
+     */
     @ApiOperation(value = "Reply invitation as reject or accept", response = ResponseEntity.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully replied invitation"),
@@ -160,6 +193,9 @@ public class ClubController {
         clubService.replyInvitation(invitationReply);
         return ResponseEntity.ok(new MessageResponse("request sent successfully"));
     }
+    /**
+     * BCS-CC-11 (CM_22)
+     */
     @ApiOperation(value = "Share new post", response = ResponseEntity.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully shared post."),
@@ -174,6 +210,9 @@ public class ClubController {
         }
         return ResponseEntity.ok(new MessageResponse("new post shared"));
     }
+    /**
+     * BCS-CC-12 (CM_23)
+     */
     @ApiOperation(value = "Comment a post", response = ResponseEntity.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully commented."),
@@ -191,18 +230,20 @@ public class ClubController {
         }
         Club club = post.getClub();
         commentRequest.setUsername(auth.getName());
-
-        boolean check = club.getMembers()
+        boolean isOwner = club.getOwner().getUserName().equalsIgnoreCase(auth.getName());
+        boolean isMember = club.getMembers()
                 .stream()
-                .anyMatch(m -> m.getUserName().equals(auth.getName()));
-        if(check==false){
+                .anyMatch(m -> m.getUserName().equalsIgnoreCase(auth.getName()));
+        if(!isMember && !isOwner){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Only members can comment a post.");
         }
         clubService.sendComment(commentRequest);
 
         return ResponseEntity.ok(new MessageResponse("new comment shared"));
     }
-
+    /**
+     * BCS-CC-13 (CM_24)
+     */
     @GetMapping("/clubs")
     public List<Club> getMyMembershipClub(OAuth2Authentication auth){
         return clubService.getMembershipClub( auth.getName());

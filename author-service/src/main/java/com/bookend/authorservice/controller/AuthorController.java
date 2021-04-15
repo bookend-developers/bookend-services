@@ -15,7 +15,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * AS-AUTHORC stands for AuthorService-AuthorController
+ * CM stands for ControllerMethod
+ */
 @RestController
 @RequestMapping("/api/author")
 public class AuthorController {
@@ -31,6 +34,11 @@ public class AuthorController {
     public void setAuthorService(AuthorService authorService){
         this.authorService=authorService;
     }
+
+
+    /**
+     * AS-AUTHORC-1 (CM_2)
+     */
     @ApiOperation(value = "Get Author with given id", response = Author.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved author"),
@@ -49,6 +57,9 @@ public class AuthorController {
         return author;
 
     }
+    /**
+     * AS-AUTHORC-2 (CM_3)
+     */
     @ApiOperation(value = "Search author", response = Author.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved author list"),
@@ -69,6 +80,9 @@ public class AuthorController {
 
         return authors;
     }
+    /**
+     * AS-AUTHORC-3 (CM_4)
+     */
     @ApiOperation(value = "Get books Id's of the author", response = Book.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved book list"),

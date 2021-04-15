@@ -26,7 +26,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
+/**
+ * BS-BC stands for BookService-BookController
+ * CM stands for ControllerMethod
+ */
 @RestController
 @RequestMapping("/api/book")
 public class BookController {
@@ -41,7 +44,9 @@ public class BookController {
     public void setGenreService(GenreService genreService) {
         this.genreService = genreService;
     }
-
+    /**
+     * BS-BC-1 (CM_32)
+     */
     @ApiOperation(value = "Get the book by Id", response = Book.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved book"),
@@ -60,6 +65,9 @@ public class BookController {
         return book;
 
     }
+    /**
+     * BS-BC-2 (CM_33)
+     */
     @ApiOperation(value = "Search book or get all books", response = Book.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved book list"),
@@ -82,11 +90,14 @@ public class BookController {
 
     }
 
-
+    /**
+     * BS-BC-3 (CM_34)
+     */
     @ApiOperation(value = "Get books of a specific author", response = Book.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved book list"),
-            @ApiResponse(code = 401, message = "You are not authorized to view books.")
+            @ApiResponse(code = 401, message = "You are not authorized to view books."),
+            @ApiResponse(code = 404, message = "Books are not found.")
     })
     @GetMapping("/author/{authorid}")
     public List<Book> getBookOfAuthor(@PathVariable("authorid") String authorId){
@@ -96,6 +107,9 @@ public class BookController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
         }
     }
+    /**
+     * BS-BC-7 (CM_35)
+     */
     @ApiOperation(value = "Add new book", response = Book.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully added book"),

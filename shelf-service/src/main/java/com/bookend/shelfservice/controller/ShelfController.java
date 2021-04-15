@@ -21,7 +21,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.swing.text.TabableView;
 import java.util.List;
-
+/**
+ * SS-SC stands for ShelfService-ShelfController
+ * CM stands for ControllerMethod
+ */
 @RestController
 @RequestMapping("/api/shelf")
 public class ShelfController {
@@ -42,7 +45,9 @@ public class ShelfController {
 
     @Autowired
     public void setShelfService(ShelfService shelfService){ this.shelfService=shelfService;}
-
+    /**
+     * SS-SC-1 (CM_53)
+     */
     @ApiOperation(value = "Add new book to shelf", response = ShelfsBook.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully added book"),
@@ -50,9 +55,8 @@ public class ShelfController {
             @ApiResponse(code = 400, message = "The book is already added this shelf.")
     }
     )
-    @PostMapping("/{shelfid}/{bookid}")
+    @PostMapping("/{shelfid}")
     public ShelfsBook addBookToShelf(@PathVariable("shelfid") String shelfID,
-                                     @PathVariable("bookid") String bookId,
                                      @RequestBody BookRequest book) throws ShelfNotFound {
 
         Shelf shelf = shelfService.getById(Long.valueOf(shelfID));
@@ -66,6 +70,9 @@ public class ShelfController {
 
 
     }
+    /**
+     * SS-SC-2 (CM_54)
+     */
     @ApiOperation(value = "Create new shelf", response = Shelf.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully added shelf"),
@@ -85,6 +92,9 @@ public class ShelfController {
         return newShelf ;
 
     }
+    /**
+     * SS-SC-3 (CM_55)
+     */
     @ApiOperation(value = "Get book  in the shelf", response = String.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved list"),
@@ -101,6 +111,9 @@ public class ShelfController {
         }
 
     }
+    /**
+     * SS-SC-4 (CM_56)
+     */
     @ApiOperation(value = "Get user's shelves", response = Shelf.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved list"),
@@ -113,6 +126,9 @@ public class ShelfController {
 
         return shelfService.findShelvesByUsername(username);
     }
+    /**
+     * SS-SC-5 (CM_57)
+     */
     @ApiOperation(value = "Get current user's shelves", response = Shelf.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved list"),
@@ -125,6 +141,9 @@ public class ShelfController {
 
         return shelfService.findShelvesByUsername(auth.getName());
     }
+    /**
+     * SS-SC-6 (CM_58)
+     */
     @ApiOperation(value = "Delete the shelf")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully deleted shelf"),
@@ -140,6 +159,9 @@ public class ShelfController {
         }
         shelfService.deleteShelf(shelfService.getById(Long.valueOf(shelfID)));
     }
+    /**
+     * SS-SC-7 (CM_59)
+     */
     @ApiOperation(value = "Delete the book from shelves")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully deleted book"),
@@ -159,6 +181,9 @@ public class ShelfController {
 
 
     }
+    /**
+     * SS-SC-8 (CM_60)
+     */
     @ApiOperation(value = "List tags")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved tags"),

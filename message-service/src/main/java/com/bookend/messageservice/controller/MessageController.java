@@ -21,7 +21,10 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import com.bookend.messageservice.model.Message;
 import com.bookend.messageservice.service.MessageService;
 import org.springframework.web.server.ResponseStatusException;
-
+/**
+ * MS-MC stands for MessageService-MessageController
+ * CM stands for ControllerMethod
+ */
 
 @RestController
 @RequestMapping("/api/message")
@@ -32,7 +35,9 @@ public class MessageController {
     public void setMessageService(MessageService messageService){
         this.messageService=messageService;
     }
-
+    /**
+     * MS-MC-1 (CM_36)
+     */
     @ApiOperation(value = "Get message by id ", response = Message.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved message"),
@@ -43,7 +48,9 @@ public class MessageController {
     public Message getMessage(@PathVariable("messageid") String messageId) throws MessageNotFound {
         return messageService.getById(messageId);
     }
-
+    /**
+     * MS-MC-2 (CM_37)
+     */
     @ApiOperation(value = "View user's inbox message ", response = Message.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved message list"),
@@ -60,6 +67,9 @@ public class MessageController {
         return chat;
         
     }
+    /**
+     * MS-MC-3 (CM_38)
+     */
     @ApiOperation(value = "View user's sent message ", response = Message.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved message list"),
@@ -74,6 +84,9 @@ public class MessageController {
         Collections.reverse(chat);
         return chat;
     }
+    /**
+     * MS-MC-4 (CM_39)
+     */
     @ApiOperation(value = "Send a message for a specific user", response = ResponseEntity.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully sending the message"),
@@ -92,6 +105,9 @@ public class MessageController {
     	messageService.saveOrUpdate(message);
         return ResponseEntity.ok("Message is sent");
     }
+    /**
+     * MS-MC-5 (CM_40)
+     */
     @ApiOperation(value = "Delete a specific message")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully deleted message"),
@@ -107,6 +123,9 @@ public class MessageController {
         messageService.deleteMessage(message,auth.getName());
         return ResponseEntity.ok(new MessageResponse("Successfully deleted."));
     }
+    /**
+     * MS-MC-6 (CM_41)
+     */
     @ApiOperation(value = "View user's messages with another user ", response = Message.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved message list"),
