@@ -2,9 +2,9 @@ package com.bookend.bookclubservice.expection;
 
 import org.hibernate.jdbc.Expectation;
 
-public class NotMemberExpection extends Exception {
+public class NotMemberException extends Exception {
 
-    public NotMemberExpection(String message) {
+    public NotMemberException(String message) {
         super(message);
     }
 }

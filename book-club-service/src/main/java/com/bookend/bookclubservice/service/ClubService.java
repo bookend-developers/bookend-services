@@ -1,7 +1,7 @@
 package com.bookend.bookclubservice.service;
 
-import com.bookend.bookclubservice.expection.ClubAllreadyExistExpection;
-import com.bookend.bookclubservice.expection.NotMemberExpection;
+import com.bookend.bookclubservice.expection.ClubAlreadyExistException;
+import com.bookend.bookclubservice.expection.NotMemberException;
 import com.bookend.bookclubservice.kafka.MessageProducer;
 import com.bookend.bookclubservice.payload.MailRequest;
 import com.bookend.bookclubservice.model.Club;
@@ -84,8 +84,11 @@ public class ClubService {
         if(owner == null){
             throw new IllegalArgumentException("There is no such member with that username");
         }
+        if(newClubRequest.getClubName() == null || newClubRequest.getClubName() == ""){
+            throw new IllegalArgumentException("There is no such member with that username");
+        }
         if(clubRepository.findAll().stream().anyMatch(club -> club.getClubName().toLowerCase().matches(newClubRequest.getClubName().toLowerCase()))){
-            throw new ClubAllreadyExistExpection("club allready exist with that clubname");
+            throw new ClubAlreadyExistException("club already exist with that club name");
         }
         Club club = new Club();
         club.setClubName(newClubRequest.getClubName());
@@ -125,9 +128,13 @@ public class ClubService {
         if(invitedPerson==null){
             throw new IllegalArgumentException("member not exist with that username");
         }
+
         Club club = clubRepository.findById(invitationRequest.getClubId()).get();
         if(invitationRepository.findByClubAndInvitedPerson(club,invitedPerson)!=null){
-            throw new IllegalArgumentException("this user allready invited to this club");
+            throw new IllegalArgumentException("this user already invited to this club");
+        }
+        if(invitedPerson.getUserName()==club.getOwner().getUserName()){
+            throw new IllegalArgumentException("Illegal operation.");
         }
         Invitation invitation = new Invitation();
         invitation.setClub(club);
@@ -164,7 +171,7 @@ public class ClubService {
     /**
      * ABCS-CSC-9 (SM_25)
      */
-    public Post savePost(NewPostRequest newPostRequest, String principal) throws NotMemberExpection {
+    public Post savePost(NewPostRequest newPostRequest, String principal) throws NotMemberException, IllegalArgumentException{
         Club club = clubRepository.findById(newPostRequest.getClubId()).orElse(null);
         Member writer = memberRepository.findByUserName(principal);
         if(club==null){
@@ -172,6 +179,12 @@ public class ClubService {
         }
         if(writer==null){
             throw new IllegalArgumentException("writer does not exist with given id");
+        }
+        if(newPostRequest.getText()==null || newPostRequest.getText()==""){
+            throw new IllegalArgumentException("Text field is empty.");
+        }
+        if(newPostRequest.getTitle()==null || newPostRequest.getTitle()==""){
+            throw new IllegalArgumentException("Title field is empty.");
         }
         if(club.getMembers().contains(writer) || club.getOwner().getUserName().equals(writer.getUserName())){
             Post post = new Post();
@@ -182,7 +195,7 @@ public class ClubService {
 
             return postRepository.save(post);
         }else
-            throw new NotMemberExpection("user doesn't belong to club");
+            throw new NotMemberException("user doesn't belong to club");
     }
     /**
      * ABCS-CSC-10 (SM_26)
