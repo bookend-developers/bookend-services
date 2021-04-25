@@ -119,4 +119,5 @@ public class RateServiceImpl implements RateService {
         }
         return rate;
     }
+
 }

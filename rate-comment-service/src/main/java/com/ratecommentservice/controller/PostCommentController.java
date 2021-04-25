@@ -13,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+/**
+ * RCS-PCC stands for RateCommentService-PostCommentController
+ * CM stands for ControllerMethod
+ */
 @RestController
 @RequestMapping("/api/post/comment")
 public class PostCommentController {
@@ -23,7 +26,9 @@ public class PostCommentController {
         this.commentService = commentService;
     }
 
-
+    /**
+     * RCS-PCC-1 (CM_47)
+     */
     @ApiOperation(value = "Get post's comments ", response = PostComment.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved comment list"),

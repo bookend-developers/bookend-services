@@ -21,7 +21,10 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
-
+/**
+ * AUTHS-USC stands for AuthorizationServer-UserServiceClass
+ * SM stands for ServiceMethod
+ */
 @Service
 public class UserService {
 
@@ -36,7 +39,9 @@ public class UserService {
     @Autowired
     private RoleRepository roleRepository;
 
-
+    /**
+     * AUTHS-USC-1 (SM_11)
+     */
     public SignUpResponse addUser(SignUpRequest signUpRequest){
         User user = new User();
         if(userDetailRepository.existsByEmail(signUpRequest.getEmail())){
@@ -63,7 +68,9 @@ public class UserService {
                         "" + "localhost:9191/api/oauth/confirm/"+ token.getConfirmationToken()));
         return new SignUpResponse("user registered. need confirmation",token.getConfirmationToken());
     }
-    
+    /**
+     * AUTHS-USC-2 (SM_12)
+     */
     public ResetPasswordResponse resetPassword(ResetPasswordRequest resetPasswordRequest) {
     	User user = userDetailRepository.findUserByEmail(resetPasswordRequest.getEmail());
     	if (user == null){
@@ -80,13 +87,21 @@ public class UserService {
     	
     	return new ResetPasswordResponse("need confirmation to reset passsword",token.getConfirmationToken());
     }
-
+    /**
+     * AUTHS-USC-3 (SM_13)
+     */
     public User save(User user){
         return userDetailRepository.save(user);
     }
+    /**
+     * AUTHS-USC-4 (SM_14)
+     */
     public User findByUsername(String username){
         return userDetailRepository.findUserByUsername(username);
     }
+    /**
+     * AUTHS-USC-5 (SM_15)
+     */
     public ConfirmResponse confirm(String token){
 
         Token confirmationToken = tokenRepository.findByConfirmationToken(token);
@@ -104,7 +119,9 @@ public class UserService {
         messageProducer.sendUserInformation(new KafkaUserRegistered(user.getId(),user.getUsername(),user.getEmail()));
         return  new ConfirmResponse("confirmed successfully",user.getUsername());
     }
-    
+    /**
+     * AUTHS-USC-6 (SM_16)
+     */
     public ConfirmResponse confirmPassword(String token,NewPasswordRequest newPasswordRequest){
 
         Token confirmationToken = tokenRepository.findByConfirmationToken(token);

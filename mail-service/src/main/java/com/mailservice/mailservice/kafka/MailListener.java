@@ -37,7 +37,7 @@ public class MailListener {
 
     @KafkaListener(topics = "Mail",
             groupId ="mailservice")
-    public void consumeBook(String message) {
+    public void consumeMail(String message) {
         System.out.println(message);
         ObjectMapper mapper = new ObjectMapper();
         try {

@@ -1,8 +1,8 @@
 package com.bookend.bookclubservice.serviceTest;
 
 
-import com.bookend.bookclubservice.expection.ClubAllreadyExistExpection;
-import com.bookend.bookclubservice.expection.NotMemberExpection;
+import com.bookend.bookclubservice.expection.ClubAlreadyExistException;
+import com.bookend.bookclubservice.expection.NotMemberException;
 import com.bookend.bookclubservice.kafka.MessageProducer;
 import com.bookend.bookclubservice.model.Club;
 import com.bookend.bookclubservice.model.Invitation;
@@ -127,7 +127,7 @@ public class clubServiceTest {
         Club club = new Club((long) 1,"clubname","test",member,true);
         clubs.add(club);
         given(clubRepository.findAll()).willReturn(clubs);
-        assertThrows(ClubAllreadyExistExpection.class,()->{
+        assertThrows(ClubAlreadyExistException.class,()->{
             clubService.saveClub(newClubRequest);
         });
     }
@@ -284,12 +284,12 @@ public class clubServiceTest {
         Club club = new Club((long)1,"","",member,true);
         given(memberRepository.findByUserName("member")).willReturn(member2);
         given(clubRepository.findById((long)1)).willReturn(Optional.of(club));
-        assertThrows(NotMemberExpection.class,()->{
+        assertThrows(NotMemberException.class,()->{
             clubService.savePost(newPostRequest, "member");
         });
     }
     @Test
-    void shouldSavePost() throws NotMemberExpection {
+    void shouldSavePost() throws NotMemberException {
         NewPostRequest newPostRequest = new NewPostRequest("title","text",(long)1);
         Member member = new Member((long)1,"member");
         Club club = new Club((long)1,"","",member,true);

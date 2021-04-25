@@ -1,6 +1,6 @@
 package com.bookend.bookclubservice.controller;
 
-import com.bookend.bookclubservice.expection.NotMemberExpection;
+import com.bookend.bookclubservice.expection.NotMemberException;
 
 import com.bookend.bookclubservice.model.Club;
 import com.bookend.bookclubservice.model.Invitation;
@@ -24,6 +24,10 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * BCS-CC stands for BookclubService-ClubController
+ * CM stands for ControllerMethod
+ */
 @RestController
 @RequestMapping("/api/club")
 public class ClubController {
@@ -32,6 +36,10 @@ public class ClubController {
     private ClubService clubService;
     @Autowired
     private MemberService memberService;
+
+    /**
+     * BCS-CC-1 (CM_12)
+     */
     @ApiOperation(value = "Get all clubs", response = Club.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved club list"),
@@ -45,6 +53,9 @@ public class ClubController {
                 .collect(Collectors.toList());
         return publicClubs;
     }
+    /**
+     * BCS-CC-2 (CM_13)
+     */
     @ApiOperation(value = "Get all members of club", response = Member.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved member list"),
@@ -57,6 +68,9 @@ public class ClubController {
 
         return club.getMembers();
     }
+    /**
+     * BCS-CC-3 (CM_14)
+     */
     @ApiOperation(value = "Get Clubs of the user", response = Club.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved club list"),
@@ -65,9 +79,18 @@ public class ClubController {
 
     @GetMapping("/{username}")
     public List<Club> getMyClubs(@PathVariable("username")String username){
-        return clubService.getMyClubs(username);
+        try{
+            return clubService.getMyClubs(username);
+        }
+        catch (IllegalArgumentException illegalArgumentException) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,illegalArgumentException.getMessage());
+        }
+
 
     }
+    /**
+     * BCS-CC-4 (CM_15)
+     */
     @ApiOperation(value = "Get Club's Post", response = Post.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved post list"),
@@ -77,6 +100,9 @@ public class ClubController {
     public List<Post> getClubPosts(@PathVariable("club-id") Long clubId){
         return clubService.getClubPosts(clubId);
     }
+    /**
+     * BCS-CC-5 (CM_16)
+     */
     @ApiOperation(value = "Get list of invitations of clubs for the user", response = Invitation.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved invitation list"),
@@ -95,6 +121,9 @@ public class ClubController {
     public List<Post> getWriterPosts(@PathVariable("username") String username){
         return clubService.getWriterPosts(username);
     }*/
+    /**
+     * BCS-CC-6 (CM_17)
+     */
     @ApiOperation(value = "Get  specific post", response = Post.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved post"),
@@ -105,7 +134,9 @@ public class ClubController {
         return clubService.findPostByID(postId);
     }
 
-
+    /**
+     * BCS-CC-7 (CM_18)
+     */
     @ApiOperation(value = "Add new club", response = ResponseEntity.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Club added successfully "),
@@ -113,13 +144,22 @@ public class ClubController {
     })
     @PostMapping("/add")
     public ResponseEntity<?> addClub(@RequestBody NewClubRequest newClubRequest){
-
-        Club club = clubService.saveClub(newClubRequest);
-        if(club==null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Club name is already in use");
+        try{
+            Club club = clubService.saveClub(newClubRequest);
+            if(club==null){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Club name is already in use");
+            }
+            return ResponseEntity.ok(club);
         }
-        return ResponseEntity.ok(club);
+        catch (IllegalArgumentException illegalArgumentException) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,illegalArgumentException.getMessage());
+        }
+
+
     }
+    /**
+     * BCS-CC-8 (CM_19)
+     */
     @ApiOperation(value = "Add new member to club", response = ResponseEntity.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully added member"),
@@ -135,7 +175,9 @@ public class ClubController {
         return ResponseEntity.ok(new MessageResponse("member added successfully"));
 
     }
-
+    /**
+     * BCS-CC-9 (CM_20)
+     */
     @ApiOperation(value = "Invite a user to the private club", response = ResponseEntity.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved posts"),
@@ -143,13 +185,20 @@ public class ClubController {
     })
     @PostMapping("/invite-person")
     public ResponseEntity<?> invitePerson(@RequestBody InvitationRequest invitationRequest){
-
-        Invitation invitation =clubService.invitePerson(invitationRequest);
-        if(invitation==null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"You already invite this person or person does not exist.");
+        try{
+            Invitation invitation =clubService.invitePerson(invitationRequest);
+            if(invitation==null){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"You already invite this person or person does not exist.");
+            }
+        }
+         catch (IllegalArgumentException illegalArgumentException) {
+            return ResponseEntity.badRequest().body(new MessageResponse(illegalArgumentException.getMessage()));
         }
         return ResponseEntity.ok(new MessageResponse("request sent successfully"));
     }
+    /**
+     * BCS-CC-10 (CM_21)
+     */
     @ApiOperation(value = "Reply invitation as reject or accept", response = ResponseEntity.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully replied invitation"),
@@ -158,22 +207,31 @@ public class ClubController {
     @PostMapping("/reply-invitation")
     public ResponseEntity<?> acceptPerson(@RequestBody InvitationReply invitationReply){
         clubService.replyInvitation(invitationReply);
-        return ResponseEntity.ok(new MessageResponse("request sent successfully"));
+        return ResponseEntity.ok(new MessageResponse("successfully"));
     }
+    /**
+     * BCS-CC-11 (CM_22)
+     */
     @ApiOperation(value = "Share new post", response = ResponseEntity.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully shared post."),
-            @ApiResponse(code = 401, message = "You are not authorized to share post.")
+            @ApiResponse(code = 401, message = "You are not authorized to share post."),
+            @ApiResponse(code = 400, message = "You are trying to post with invalid data.")
     })
     @PostMapping("/new-post")
     public ResponseEntity<?> sharePost(@RequestBody NewPostRequest newPostRequest, OAuth2Authentication auth){
         try {
             clubService.savePost(newPostRequest,(String) auth.getPrincipal());
-        } catch (NotMemberExpection notMemberExpection) {
-            return ResponseEntity.badRequest().body(new MessageResponse(notMemberExpection.getMessage()));
+        } catch (NotMemberException notMemberException) {
+            return ResponseEntity.badRequest().body(new MessageResponse(notMemberException.getMessage()));
+        } catch (IllegalArgumentException illegalArgumentException) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,illegalArgumentException.getMessage());
         }
         return ResponseEntity.ok(new MessageResponse("new post shared"));
     }
+    /**
+     * BCS-CC-12 (CM_23)
+     */
     @ApiOperation(value = "Comment a post", response = ResponseEntity.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully commented."),
@@ -189,20 +247,25 @@ public class ClubController {
         if(post==null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Post is not found");
         }
+        if(commentRequest.getComment()==null||commentRequest.getComment()==""){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Mandatory field is empty.");
+        }
         Club club = post.getClub();
         commentRequest.setUsername(auth.getName());
-
-        boolean check = club.getMembers()
+        boolean isOwner = club.getOwner().getUserName().equalsIgnoreCase(auth.getName());
+        boolean isMember = club.getMembers()
                 .stream()
-                .anyMatch(m -> m.getUserName().equals(auth.getName()));
-        if(check==false){
+                .anyMatch(m -> m.getUserName().equalsIgnoreCase(auth.getName()));
+        if(!isMember && !isOwner){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Only members can comment a post.");
         }
         clubService.sendComment(commentRequest);
 
         return ResponseEntity.ok(new MessageResponse("new comment shared"));
     }
-
+    /**
+     * BCS-CC-13 (CM_24)
+     */
     @GetMapping("/clubs")
     public List<Club> getMyMembershipClub(OAuth2Authentication auth){
         return clubService.getMembershipClub( auth.getName());

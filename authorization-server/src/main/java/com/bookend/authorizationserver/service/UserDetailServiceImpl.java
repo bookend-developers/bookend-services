@@ -11,13 +11,19 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-
+/**
+ * AUTHS-UDSC stands for AuthorizationServer-UserDetailsServiceClass
+ * SM stands for ServiceMethods
+ */
 @Service("userDetailsService")
 public class UserDetailServiceImpl implements UserDetailsService {
 
     @Autowired
     private UserDetailRepository userDetailRepository;
 
+    /**
+     * AUTHS-UDSC-1 (SM_10)
+     */
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
 

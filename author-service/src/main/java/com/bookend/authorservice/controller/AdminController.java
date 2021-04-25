@@ -14,7 +14,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
+/**
+ * AS-ADMINC stands for AuthorService-AdminController
+ * CM stands for ControllerMethod
+ */
 @RestController
 @RequestMapping("/api/author/admin")
 public class AdminController {
@@ -29,6 +32,11 @@ public class AdminController {
     public void setAuthorService(AuthorService authorService){
         this.authorService=authorService;
     }
+
+
+    /**
+     * AS-ADMINC-1 (CM_1)
+     */
     @ApiOperation(value = "Add new author", response = Author.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully added author"),
