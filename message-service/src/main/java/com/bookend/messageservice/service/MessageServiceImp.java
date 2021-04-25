@@ -66,7 +66,7 @@ public class MessageServiceImp implements MessageService{
 		if(message.getText()==null || message.getText() == ""){
 			throw new MandatoryFieldException("Text cannot be empty.");
 		}
-		message.setText(message.getSubject());
+		message.setText(message.getText());
 
 		if(message.getSendDate()==null){
 			throw new MandatoryFieldException("Date cannot be empty.");

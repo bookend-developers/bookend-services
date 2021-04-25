@@ -38,7 +38,8 @@ public class Message implements Comparable<Message> {
 		this.sendDate = sendDate;
 	}
 
-    public String getId() {
+
+	public String getId() {
 		return id;
 	}
 
@@ -52,6 +53,14 @@ public class Message implements Comparable<Message> {
 
 	public void setSender(String sender) {
 		this.sender = sender;
+	}
+
+	public String getReceiver() {
+		return receiver;
+	}
+
+	public void setReceiver(String receiver) {
+		this.receiver = receiver;
 	}
 
 	public String getSubject() {
@@ -76,14 +85,6 @@ public class Message implements Comparable<Message> {
 
 	public void setSendDate(Date sendDate) {
 		this.sendDate = sendDate;
-	}
-	
-	public String getReceiver() {
-		return receiver;
-	}
-
-	public void setReceiver(String receiver) {
-		this.receiver = receiver;
 	}
 
 	@Override

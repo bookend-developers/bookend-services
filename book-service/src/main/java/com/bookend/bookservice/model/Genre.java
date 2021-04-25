@@ -9,8 +9,6 @@ public class Genre {
     private String id;
     private String genre;
 
-
-
     public Genre() {
     }
 

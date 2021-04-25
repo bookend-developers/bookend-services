@@ -96,6 +96,11 @@ public class BookController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
         }
     }
+
+    @GetMapping("/genres")
+    public List<Genre> getAllGenres(){
+        return genreService.findAll();
+    }
     @ApiOperation(value = "Add new book", response = Book.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully added book"),
