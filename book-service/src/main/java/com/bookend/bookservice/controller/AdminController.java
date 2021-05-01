@@ -74,6 +74,7 @@ public class AdminController {
     public void delete(@PathVariable("bookid") String bookId){
         try {
             bookService.delete(bookId);
+            bookService.delete(bookId);
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
         }

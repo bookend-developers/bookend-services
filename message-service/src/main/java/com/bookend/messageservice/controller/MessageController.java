@@ -97,7 +97,7 @@ public class MessageController {
 
     @PostMapping("/new/{receiverUser}")
     public ResponseEntity<String> sendMessage(@PathVariable("receiverUser") String receiver, @RequestBody Message message, OAuth2Authentication auth ) throws MandatoryFieldException {
-        message.setReceiver(receiver);
+
         message.setSender(auth.getName());
         message.setSubject(message.getSubject());
         message.setText(message.getText());

@@ -53,7 +53,7 @@ public class RateController {
     @GetMapping("/book/{bookId}")
     public Double getBookRate(@PathVariable("bookId") String  bookId ) throws BookNotFound, RateNotFound {
         Double rate= rateService.getBookAverageRate(bookId);
-        if(rate == null){
+        if(rate != null){
             return 0.0;
         }
         return rate;
@@ -118,9 +118,9 @@ public class RateController {
     public ResponseEntity<?> deleteRate(@PathVariable("rateid") String rateId, OAuth2Authentication auth) throws RateNotFound {
         Rate rate =rateService.findByRateID(Long.valueOf(rateId));
         if(rate==null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Comment not found.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Rate not found.");
         }
-        if(!rate.getUsername().equals(auth.getName())){
+        if(rate.getUsername().equals(auth.getName())){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,"The operation you trying to do is forbidden.");
         }
         rateService.deleteRate(rate);

@@ -221,7 +221,7 @@ public class ClubController {
     @PostMapping("/new-post")
     public ResponseEntity<?> sharePost(@RequestBody NewPostRequest newPostRequest, OAuth2Authentication auth){
         try {
-            clubService.savePost(newPostRequest,(String) auth.getPrincipal());
+            clubService.savePost(newPostRequest,null);
         } catch (NotMemberException notMemberException) {
             return ResponseEntity.badRequest().body(new MessageResponse(notMemberException.getMessage()));
         } catch (IllegalArgumentException illegalArgumentException) {

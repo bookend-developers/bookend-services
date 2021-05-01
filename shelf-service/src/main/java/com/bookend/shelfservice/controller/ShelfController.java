@@ -59,7 +59,7 @@ public class ShelfController {
     public ShelfsBook addBookToShelf(@PathVariable("shelfid") String shelfID,
                                      @RequestBody BookRequest book) throws ShelfNotFound {
 
-        Shelf shelf = shelfService.getById(Long.valueOf(shelfID));
+        Shelf shelf = shelfService.getById(null);
         ShelfsBook shelfsBook = null;
         try {
             shelfsBook = bookService.saveOrUpdate(book ,shelf);
