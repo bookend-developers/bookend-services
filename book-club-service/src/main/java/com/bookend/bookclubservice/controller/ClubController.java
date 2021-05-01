@@ -247,7 +247,7 @@ public class ClubController {
         if(post==null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Post is not found");
         }
-        if(commentRequest.getComment()==null||commentRequest.getComment()==""){
+        if(commentRequest.getComment()==null&&commentRequest.getComment().equals("")){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Mandatory field is empty.");
         }
         Club club = post.getClub();

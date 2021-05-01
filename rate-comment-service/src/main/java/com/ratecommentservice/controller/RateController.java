@@ -92,7 +92,7 @@ public class RateController {
         if(rateRequest.getRate()== null){
             throw  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Please fill all necessary places");
         }
-        if(rateRequest.getBookId()== null){
+        if(rateRequest.getBookId()!= null){
             throw  new ResponseStatusException(HttpStatus.BAD_REQUEST,"The way you are trying to rate is not accepted.");
         }
         if(rateRequest.getBookname()== null){
