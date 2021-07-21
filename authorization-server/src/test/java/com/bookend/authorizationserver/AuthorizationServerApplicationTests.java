@@ -3,10 +3,10 @@ package com.bookend.authorizationserver;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+//@SpringBootTest
 class AuthorizationServerApplicationTests {
 
-	@Test
+	//@Test
 	void contextLoads() {
 	}
 

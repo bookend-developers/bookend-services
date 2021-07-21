@@ -225,7 +225,8 @@ public class clubServiceTest {
     void shouldNotSendInvitation(){
         InvitationRequest  invitationRequest = new InvitationRequest((long)1,"invitationMem");
         Member member = new Member((long)1,"invitationMem");
-        Club club = new Club((long)1,"","",member,true);
+        Member owner = new Member((long)2,"owner");
+        Club club = new Club((long)1,"","",owner,true);
         Invitation invitation = new Invitation((long)1,club,member);
         given(memberRepository.findByUserName("invitationMem")).willReturn(member);
         given(clubRepository.findById((long)1)).willReturn(java.util.Optional.of(club));
