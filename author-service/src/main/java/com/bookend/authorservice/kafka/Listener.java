@@ -1,5 +1,7 @@
 package com.bookend.authorservice.kafka;
 
+import com.bookend.authorservice.exception.MandatoryFieldException;
+import com.bookend.authorservice.exception.NotFoundException;
 import com.bookend.authorservice.model.Author;
 import com.bookend.authorservice.model.Book;
 import com.bookend.authorservice.service.AuthorService;
@@ -32,15 +34,15 @@ public class Listener {
         ObjectMapper mapper = new ObjectMapper();
         try {
           Map<String,String> msg = mapper.readValue(message,Map.class);
-          Author author = authorService.getById(msg.get("author"));
 
-          Book book= new Book(msg.get("book"),author);
-          bookService.save(book);
-          author.getBookList().add(book);
-          authorService.update(author);
+          authorService.update(msg);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NotFoundException notFoundException) {
+            notFoundException.printStackTrace();
+        } catch (MandatoryFieldException e) {
             e.printStackTrace();
         }
 
@@ -51,7 +53,11 @@ public class Listener {
 
         System.out.println(message);
         String[] splited = message.split("\"");
-        bookService.deleteByBookId(splited[1]);
+        try {
+            bookService.deleteByBookId(splited[1]);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 

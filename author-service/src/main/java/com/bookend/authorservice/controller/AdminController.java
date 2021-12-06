@@ -1,7 +1,8 @@
 package com.bookend.authorservice.controller;
 
+import com.bookend.authorservice.exception.AuthorAlreadyExists;
+import com.bookend.authorservice.exception.MandatoryFieldException;
 import com.bookend.authorservice.model.Author;
-import com.bookend.authorservice.model.Book;
 import com.bookend.authorservice.payload.AuthorRequest;
 import com.bookend.authorservice.service.AuthorService;
 import com.bookend.authorservice.service.BookService;
@@ -9,20 +10,14 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.security.Principal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.Locale;
-
+/**
+ * AS-ADMINC stands for AuthorService-AdminController
+ * CM stands for ControllerMethod
+ */
 @RestController
 @RequestMapping("/api/author/admin")
 public class AdminController {
@@ -37,6 +32,11 @@ public class AdminController {
     public void setAuthorService(AuthorService authorService){
         this.authorService=authorService;
     }
+
+
+    /**
+     * AS-ADMINC-1 (CM_1)
+     */
     @ApiOperation(value = "Add new author", response = Author.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully added author"),
@@ -46,26 +46,18 @@ public class AdminController {
     )
     @PostMapping("/new")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public Author newAuthor(@RequestBody AuthorRequest author, Principal principal)  {
+    public Author newAuthor(@RequestBody AuthorRequest author)  {
 
-        Author newAuthor = new Author();
-        if(author.getName()==null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Author name field cannot be empty.");
-        }
-        newAuthor.setName(author.getName());
-        newAuthor.setBiography(author.getBiography());
-        newAuthor.setBirthDate(LocalDate.parse(author.getBirthDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.US)));
 
-        if(author.getDateOfDeath()==""){
-            newAuthor.setDateOfDeath(null);
-        }else{
-            newAuthor.setDateOfDeath(LocalDate.parse(author.getDateOfDeath(), DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.US)));
+        Author addedAuthor = null;
+        try {
+            addedAuthor = authorService.save(author);
+        } catch (AuthorAlreadyExists  authorAlreadyExists) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,authorAlreadyExists.getMessage());
+        } catch (MandatoryFieldException mandatoryFieldException) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, mandatoryFieldException.getMessage());
         }
-        Author addedAuthor = authorService.saveOrUpdate(newAuthor);
-        if(addedAuthor==null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Author already exists.");
 
-        }
         return addedAuthor;
 
     }

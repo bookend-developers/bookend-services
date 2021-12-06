@@ -3,10 +3,10 @@ package com.bookend.bookservice;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+//@SpringBootTest
 class BookServiceApplicationTests {
 
-	@Test
+	//@Test
 	void contextLoads() {
 	}
 

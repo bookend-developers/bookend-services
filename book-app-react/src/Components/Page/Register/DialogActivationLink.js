@@ -39,7 +39,9 @@ export default function DialogSelect(props) {
                 }else{
                     alert(result)
                 }
-            })
+            }).catch((err)=> {
+            alert("Authorization service temporarily is offline for maintenance.")
+        })
     }
 
     return (

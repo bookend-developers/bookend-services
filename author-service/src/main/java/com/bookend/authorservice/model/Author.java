@@ -24,6 +24,21 @@ public class Author {
         this.bookList=new ArrayList<Book>();
     }
 
+    public Author(String id, String name) {
+        this.id = id;
+        this.bookList = new ArrayList<Book>();
+        this.name = name;
+    }
+
+    public Author(String id, String name, String biography, LocalDate birthDate, LocalDate dateOfDeath) {
+        this.id = id;
+        this.name = name;
+        this.bookList = new ArrayList<Book>();
+        this.biography = biography;
+        this.birthDate = birthDate;
+        this.dateOfDeath = dateOfDeath;
+    }
+
     public Author(String name, String biography, LocalDate birthDate, LocalDate dateOfDeath) {
         this.name = name;
         this.biography=biography;

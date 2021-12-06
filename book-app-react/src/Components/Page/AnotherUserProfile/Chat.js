@@ -71,6 +71,8 @@ export default class FetchRandomUser extends React.Component {
                     this.props.history.push("/");
                     window.location.reload();
                 }
+        }).catch((err)=> {
+            alert("Message service temporarily is offline for maintenance.")
         })
     }
 
@@ -94,7 +96,9 @@ export default class FetchRandomUser extends React.Component {
                     this.props.history.push("/");
                     window.location.reload();
                 }
-            })
+            }).catch((err)=> {
+            alert("Message service temporarily is offline for maintenance.")
+        })
     }
 
     componentDidMount() {
@@ -160,7 +164,7 @@ export default class FetchRandomUser extends React.Component {
                                </TableRow>
                         )}
                             <TablePagination
-                                count={50}
+                                count={this.state.chat.length}
                                 page={this.state.page}
                                 onChangePage={this.handleChangePage}
                                 rowsPerPage={this.state.rowsPerPage}

@@ -124,4 +124,17 @@ public class Book {
         this.comments = new ArrayList<>();
         this.rate = 0.0;
     }
+    public Book(String id,Integer page, Genre genre, String description, String bookName, String author, String authorid, boolean verified, String ISBN) {
+        this.id = id;
+        this.page = page;
+        this.genre = genre;
+        this.description = description;
+        this.bookName = bookName;
+        this.author = author;
+        this.authorid = authorid;
+        this.verified = verified;
+        this.ISBN = ISBN;
+        this.comments = new ArrayList<>();
+        this.rate = 0.0;
+    }
 }

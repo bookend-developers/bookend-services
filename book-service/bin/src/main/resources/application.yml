@@ -6,7 +6,7 @@ spring:
     mongodb:
       host: localhost
       port: 27017
-      database: book-service
+      database: book-com.bookclupservice.bookclubservice.service
   datasource:
     kafka:
       producer:

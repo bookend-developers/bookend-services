@@ -15,7 +15,7 @@ public class Token {
 
     private LocalDateTime createdDate;
 
-    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
+    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
 

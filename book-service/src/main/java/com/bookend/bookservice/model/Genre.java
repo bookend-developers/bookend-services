@@ -9,9 +9,12 @@ public class Genre {
     private String id;
     private String genre;
 
-
-
     public Genre() {
+    }
+
+    public Genre(String id, String genre) {
+        this.id = id;
+        this.genre = genre;
     }
 
     public Genre(String genre) {

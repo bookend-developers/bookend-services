@@ -1,0 +1,29 @@
+version: "3"
+services:
+  mysqldb:
+    image: mysql:8
+    container_name: mysqldb
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: bookend-book-club
+    networks:
+      - default
+
+  book-club-service:
+    #image: ekremozturk/book-club-service
+    build: .
+    depends_on:
+      - mysqldb
+    container_name: book-club-container
+    ports:
+      - 8089:8089
+    networks:
+      - default
+
+volumes:
+  backUpBcDb:
+
+networks:
+  default:
+    external: true
+    name: bookendnet

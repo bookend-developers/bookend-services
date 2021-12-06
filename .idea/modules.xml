@@ -2,14 +2,20 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/author-service/.mvn/.mvn.iml" filepath="$PROJECT_DIR$/author-service/.mvn/.mvn.iml" />
+      <module fileurl="file://$PROJECT_DIR$/authorization-server/.mvn/.mvn1.iml" filepath="$PROJECT_DIR$/authorization-server/.mvn/.mvn1.iml" />
       <module fileurl="file://$PROJECT_DIR$/book-service/Book-service.iml" filepath="$PROJECT_DIR$/book-service/Book-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/author-service/author-service.iml" filepath="$PROJECT_DIR$/author-service/author-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/authorization-server/authorization-server.iml" filepath="$PROJECT_DIR$/authorization-server/authorization-server.iml" />
       <module fileurl="file://$PROJECT_DIR$/book-club-service/book-club-service.iml" filepath="$PROJECT_DIR$/book-club-service/book-club-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/mail-service/mail-service.iml" filepath="$PROJECT_DIR$/mail-service/mail-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/author-service/src/main/main.iml" filepath="$PROJECT_DIR$/author-service/src/main/main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/authorization-server/src/main/main1.iml" filepath="$PROJECT_DIR$/authorization-server/src/main/main1.iml" />
       <module fileurl="file://$PROJECT_DIR$/message-service/message-service.iml" filepath="$PROJECT_DIR$/message-service/message-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/rate-comment-service/rate-comment-service.iml" filepath="$PROJECT_DIR$/rate-comment-service/rate-comment-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/shelf-service/shelf-service.iml" filepath="$PROJECT_DIR$/shelf-service/shelf-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/author-service/src/test/test.iml" filepath="$PROJECT_DIR$/author-service/src/test/test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/authorization-server/src/test/test1.iml" filepath="$PROJECT_DIR$/authorization-server/src/test/test1.iml" />
     </modules>
   </component>
 </project>

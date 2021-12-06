@@ -55,7 +55,9 @@ export default function DialogSelect(props) {
                     this.props.history.push("/");
                     window.location.reload();
                 }
-            })
+            }).catch((err)=> {
+            alert("Authorization service temporarily is offline for maintenance.")
+        })
     }
 
 
@@ -86,7 +88,9 @@ export default function DialogSelect(props) {
                     this.props.history.push("/");
                     window.location.reload();
                 }
-            })
+            }).catch((err)=> {
+            alert("Authorization service temporarily is offline for maintenance.")
+        })
     }
 
 

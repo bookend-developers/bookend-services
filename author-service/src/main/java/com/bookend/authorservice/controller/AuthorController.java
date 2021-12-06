@@ -1,24 +1,24 @@
 package com.bookend.authorservice.controller;
 
+import com.bookend.authorservice.exception.NotFoundException;
 import com.bookend.authorservice.model.Author;
 import com.bookend.authorservice.model.Book;
-import com.bookend.authorservice.payload.AuthorRequest;
 import com.bookend.authorservice.service.AuthorService;
 import com.bookend.authorservice.service.BookService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * AS-AUTHORC stands for AuthorService-AuthorController
+ * CM stands for ControllerMethod
+ */
 @RestController
 @RequestMapping("/api/author")
 public class AuthorController {
@@ -34,6 +34,11 @@ public class AuthorController {
     public void setAuthorService(AuthorService authorService){
         this.authorService=authorService;
     }
+
+
+    /**
+     * AS-AUTHORC-1 (CM_2)
+     */
     @ApiOperation(value = "Get Author with given id", response = Author.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved author"),
@@ -42,13 +47,19 @@ public class AuthorController {
     })
     @GetMapping("/{authorid}")
     public Author getAuthorInfo(@PathVariable("authorid") String authorId) {
-        Author author= authorService.getById(authorId);
-        if(author==null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Author is not found");
+        Author author= null;
+        try {
+            author = authorService.getById(authorId);
+        } catch (NotFoundException notFoundException) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, notFoundException.getMessage());
         }
+
         return author;
 
     }
+    /**
+     * AS-AUTHORC-2 (CM_3)
+     */
     @ApiOperation(value = "Search author", response = Author.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved author list"),
@@ -69,6 +80,9 @@ public class AuthorController {
 
         return authors;
     }
+    /**
+     * AS-AUTHORC-3 (CM_4)
+     */
     @ApiOperation(value = "Get books Id's of the author", response = Book.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved book list"),
@@ -77,9 +91,11 @@ public class AuthorController {
     })
     @GetMapping("/books")
     public List<Book> getAuthorBooks(@RequestParam String authorid){
-        Author author = authorService.getById(authorid);
-        if(author== null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"The author does not exist.");
+        Author author = null;
+        try {
+            author = authorService.getById(authorid);
+        } catch (NotFoundException notFoundException) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, notFoundException.getMessage());
         }
         return author.getBookList();
     }

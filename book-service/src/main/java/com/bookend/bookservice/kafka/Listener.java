@@ -1,5 +1,6 @@
 package com.bookend.bookservice.kafka;
 
+import com.bookend.bookservice.exception.NotFoundException;
 import com.bookend.bookservice.model.Book;
 import com.bookend.bookservice.service.BookService;
 import com.bookend.bookservice.service.SortService;
@@ -37,16 +38,18 @@ public class Listener {
         try {
             Map<String,String> msg = mapper.readValue(message,Map.class);
             Book book = bookService.getById(msg.get("book"));
-            sortService.remove(book,"comment");
+            sortService.remove(book);
             System.out.println(msg.get("comment"));
             System.out.println(Long.valueOf(msg.get("comment")));
             book.getComments().add(Long.valueOf(msg.get("comment")));
             Book updatedBook = bookService.update(book);
-            sortService.add(updatedBook,"comment");
+            sortService.add(updatedBook);
             sortService.sort("comment");
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NotFoundException e) {
             e.printStackTrace();
         }
 
@@ -61,14 +64,16 @@ public class Listener {
             Map<String,String> msg = mapper.readValue(message,Map.class);
 
             Book book = bookService.getById(msg.get("book"));
-            sortService.remove(book,"rate");
+            sortService.remove(book);
             book.setRate(Double.valueOf(msg.get("rate")));
             Book updatedBook = bookService.update(book);
-            sortService.add(updatedBook,"rate");
+            sortService.add(updatedBook);
             sortService.sort("rate");
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NotFoundException e) {
             e.printStackTrace();
         }
     }

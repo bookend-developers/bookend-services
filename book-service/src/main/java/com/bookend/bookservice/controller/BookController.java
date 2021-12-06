@@ -1,5 +1,8 @@
 package com.bookend.bookservice.controller;
 
+import com.bookend.bookservice.exception.AlreadyExist;
+import com.bookend.bookservice.exception.MandatoryFieldException;
+import com.bookend.bookservice.exception.NotFoundException;
 import com.bookend.bookservice.model.Book;
 import com.bookend.bookservice.model.Genre;
 import com.bookend.bookservice.payload.BookRequest;
@@ -38,7 +41,9 @@ public class BookController {
     public void setGenreService(GenreService genreService) {
         this.genreService = genreService;
     }
-
+    /**
+     * BS-BC-1 (CM_32)
+     */
     @ApiOperation(value = "Get the book by Id", response = Book.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved book"),
@@ -46,15 +51,20 @@ public class BookController {
             @ApiResponse(code = 404, message = "Book is not found.")
     })
     @GetMapping("/{bookid}")
-    public Book getBookInfo(@PathVariable("bookid") String bookId ) {
+    public Book getBook(@PathVariable("bookid") String bookId ) {
 
-        Book book = bookService.getById(bookId);
-        if(book==null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"The book does not exist.");
+        Book book = null;
+        try {
+            book = bookService.getById(bookId);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
         }
         return book;
 
     }
+    /**
+     * BS-BC-2 (CM_33)
+     */
     @ApiOperation(value = "Search book or get all books", response = Book.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved book list"),
@@ -68,28 +78,39 @@ public class BookController {
             ,@RequestParam(required = false) boolean commentSort
             , OAuth2Authentication auth){
         final OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) auth.getDetails();
-
-        String accessToken = details.getTokenValue();
-        List<Book> books = bookService.search(title,genre,rateSort,commentSort,accessToken);
-        if(books==null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"There is no match.");
+        try {
+            return bookService.search(title,genre,rateSort,commentSort);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
         }
 
 
-
-        return books;
     }
 
-
+    /**
+     * BS-BC-3 (CM_34)
+     */
     @ApiOperation(value = "Get books of a specific author", response = Book.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved book list"),
-            @ApiResponse(code = 401, message = "You are not authorized to view books.")
+            @ApiResponse(code = 401, message = "You are not authorized to view books."),
+            @ApiResponse(code = 404, message = "Books are not found.")
     })
     @GetMapping("/author/{authorid}")
     public List<Book> getBookOfAuthor(@PathVariable("authorid") String authorId){
-        return bookService.findByAuthor(authorId);
+        try {
+            return bookService.findByAuthor(authorId);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
+        }
     }
+    @GetMapping("/genres")
+    public List<Genre> getAllGenres(){
+        return genreService.findAll();
+    }
+    /**
+     * BS-BC-7 (CM_35)
+     */
     @ApiOperation(value = "Add new book", response = Book.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully added book"),
@@ -99,17 +120,13 @@ public class BookController {
     )
     @PostMapping("/new")
     public Book userBook(@RequestBody BookRequest bookRequest){
-       bookRequest.setVerified(false);
-        if(bookRequest.getBookName()==null  || bookRequest.getBookName().equals("")){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Book name field cannot be empty.");
-        }
-
-        if(bookRequest.getAuthor()==null || bookRequest.getAuthor().equals("")){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Author field cannot be empty.");
-        }
-
-        Book addedBook =bookService.save(bookRequest);
-        if(addedBook==null){
+        bookRequest.setVerified(false);
+        Book addedBook = null;
+        try {
+            addedBook = bookService.save(bookRequest);
+        } catch (MandatoryFieldException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,e.getMessage());
+        } catch (AlreadyExist e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Book already exists.");
         }
         return addedBook;

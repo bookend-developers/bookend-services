@@ -93,7 +93,9 @@ export default class Genre extends React.Component {
                     this.props.history.push("/");
                     window.location.reload();
                 }
-            })
+            }).catch((err)=> {
+            alert("Book service temporarily is offline for maintenance.")
+        })
     }
 
     handleListBook(){
@@ -116,7 +118,9 @@ export default class Genre extends React.Component {
                     this.props.history.push("/");
                     window.location.reload();
                 }
-            })
+            }).catch((err)=> {
+            alert("Book service temporarily is offline for maintenance.")
+        })
     }
 
     handleCurrentUserName(){
@@ -205,7 +209,7 @@ export default class Genre extends React.Component {
                         </TableRow>
                     )}
                     <TablePagination
-                        count={50}
+                        count={this.state.bookData.length}
                         page={this.state.page}
                         onChangePage={this.handleChangePage}
                         rowsPerPage={this.state.rowsPerPage}

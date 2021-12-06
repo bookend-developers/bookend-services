@@ -1,5 +1,6 @@
 package com.bookend.shelfservice.controller;
 
+import com.bookend.shelfservice.exception.*;
 import com.bookend.shelfservice.model.ShelfsBook;
 import com.bookend.shelfservice.model.Shelf;
 import com.bookend.shelfservice.model.Tag;
@@ -20,7 +21,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.swing.text.TabableView;
 import java.util.List;
-
+/**
+ * SS-SC stands for ShelfService-ShelfController
+ * CM stands for ControllerMethod
+ */
 @RestController
 @RequestMapping("/api/shelf")
 public class ShelfController {
@@ -41,7 +45,9 @@ public class ShelfController {
 
     @Autowired
     public void setShelfService(ShelfService shelfService){ this.shelfService=shelfService;}
-
+    /**
+     * SS-SC-1 (CM_53)
+     */
     @ApiOperation(value = "Add new book to shelf", response = ShelfsBook.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully added book"),
@@ -49,19 +55,24 @@ public class ShelfController {
             @ApiResponse(code = 400, message = "The book is already added this shelf.")
     }
     )
-    @PostMapping("/{shelfid}/{bookid}")
+    @PostMapping("/{shelfid}")
     public ShelfsBook addBookToShelf(@PathVariable("shelfid") String shelfID,
-                                     @PathVariable("bookid") String bookId,
-                                     @RequestBody BookRequest book){
+                                     @RequestBody BookRequest book) throws ShelfNotFound {
+
         Shelf shelf = shelfService.getById(Long.valueOf(shelfID));
-        ShelfsBook shelfsBook = bookService.saveOrUpdate(new ShelfsBook(book.getBookid(),book.getBookName(), shelf));
-        if(shelfsBook== null){
+        ShelfsBook shelfsBook = null;
+        try {
+            shelfsBook = bookService.saveOrUpdate(book ,shelf);
+        } catch (AlreadyExists alreadyExists) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Book is already added to the Shelf.");
         }
         return shelfsBook;
 
 
     }
+    /**
+     * SS-SC-2 (CM_54)
+     */
     @ApiOperation(value = "Create new shelf", response = Shelf.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully added shelf"),
@@ -71,15 +82,19 @@ public class ShelfController {
     )
     @PostMapping("/new")
     public Shelf newShelf(@RequestBody ShelfRequest shelfRequest,
-                          OAuth2Authentication auth){
-        Shelf newShelf =shelfService.saveOrUpdate(shelfRequest,auth.getName());
-        if(newShelf== null){
-
-           throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Shelfname is already in use.");
+                          OAuth2Authentication auth) throws MandatoryFieldException {
+        Shelf newShelf = null;
+        try {
+            newShelf = shelfService.saveOrUpdate(shelfRequest,auth.getName());
+        } catch (AlreadyExists alreadyExists) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Shelfname is already in use.");
         }
         return newShelf ;
 
     }
+    /**
+     * SS-SC-3 (CM_55)
+     */
     @ApiOperation(value = "Get book  in the shelf", response = String.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved list"),
@@ -87,12 +102,18 @@ public class ShelfController {
     }
     )
     @GetMapping("/{shelfid}")
-    public List<ShelfsBook> getBooks(@PathVariable("shelfid")  String shelfID){
 
-
-        return shelfService.getBooks(Long.valueOf(shelfID));
+    public List<ShelfsBook> getBooks(@PathVariable("shelfid")  String shelfID) {
+        try {
+            return shelfService.getBooks(Long.valueOf(shelfID));
+        } catch (ShelfNotFound shelfNotFound) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,shelfNotFound.getMessage());
+        }
 
     }
+    /**
+     * SS-SC-4 (CM_56)
+     */
     @ApiOperation(value = "Get user's shelves", response = Shelf.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved list"),
@@ -105,6 +126,9 @@ public class ShelfController {
 
         return shelfService.findShelvesByUsername(username);
     }
+    /**
+     * SS-SC-5 (CM_57)
+     */
     @ApiOperation(value = "Get current user's shelves", response = Shelf.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved list"),
@@ -117,6 +141,9 @@ public class ShelfController {
 
         return shelfService.findShelvesByUsername(auth.getName());
     }
+    /**
+     * SS-SC-6 (CM_58)
+     */
     @ApiOperation(value = "Delete the shelf")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully deleted shelf"),
@@ -125,13 +152,16 @@ public class ShelfController {
     }
     )
     @DeleteMapping("/delete/{shelfid}")
-    public void deleteShelf(@PathVariable("shelfid")  String shelfID,OAuth2Authentication auth){
+    public void deleteShelf(@PathVariable("shelfid")  String shelfID,OAuth2Authentication auth) throws ShelfNotFound, NotFoundException {
         Shelf shelf = shelfService.getById(Long.valueOf(shelfID));
         if(!shelf.getUsername().equals(auth.getName())){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,"The action is forbidden.");
         }
         shelfService.deleteShelf(shelfService.getById(Long.valueOf(shelfID)));
     }
+    /**
+     * SS-SC-7 (CM_59)
+     */
     @ApiOperation(value = "Delete the book from shelves")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully deleted book"),
@@ -141,14 +171,19 @@ public class ShelfController {
     )
     @DeleteMapping("/delete/{shelfid}/{bookid}")
     public void deleteBook(@PathVariable("bookid") String bookId,
-                           @PathVariable("shelfid")  String shelfID,OAuth2Authentication auth){
+                           @PathVariable("shelfid")  String shelfID,OAuth2Authentication auth) throws ShelfNotFound, NotFoundException {
         Shelf shelf = shelfService.getById(Long.valueOf(shelfID));
         if(!shelf.getUsername().equals(auth.getName())){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,"The action is forbidden.");
         }
+
         bookService.delete(bookId,shelfID);
 
+
     }
+    /**
+     * SS-SC-8 (CM_60)
+     */
     @ApiOperation(value = "List tags")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved tags"),

@@ -16,7 +16,7 @@ public class BookRequest {
     private String bookName;
     private String author;
     private String authorid;
-    private String ISBN;
+    private String isbn;
 
     public BookRequest() {
     }
@@ -29,7 +29,7 @@ public class BookRequest {
         this.bookName = bookName;
         this.author = author;
         this.authorid = authorid;
-        this.ISBN = ISBN;
+        this.isbn = ISBN;
     }
 
     public Boolean getVerified() {
@@ -88,11 +88,11 @@ public class BookRequest {
         this.authorid = authorid;
     }
 
-    public String getISBN() {
-        return ISBN;
+    public String getIsbn() {
+        return isbn;
     }
 
-    public void setISBN(String ISBN) {
-        this.ISBN = ISBN;
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 }

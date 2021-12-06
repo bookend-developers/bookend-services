@@ -15,8 +15,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+/**
+ * AUTHS-PC stands for AuthorizationServer-ProfileController
+ * CM stands for ControllerMethod
+ */
 @RestController
-
 @RequestMapping("/api/profile")
 
 public class ProfileController {
@@ -33,6 +36,9 @@ public class ProfileController {
     public void setUserDetailService(UserDetailServiceImpl userDetailService) {
         this.userDetailService = userDetailService;
     }
+    /**
+     * AUTHS-PC-1 (CM_9)
+     */
     @ApiOperation(value = "Get user profile", response = Profile.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved profile "),
@@ -43,12 +49,18 @@ public class ProfileController {
         User user = userService.findByUsername(username);
         return new Profile(user.getFirstname(),user.getLastname(),user.getUsername(),user.getAboutMe(),user.getEmail());
     }
+    /**
+     * AUTHS-PC-2 (CM_10)
+     */
     @GetMapping("/{username}")
     public Profile getProfile(@PathVariable("username") String username){
 
         User user =userDetailRepository.findByUsername(username).get();
         return new Profile(user.getId(),user.getUsername(),user.getEmail());
     }
+    /**
+     * AUTHS-PC-3 (CM_11)
+     */
     @PostMapping("/{username}")
     public User setProfile(@PathVariable("username") String username,@RequestBody Profile profileRequest){
         User user = userService.findByUsername(username);

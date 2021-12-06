@@ -1,5 +1,8 @@
 package com.bookend.shelfservice.kafka;
 
+import com.bookend.shelfservice.exception.AlreadyExists;
+import com.bookend.shelfservice.exception.NotFoundException;
+import com.bookend.shelfservice.exception.TagNotFound;
 import com.bookend.shelfservice.model.Tag;
 import com.bookend.shelfservice.payload.GenreMessage;
 import com.bookend.shelfservice.service.BookService;
@@ -37,7 +40,7 @@ public class Listener {
     }
     @KafkaListener(topics = "deleting-book",
             groupId ="bookend-shelfservice")
-    public void consumeBook(String message) {
+    public void consumeBook(String message) throws NotFoundException {
         System.out.println(message);
         String[] splited = message.split("\"");
         bookService.deleteFromShelves(splited[1]);
@@ -51,22 +54,16 @@ public class Listener {
         ObjectMapper mapper = new ObjectMapper();
         try {
             GenreMessage newGenre = mapper.readValue(message, GenreMessage.class);
-            Tag checkTag = tagService.findByID(newGenre.getId());
-            if(checkTag!=null){
-                checkTag.setTag(newGenre.getGenre());
-                tagService.save(checkTag);
-            }
-            else {
-                tagService.save(new Tag(newGenre.getId(),newGenre.getGenre()));
-            }
+            tagService.save(newGenre);
 
 
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (AlreadyExists alreadyExists) {
+            alreadyExists.printStackTrace();
         }
-
 
 
     }

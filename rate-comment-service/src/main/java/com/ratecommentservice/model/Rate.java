@@ -34,6 +34,13 @@ public class Rate {
         this.rate = rate;
     }
 
+    public Rate(Long id,Book book, String username, Double rate) {
+        this.rateId = id;
+        this.book = book;
+        this.username = username;
+        this.rate = rate;
+    }
+
     public Rate(){}
 
     public Long getRateId() {
