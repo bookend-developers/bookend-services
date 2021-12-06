@@ -20,8 +20,15 @@ services:
       KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092
       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+  mysqldb:
+    image: mysql:5.7
+    container_name: mysqlcon
+    ports:
+      - '3306:3306'
+    environment:
+        MYSQL_ROOT_PASSWORD: 1234
 
 networks:
   default:
-    external: true
+    external: false
     name: bookendnet

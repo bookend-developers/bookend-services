@@ -5,14 +5,6 @@ services:
     container_name: mongo
     networks:
       - default
-  mysqldb:
-    image: mysql:5.7
-    container_name: mysqldb
-    environment:
-        MYSQL_DATABASE: bookend-authorization-service
-        MYSQL_ROOT_PASSWORD: 1234
-    networks:
-      - default
 
   author-service:
     build: /Coding/java-oxygen/Workspace/bookend-services/author-service.
