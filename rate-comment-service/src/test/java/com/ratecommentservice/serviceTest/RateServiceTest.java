@@ -171,7 +171,7 @@ public class RateServiceTest {
     }
 
 
-
+/*
     @MockitoSettings(strictness = Strictness.WARN)
     @Test
     void shouldSaveNonExistingRateWhenBookDoesNotExist() throws BookNotFound, RateNotFound {
@@ -194,5 +194,5 @@ public class RateServiceTest {
         final Rate saved = rateService.save(rateRequest, username);
         assertThat(saved).isNotNull();
         verify(rateRepository,times(2)).save(any(Rate.class));
-    }
+    }*/
 }

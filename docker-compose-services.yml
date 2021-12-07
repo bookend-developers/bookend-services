@@ -2,8 +2,6 @@ version: "3"
 services:
   authorization-service:
     build: /authorization-server.
-    depends_on:
-      - mysqlcon
     container_name: authscon
     ports:
       - 9191:9191
@@ -11,8 +9,6 @@ services:
       - default
   author-service:
     build: /author-service.
-    depends_on:
-      - mongo
     container_name: ascon
     ports:
       - 8085:8085
@@ -20,8 +16,6 @@ services:
       - default
   book-service:
     build: /book-service.
-    depends_on:
-      - mongo
     container_name: bscon
     ports:
       - 8082:8082
@@ -29,30 +23,39 @@ services:
       - default
   book-club-service:
     build: /book-club-service.
-    depends_on:
-      - mysqlcon
     container_name: bclubcon
     ports:
       - 8089:8089
     networks:
       - default
 
+  message-service:
+    build: /message-service.
+    container_name: message-ser-con
+    ports:
+      - 8087:8087
+    networks:
+      - default
+  shelf-service:
+    build: /shelf-service.
+    container_name: shelf-ser-con
+    ports:
+      - 8083:8083
+    networks:
+      - default
+
   mail-service:
     build: /mail-service.
-    depends_on:
-      - mysqlcon
     container_name: mail-ser-con
     ports:
       - 8090:8090
     networks:
       - default
-  message-service:
-    build: /message-service.
-    depends_on:
-      - mongo
-    container_name: message-ser-con
+  rate-comment-service:
+    build: /rate-comment-service.
+    container_name: rate-comment-ser-con
     ports:
-      - 8087:8087
+      - 8081:8081
     networks:
       - default
 

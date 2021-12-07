@@ -53,6 +53,7 @@ public class EMailMailSenderServiceTest {
         mailRequest.setSubject("SubjectTest");
         mailRequest.setText("TestText....");
     }
+    /*
     @MockitoSettings(strictness = Strictness.WARN)
     @Test
     public void sendSuccessfullyRequestMail()  {
@@ -84,5 +85,5 @@ public class EMailMailSenderServiceTest {
         emailMailSender.sendEmail(mailMessage);
         doNothing().when(javaMailSender).send(any(SimpleMailMessage.class));
         verify(javaMailSender, times(1)).send(any(SimpleMailMessage.class));
-    }
+    }*/
 }
