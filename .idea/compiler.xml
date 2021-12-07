@@ -11,8 +11,8 @@
         <module name="authorization-server" />
         <module name="shelf-service" />
         <module name="book-club-service" />
-        <module name="mail-service" />
         <module name="message-service" />
+        <module name="mail-service" />
         <module name="author-service" />
       </profile>
     </annotationProcessing>

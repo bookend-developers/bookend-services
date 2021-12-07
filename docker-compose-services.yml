@@ -1,47 +1,64 @@
 version: "3"
 services:
-  mongo:
-    image: mongo
-    container_name: mongo
+  authorization-service:
+    build: /authorization-server.
+    container_name: authscon
+    ports:
+      - 9191:9191
     networks:
       - default
-  mysqldb:
-    image: mysql:5.7
-    container_name: mysqldb
-    environment:
-        MYSQL_DATABASE: bookend-authorization-service
-        MYSQL_ROOT_PASSWORD: 1234
-    networks:
-      - default
-
   author-service:
-    build: /Coding/java-oxygen/Workspace/bookend-services/author-service.
-    depends_on:
-      - mongo
+    build: /author-service.
     container_name: ascon
     ports:
       - 8085:8085
     networks:
       - default
   book-service:
-    build: /Coding/java-oxygen/Workspace/bookend-services/book-service.
-    depends_on:
-      - mongo
+    build: /book-service.
     container_name: bscon
     ports:
       - 8082:8082
     networks:
       - default
-
-  authorization-service:
-    build: /Coding/java-oxygen/Workspace/bookend-services/authorization-server.
-    depends_on:
-      - mysqldb
-    container_name: authscon
+  book-club-service:
+    build: /book-club-service.
+    container_name: bclubcon
     ports:
-      - 9191:9191
+      - 8089:8089
     networks:
       - default
+
+  message-service:
+    build: /message-service.
+    container_name: message-ser-con
+    ports:
+      - 8087:8087
+    networks:
+      - default
+  shelf-service:
+    build: /shelf-service.
+    container_name: shelf-ser-con
+    ports:
+      - 8083:8083
+    networks:
+      - default
+
+  mail-service:
+    build: /mail-service.
+    container_name: mail-ser-con
+    ports:
+      - 8090:8090
+    networks:
+      - default
+  rate-comment-service:
+    build: /rate-comment-service.
+    container_name: rate-comment-ser-con
+    ports:
+      - 8081:8081
+    networks:
+      - default
+
   
 networks:
   default:

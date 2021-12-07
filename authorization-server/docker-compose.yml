@@ -1,18 +1,7 @@
 version: "3"
 services:
-  mysqldb:
-    image: mysql:5.7
-    container_name: mysqldb
-    environment:
-        MYSQL_DATABASE: bookend-authorization-service
-        MYSQL_ROOT_PASSWORD: 1234
-    networks:
-      - default
-
   authorization-service:
     build: .
-    depends_on:
-      - mysqldb
     container_name: authscon
     ports:
       - 9191:9191

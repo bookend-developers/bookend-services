@@ -20,6 +20,7 @@
         <option value="$PROJECT_DIR$/book-service/pom.xml" />
         <option value="$PROJECT_DIR$/rate-comment-service/pom.xml" />
         <option value="$PROJECT_DIR$/shelf-service/pom.xml" />
+        <option value="$PROJECT_DIR$/mail-service/pom.xml" />
       </list>
     </option>
   </component>
