@@ -5,9 +5,10 @@ services:
     container_name: zookeeper
     ports:
     - 2181:2181
-
   kafka:
     image: wurstmeister/kafka
+    depends_on:
+    - zookeeper
     container_name: kafka
     ports:
     - 9092:9092
@@ -27,6 +28,17 @@ services:
       - '3306:3306'
     environment:
         MYSQL_ROOT_PASSWORD: 1234
+    volumes:
+      - "mysql-data:/var/opt/mysql"
+  mongo:
+    image: mongo
+    container_name: mongo
+    volumes:
+      - "mongo-data:/var/opt/mongo"
+
+volumes:
+  mysql-data:
+  mongo-data:
 
 networks:
   default:

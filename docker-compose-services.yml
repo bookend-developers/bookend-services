@@ -1,13 +1,16 @@
 version: "3"
 services:
-  mongo:
-    image: mongo
-    container_name: mongo
+  authorization-service:
+    build: /authorization-server.
+    depends_on:
+      - mysqlcon
+    container_name: authscon
+    ports:
+      - 9191:9191
     networks:
       - default
-
   author-service:
-    build: /Coding/java-oxygen/Workspace/bookend-services/author-service.
+    build: /author-service.
     depends_on:
       - mongo
     container_name: ascon
@@ -16,7 +19,7 @@ services:
     networks:
       - default
   book-service:
-    build: /Coding/java-oxygen/Workspace/bookend-services/book-service.
+    build: /book-service.
     depends_on:
       - mongo
     container_name: bscon
@@ -24,16 +27,35 @@ services:
       - 8082:8082
     networks:
       - default
-
-  authorization-service:
-    build: /Coding/java-oxygen/Workspace/bookend-services/authorization-server.
+  book-club-service:
+    build: /book-club-service.
     depends_on:
-      - mysqldb
-    container_name: authscon
+      - mysqlcon
+    container_name: bclubcon
     ports:
-      - 9191:9191
+      - 8089:8089
     networks:
       - default
+
+  mail-service:
+    build: /mail-service.
+    depends_on:
+      - mysqlcon
+    container_name: mail-ser-con
+    ports:
+      - 8090:8090
+    networks:
+      - default
+  message-service:
+    build: /message-service.
+    depends_on:
+      - mongo
+    container_name: message-ser-con
+    ports:
+      - 8087:8087
+    networks:
+      - default
+
   
 networks:
   default:
