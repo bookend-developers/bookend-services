@@ -1,5 +1,6 @@
 package com.bookend.shelfservice.kafka;
 
+import com.bookend.shelfservice.exception.AlreadyExists;
 import com.bookend.shelfservice.exception.NotFoundException;
 import com.bookend.shelfservice.exception.TagNotFound;
 import com.bookend.shelfservice.model.Tag;
@@ -53,22 +54,15 @@ public class Listener {
         ObjectMapper mapper = new ObjectMapper();
         try {
             GenreMessage newGenre = mapper.readValue(message, GenreMessage.class);
-            Tag checkTag = tagService.findByID(newGenre.getId());
-            if(checkTag!=null){
-                checkTag.setTag(newGenre.getGenre());
-                tagService.save(checkTag);
-            }
-            else {
-                tagService.save(new Tag(newGenre.getId(),newGenre.getGenre()));
-            }
+            tagService.save(newGenre);
 
 
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (TagNotFound tagNotFound) {
-            tagNotFound.printStackTrace();
+        } catch (AlreadyExists alreadyExists) {
+            alreadyExists.printStackTrace();
         }
 
 

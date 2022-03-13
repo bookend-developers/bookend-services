@@ -1,11 +1,13 @@
 package com.bookend.shelfservice.serviceTest;
 
+import com.bookend.shelfservice.exception.AlreadyExists;
 import com.bookend.shelfservice.exception.NotFoundException;
 import com.bookend.shelfservice.exception.ShelfNotFound;
 import com.bookend.shelfservice.exception.ShelfsBookNotFound;
 import com.bookend.shelfservice.model.Shelf;
 import com.bookend.shelfservice.model.ShelfsBook;
 import com.bookend.shelfservice.model.Tag;
+import com.bookend.shelfservice.payload.BookRequest;
 import com.bookend.shelfservice.repository.BookRepository;
 import com.bookend.shelfservice.repository.ShelfRepository;
 import com.bookend.shelfservice.service.BookServiceImpl;
@@ -37,7 +39,7 @@ public class BookServiceTest {
     private BookServiceImpl bookService;
 
     @Test
-    void getShelfsBookIfIdHaveMatchSuccesfully() throws ShelfsBookNotFound {
+    void getShelfsBookIfIdHaveMatchSuccessfully() throws ShelfsBookNotFound {
         String id = "5";
         List<Tag> tags = new ArrayList<>();
         tags.add(new Tag("Romantic"));
@@ -59,25 +61,29 @@ public class BookServiceTest {
     }
 
     @Test
-    void shouldReturnNullIfGivenShelfsBookThatWillBeSavedAlreadyExists(){
+    void failToAddShelfsBookIfBookAlreadyExists(){
         List<ShelfsBook> books = new ArrayList<>();
         String id = "5";
+
         final Shelf shelf = new Shelf("Recently Read","eda");
+        final BookRequest bookRequest = new BookRequest(id, "The Tales");
         final ShelfsBook shelfsBook = new ShelfsBook(id, "The Fairy Tales",shelf);
         books.add(shelfsBook);
-        final ShelfsBook shelfsBook2 = new ShelfsBook(id, "The Tales",shelf);
+
         given(bookRepository.findShelfsBookByShelf(shelf)).willReturn(books);
-        final ShelfsBook saved = bookService.saveOrUpdate(shelfsBook2);
-        assertThat(saved).isNull();
+        assertThrows(AlreadyExists.class,()->{
+            bookService.saveOrUpdate(bookRequest,shelf);
+        });
     }
 
     @Test
-    void shouldSaveGivenShelfsBookSuccessfully(){
+    void shouldSaveGivenShelfsBookSuccessfully() throws AlreadyExists {
         String id = "5";
         final Shelf shelf = new Shelf("Recently Read","eda");
+        final BookRequest bookRequest = new BookRequest(id, "The Fairy Tales");
         final ShelfsBook shelfsBook = new ShelfsBook(id, "The Fairy Tales",shelf);
         given(bookRepository.save(any(ShelfsBook.class))).willReturn(shelfsBook);
-        final ShelfsBook saved = bookService.saveOrUpdate(shelfsBook);
+        final ShelfsBook saved = bookService.saveOrUpdate(bookRequest,shelf);
         assertThat(saved).isNotNull();
         verify(bookRepository).save(any(ShelfsBook.class));
     }

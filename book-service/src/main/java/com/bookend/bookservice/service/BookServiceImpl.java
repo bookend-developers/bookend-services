@@ -63,7 +63,7 @@ public class BookServiceImpl implements BookService {
         if(bookRequest.getBookName()==null  || bookRequest.getBookName().equals("")){
             throw new MandatoryFieldException("Book name field cannot be empty.");
         }
-        if(bookRequest.getAuthor()==null || bookRequest.getAuthor().equals("")){
+        if(bookRequest.getAuthorid()==null || bookRequest.getAuthorid().equals("")){
             throw new MandatoryFieldException("Author field cannot be empty.");
         }
         if(bookRequest.getDescription()==null || bookRequest.getDescription().equals("")){
@@ -72,7 +72,7 @@ public class BookServiceImpl implements BookService {
         if(bookRequest.getPage()==null){
             throw new MandatoryFieldException("Page field cannot be empty.");
         }
-        if(bookRequest.getISBN()==null || bookRequest.getISBN().equals("")){
+        if(bookRequest.getIsbn()==null || bookRequest.getIsbn().equals("")){
             throw new MandatoryFieldException("ISBN field cannot be empty.");
         }
         if(bookRequest.getGenre()==null || bookRequest.getGenre().equals("")){
@@ -89,7 +89,7 @@ public class BookServiceImpl implements BookService {
                         .collect(Collectors.toList());
                 if(filteredbyGenre.size()!=0){
                     List<Book> filteredByISBN = filteredbyGenre.stream()
-                            .filter(b->b.getISBN().equals(bookRequest.getISBN()))
+                            .filter(b->b.getISBN().equals(bookRequest.getIsbn()))
                             .collect(Collectors.toList());
                     if(filteredByISBN.size()!=0){
                         throw new AlreadyExist("Book already exists");
@@ -109,7 +109,7 @@ public class BookServiceImpl implements BookService {
         book.setPage(bookRequest.getPage());
         book.setVerified(bookRequest.getVerified());
 
-        book.setISBN(bookRequest.getISBN());
+        book.setISBN(bookRequest.getIsbn());
 
         Genre genre = genreService.findByGenre(bookRequest.getGenre());
         if(genre == null){
@@ -133,6 +133,13 @@ public class BookServiceImpl implements BookService {
         return bookRepository.save(book);
     }
 
+    @Override
+    public Book verify(String bookID) throws NotFoundException {
+        Book book = getById(bookID);
+        book.setVerified(Boolean.TRUE);
+        book = bookRepository.save(book);
+        return book;
+    }
 
 
     @Override

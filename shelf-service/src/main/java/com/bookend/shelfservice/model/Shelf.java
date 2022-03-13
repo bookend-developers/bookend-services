@@ -83,5 +83,6 @@ public class Shelf {
         this.shelfname = shelfname;
         this.tags = new ArrayList<>();
         this.username = username;
+        this.shelfsBooks = new ArrayList<>();
     }
 }

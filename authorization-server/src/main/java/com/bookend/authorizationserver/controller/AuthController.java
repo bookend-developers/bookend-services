@@ -23,15 +23,20 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
-
+/**
+ * AUTHS-AC stands for AuthorizationServer-AuthController
+ * CM stands for ControllerMethod
+ */
 @RestController
-
 @RequestMapping("/api/oauth")
-
 public class AuthController {
 
     @Autowired
     UserService userService;
+
+    /**
+     * AUTHS-AC-1 (CM_5)
+     */
     @ApiOperation(value = "New User Registration", response = ResponseEntity.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully registered user"),
@@ -42,6 +47,10 @@ public class AuthController {
         SignUpResponse res = userService.addUser(signUpRequest);
         return ResponseEntity.ok(res);
     }
+
+    /**
+     * AUTHS-AC-2 (CM_6)
+     */
     @ApiOperation(value = "Confirm User Email", response = ResponseEntity.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully confirmation of an email")
@@ -52,7 +61,9 @@ public class AuthController {
         ConfirmResponse confirmResponse = userService.confirm(token);
         return ResponseEntity.ok(confirmResponse);
     }
-    
+    /**
+     * AUTHS-AC-3 (CM_7)
+     */
     @PostMapping("resetPassword")
     public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest){
     	ResetPasswordResponse res = userService.resetPassword(resetPasswordRequest);
@@ -61,7 +72,9 @@ public class AuthController {
     	}
         return ResponseEntity.ok(res);
     }
-    
+    /**
+     * AUTHS-AC-4 (CM_8)
+     */
     @PostMapping("confirmPassword/{token}")
     public ResponseEntity<?> confirmResetPassword(@PathVariable("token") String token,@RequestBody NewPasswordRequest newPasswordRequest){
     	ConfirmResponse confirmResponse = userService.confirmPassword(token,newPasswordRequest);
@@ -69,13 +82,4 @@ public class AuthController {
     }
     
 
-    @GetMapping("test")
-    public String test() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!(authentication instanceof AnonymousAuthenticationToken)) {
-            String currentUserName = authentication.getName();
-            return currentUserName;
-        }
-        return "hata";
-    }
 }

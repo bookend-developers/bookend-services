@@ -1,5 +1,6 @@
 package com.bookend.shelfservice.serviceTest;
 
+import com.bookend.shelfservice.exception.AlreadyExists;
 import com.bookend.shelfservice.exception.MandatoryFieldException;
 import com.bookend.shelfservice.exception.NotFoundException;
 import com.bookend.shelfservice.exception.ShelfNotFound;
@@ -58,7 +59,7 @@ public class ShelfServiceTest {
     }
 
     @Test
-    void shouldSaveShelfWithEmptyTagList() throws MandatoryFieldException {
+    void shouldSaveShelfWithEmptyTagList() throws MandatoryFieldException, AlreadyExists {
         final Shelf shelf = new Shelf("Recently Read","eda");
         List<String> tags = new ArrayList<>();
         final ShelfRequest shelfRequest = new ShelfRequest("Recently Read", tags);
@@ -79,20 +80,23 @@ public class ShelfServiceTest {
     }
 
     @Test
-    void shouldReturnNullIfShelfNameAlreadyExists() throws MandatoryFieldException {
+    void failToSaveIfShelfNameAlreadyInUse() throws MandatoryFieldException {
+        final String username = "eda";
         List<Shelf> shelves = new ArrayList<>();
-        final Shelf shelf = new Shelf("Recently Read","eda");
-        final Shelf shelf2 = new Shelf("To Read","eda");
+        final Shelf shelf = new Shelf("Recently Read",username);
+        final Shelf shelf2 = new Shelf("read",username);
         shelves.add(shelf);
         shelves.add(shelf2);
-        final ShelfRequest shelfRequest = new ShelfRequest("To Read", new ArrayList<String>());
-        given(shelfRepository.findShelvesByUsername("eda")).willReturn(shelves);
-        final Shelf saved = shelfService.saveOrUpdate(shelfRequest, "eda");
-        assertThat(saved).isNull();
+        final ShelfRequest shelfRequest = new ShelfRequest("read", new ArrayList<String>());
+        given(shelfRepository.findShelvesByUsername(username)).willReturn(shelves);
+        assertThrows(AlreadyExists.class, ()->{
+            shelfService.saveOrUpdate(shelfRequest, username);
+        });
+        verify(shelfRepository,never()).save(any(Shelf.class));
     }
-    //---------------Bakılsın tekrar---------------------------
+
     @Test
-    void shouldSaveShelfSuccesfully() throws ShelfNotFound, MandatoryFieldException {
+    void shouldSaveShelfWhenTagListIsNotEmpty() throws ShelfNotFound, MandatoryFieldException, AlreadyExists {
         List<String> tagNames = new ArrayList<>();
         tagNames.add("Romantic");
         List<Tag> tags = new ArrayList<>();
@@ -106,6 +110,7 @@ public class ShelfServiceTest {
         assertThat(saved).isNotNull();
         verify(shelfRepository).save(any(Shelf.class));
     }
+
 
     @Test
     void shouldReturnAllShelvesWithGivenUsername(){
@@ -123,12 +128,12 @@ public class ShelfServiceTest {
     void shouldDeleteShelfWithGivenShelf() throws NotFoundException {
         final Long id = Long.valueOf(5);
         final Shelf shelf = new Shelf(id,"Recently Read","eda", new ArrayList<Tag>());
-        //given(shelfRepository.findShelfById(id)).willReturn(shelf);
+        given(shelfRepository.findShelfById(id)).willReturn(shelf);
         shelfService.deleteShelf(shelf);
         verify(shelfRepository,times(1)).delete(any(Shelf.class));
     }
 
-/*
+
     @Test
     void shouldFailToDeleteShelfIfNoShelfExistsWithGivenShelf() {
         final Long id = Long.valueOf(5);
@@ -138,9 +143,9 @@ public class ShelfServiceTest {
             shelfService.deleteShelf(shelf);
         });
     }
-*/
+
     @Test
-    void shouldGetBooksWithGivenShelfId() throws ShelfNotFound {
+    void shouldGetBooksWithGivenShelfId() throws ShelfNotFound, NotFoundException {
         List<ShelfsBook> books = new ArrayList<>();
         final Long id = Long.valueOf(5);
         final Shelf shelf = new Shelf(id,"Recently Read","eda", new ArrayList<Tag>());
@@ -154,6 +159,6 @@ public class ShelfServiceTest {
         assertEquals(books,expected);
     }
 
- 
+
 
 }
