@@ -72,7 +72,9 @@ export default class Rate extends React.Component {
                     this.props.history.push("/");
                     window.location.reload();
                 }
-            })
+            }).catch((err)=> {
+            alert("Rate service temporarily is offline for maintenance.")
+        })
     }
 
     showAverageRate() {
@@ -98,7 +100,10 @@ export default class Rate extends React.Component {
                     this.props.history.push("/");
                     window.location.reload();
                 }
-            })
+            }).catch((err)=> {
+            alert("Rate service temporarily is offline for maintenance.")
+        })
+
 
     }
     componentDidMount() {

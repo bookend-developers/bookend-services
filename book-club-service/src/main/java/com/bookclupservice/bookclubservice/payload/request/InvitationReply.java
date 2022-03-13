@@ -1,10 +1,16 @@
 package com.bookclupservice.bookclubservice.payload.request;
 
+import com.sun.istack.NotNull;
+
 public class InvitationReply {
 
     private Long invitationId;
     private  EInvitationReply eInvitationReply;
 
+    public InvitationReply(Long invitationId, EInvitationReply eInvitationReply) {
+        this.invitationId = invitationId;
+        this.eInvitationReply = eInvitationReply;
+    }
 
     public Long getInvitationId() {
         return invitationId;

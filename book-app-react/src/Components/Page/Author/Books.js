@@ -57,7 +57,9 @@ export default class Books extends React.Component {
                     this.props.history.push("/");
                     window.location.reload();
                 }
-            })
+            }).catch((err)=> {
+            alert("Book service temporarily is offline for maintenance.")
+        })
     }
 
     render() {
@@ -87,7 +89,7 @@ export default class Books extends React.Component {
                         </TableRow>
                     )}
                     <TablePagination
-                        count={50}
+                        count={this.state.booksOfAuthor.length}
                         page={this.state.page}
                         onChangePage={this.handleChangePage}
                         rowsPerPage={this.state.rowsPerPage}

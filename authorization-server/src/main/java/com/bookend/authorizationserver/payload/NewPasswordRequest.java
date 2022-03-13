@@ -4,6 +4,13 @@ public class NewPasswordRequest {
 
 	private String password;
 
+	public NewPasswordRequest(String password) {
+		this.password = password;
+	}
+
+	public NewPasswordRequest() {
+	}
+
 	public String getPassword() {
 		return password;
 	}

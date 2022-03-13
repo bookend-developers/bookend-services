@@ -64,15 +64,7 @@ public class SortedLists {
         return sort();
 
     }
-    public SortedLists add(Book book, String type){
-        if(type.equals("rate")){
-           sortedByRate.add(book);
-        }
-        if (type.equals("comment")){
-            sortedByComment.add(book);
-        }
-        return sort();
-    }
+
     public SortedLists sort(){
 
         Collections.sort(sortedByComment, new BookComparator("comment"));
@@ -89,7 +81,7 @@ public class SortedLists {
         return this;
 
     }
-    public SortedLists remove(Book book, String type){
+    public SortedLists remove(Book book){
         Iterator<Book> rateIterator = sortedByRate.iterator();
          while(rateIterator.hasNext()){
              Book b = rateIterator.next();

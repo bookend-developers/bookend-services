@@ -1,5 +1,8 @@
 package com.bookend.bookservice.controller;
 
+import com.bookend.bookservice.exception.AlreadyExist;
+import com.bookend.bookservice.exception.MandatoryFieldException;
+import com.bookend.bookservice.exception.NotFoundException;
 import com.bookend.bookservice.model.Book;
 import com.bookend.bookservice.model.Genre;
 import com.bookend.bookservice.payload.BookRequest;
@@ -40,20 +43,16 @@ public class AdminController {
     @PostMapping("/new")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Book adminBook(@RequestBody BookRequest bookRequest){
-        if(bookRequest.getBookName()==null  || bookRequest.getBookName().equals("")){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Book name field cannot be empty.");
-        }
-
-        if(bookRequest.getAuthor()==null || bookRequest.getAuthor().equals("")){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Author field cannot be empty.");
-        }
-
         bookRequest.setVerified(true);
-        Book addedBook =bookService.save(bookRequest);
-        if(addedBook==null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Book already exists.");
+        try {
+            return bookService.save(bookRequest);
+        } catch (MandatoryFieldException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,e.getMessage());
+        } catch (AlreadyExist alreadyExist) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,alreadyExist.getMessage());
         }
-        return addedBook;
+
+
     }
     @ApiOperation(value = "Delete the book")
     @ApiResponses(value = {
@@ -64,7 +63,11 @@ public class AdminController {
     @DeleteMapping("/{bookid}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void delete(@PathVariable("bookid") String bookId){
-        bookService.delete(bookId);
+        try {
+            bookService.delete(bookId);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
+        }
 
     }
     @ApiOperation(value = "Add new genre", response = Genre.class)
@@ -90,13 +93,19 @@ public class AdminController {
     @GetMapping("/unverified")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<Book> listUnverified(){
-        return bookService.findBookByVerifiedIsFalse();
+        try {
+            return bookService.findBookByVerifiedIsFalse();
+        } catch (NotFoundException e) {
+           throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
+        }
     }
     @PostMapping("/verify/{bookid}")
     public Book verifyBook(@PathVariable("bookid") String bookId){
-        Book book = bookService.getById(bookId);
-        if(book==null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"The book does not exist.");
+        Book book = null;
+        try {
+            book = bookService.getById(bookId);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
         }
         book.setVerified(Boolean.TRUE);
         return bookService.update(book);

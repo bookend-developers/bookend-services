@@ -60,7 +60,9 @@ export default function DialogSelect(props) {
                         pathname:  "/reset-password",
                     });
                 }
-            })
+            }).catch((err)=> {
+            alert("Authorization service temporarily is offline for maintenance.")
+        })
     }
 
     return (

@@ -86,7 +86,9 @@ export default class AddNewShelf extends React.Component {
                     }
                 }
             )
-            .catch(error => console.log('error', error));
+            .catch((err)=> {
+                alert("Shelf service temporarily is offline for maintenance.")
+            })
     }
 
     componentDidMount() {
@@ -110,7 +112,9 @@ export default class AddNewShelf extends React.Component {
                     this.props.history.push("/");
                     window.location.reload();
                 }
-            })
+            }).catch((err)=> {
+            alert("Shelf service temporarily is offline for maintenance.")
+        })
     }
 
     render() {

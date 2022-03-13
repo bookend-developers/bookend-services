@@ -1,5 +1,8 @@
 package com.bookend.shelfservice.service;
 
+import com.bookend.shelfservice.exception.MandatoryFieldException;
+import com.bookend.shelfservice.exception.NotFoundException;
+import com.bookend.shelfservice.exception.ShelfNotFound;
 import com.bookend.shelfservice.model.Shelf;
 import com.bookend.shelfservice.model.ShelfsBook;
 import com.bookend.shelfservice.model.Tag;
@@ -7,7 +10,9 @@ import com.bookend.shelfservice.payload.ShelfRequest;
 import com.bookend.shelfservice.repository.ShelfRepository;
 import com.bookend.shelfservice.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,8 +27,6 @@ public class ShelfServiceImpl implements ShelfService {
         this.tagRepository = tagRepository;
     }
 
-
-
     @Autowired
     public void setShelfRepository(ShelfRepository shelfRepository) {
         this.shelfRepository = shelfRepository;
@@ -35,13 +38,20 @@ public class ShelfServiceImpl implements ShelfService {
     }
 
     @Override
-    public Shelf getById(Long id) {
-        return  shelfRepository.findShelfById(id);
+    public Shelf getById(Long id) throws ShelfNotFound {
+        Shelf shelf = shelfRepository.findShelfById(id);
+        if(shelf == null) {
+            throw new ShelfNotFound("Shelf does not exist.");
+        }
+        return shelf;
     }
 
     @Override
-    public Shelf saveOrUpdate(ShelfRequest shelfRequest, String username) {
+    public Shelf saveOrUpdate(ShelfRequest shelfRequest, String username) throws MandatoryFieldException {
         List<Shelf> shelves = shelfRepository.findShelvesByUsername(username);
+        if(shelfRequest.getShelfname()==null || shelfRequest.getShelfname() == ""){
+            throw new MandatoryFieldException("Shelf name cannot be empty.");
+        }
         if (shelfRequest.getTags() == null || shelfRequest.getTags().isEmpty()) {
             return shelfRepository.save(new Shelf(shelfRequest.getShelfname(),username));
         }
@@ -66,14 +76,18 @@ public class ShelfServiceImpl implements ShelfService {
     }
 
     @Override
-    public void deleteShelf(Shelf shelf) {
-         shelfRepository.delete(shelf);
+    public void deleteShelf(Shelf shelf) throws NotFoundException {
+        shelfRepository.delete(shelf);
+
     }
 
     @Override
-    public List<ShelfsBook> getBooks(Long id) {
-        List<ShelfsBook> bookIDs = getById(id).getShelfsBooks();
 
+    public List<ShelfsBook> getBooks(Long id) throws ShelfNotFound, NullPointerException {
+        List<ShelfsBook> bookIDs = getById(id).getShelfsBooks();
+        if(bookIDs == null){
+            throw new NullPointerException();
+        }
         return bookIDs;
     }
 }

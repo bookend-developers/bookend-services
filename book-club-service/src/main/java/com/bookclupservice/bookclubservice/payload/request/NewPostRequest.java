@@ -12,6 +12,12 @@ public class NewPostRequest {
     private String text;
     private Long clubId;
 
+    public NewPostRequest(String title, String text, Long clubId) {
+        this.title = title;
+        this.text = text;
+        this.clubId = clubId;
+    }
+
     public String getTitle() {
         return title;
     }

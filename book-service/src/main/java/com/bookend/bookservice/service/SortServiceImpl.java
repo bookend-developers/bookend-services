@@ -25,19 +25,6 @@ public class SortServiceImpl implements SortService {
 
     }
 
-    @Override
-    public void add(Book book, String type) {
-        SortedLists sortedLists = findOne();
-        sortedListRepo.save(sortedLists.add(book));
-    }
-
-    @Override
-    public SortedLists sort() {
-        SortedLists sortedLists = findOne();
-        sortedLists.sort();
-        sortedListRepo.save(sortedLists);
-        return sortedLists;
-    }
 
     @Override
     public SortedLists sort(String type) {
@@ -57,9 +44,9 @@ public class SortServiceImpl implements SortService {
     }
 
     @Override
-    public SortedLists remove(Book book,String type) {
+    public SortedLists remove(Book book) {
         SortedLists sortedLists=findOne();
-        sortedLists = sortedLists.remove(book,type);
+        sortedLists = sortedLists.remove(book);
         return sortedListRepo.save(sortedLists) ;
     }
 }

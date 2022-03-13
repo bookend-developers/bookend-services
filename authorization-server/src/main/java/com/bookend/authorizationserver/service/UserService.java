@@ -67,7 +67,7 @@ public class UserService {
     public ResetPasswordResponse resetPassword(ResetPasswordRequest resetPasswordRequest) {
     	User user = userDetailRepository.findUserByEmail(resetPasswordRequest.getEmail());
     	if (user == null){
-    		return null;
+    		throw new IllegalArgumentException("user not exist");
     	}
     	Token token = new Token(user);
     	tokenRepository.save(token);
@@ -119,36 +119,5 @@ public class UserService {
         //messageProducer.sendUserInformation(new KafkaUserRegistered(user.getId(),user.getUsername(),user.getEmail()));
         return  new ConfirmResponse("password reset confirmed successfully",user.getUsername());
     }
-    
-    
-    /*
-    public void addToMailService(String id, String email){
-        RestTemplate restTemplate = new RestTemplate();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
-        MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
-        map.add("id", id);
-        map.add("email", email);
-
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
-
-        ResponseEntity<String> response = restTemplate.postForEntity( "http://localhost:8090/save-user", request , String.class );
-    }
-
-    public void sendMail(String email, String token){
-        RestTemplate restTemplate = new RestTemplate();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
-        MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
-        map.add("email", email);
-        map.add("token", token);
-
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
-
-        ResponseEntity<String> response = restTemplate.postForEntity( "http://localhost:8090/confirmation-mail", request , String.class );
-    }*/
 }

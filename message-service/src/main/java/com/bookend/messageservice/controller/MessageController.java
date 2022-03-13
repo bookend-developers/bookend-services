@@ -4,6 +4,9 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import com.bookend.messageservice.exception.MandatoryFieldException;
+import com.bookend.messageservice.exception.MessageNotFound;
+import com.bookend.messageservice.exception.UserNotFound;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -37,7 +40,7 @@ public class MessageController {
     }
     )
     @GetMapping("/{messageid}")
-    public Message getMessage(@PathVariable("messageid") String messageId) {
+    public Message getMessage(@PathVariable("messageid") String messageId) throws MessageNotFound {
         return messageService.getById(messageId);
     }
 
@@ -48,7 +51,7 @@ public class MessageController {
     }
     )
     @GetMapping("/inbox")
-    public List<Message> getInbox(OAuth2Authentication auth){
+    public List<Message> getInbox(OAuth2Authentication auth) throws MessageNotFound {
 
         List<Message> chat =  messageService.findMessageByReceiver(auth.getUserAuthentication().getName());
         Collections.sort(chat, (o1, o2) -> o1.getSendDate().compareTo(o2.getSendDate()));
@@ -64,7 +67,7 @@ public class MessageController {
     }
     )
     @GetMapping("/sent")
-    public List<Message> getSent(OAuth2Authentication auth){
+    public List<Message> getSent(OAuth2Authentication auth) throws MessageNotFound {
 
     	List<Message> chat = messageService.findMessageBySender(auth.getUserAuthentication().getName());
         Collections.sort(chat, (o1, o2) -> o1.getSendDate().compareTo(o2.getSendDate()));
@@ -80,7 +83,7 @@ public class MessageController {
     )
 
     @PostMapping("/new/{receiverUser}")
-    public ResponseEntity<String> sendMessage(@PathVariable("receiverUser") String receiver, @RequestBody Message message, OAuth2Authentication auth ){
+    public ResponseEntity<String> sendMessage(@PathVariable("receiverUser") String receiver, @RequestBody Message message, OAuth2Authentication auth ) throws MandatoryFieldException {
         message.setReceiver(receiver);
         message.setSender(auth.getName());
         message.setSubject(message.getSubject());
@@ -96,7 +99,7 @@ public class MessageController {
     }
     )
     @DeleteMapping("/delete/{messageid}")
-    public ResponseEntity<?> deleteMessage(@PathVariable("messageid")  String messageId,OAuth2Authentication auth){
+    public ResponseEntity<?> deleteMessage(@PathVariable("messageid")  String messageId,OAuth2Authentication auth) throws MessageNotFound, UserNotFound {
         Message message = messageService.getById(messageId);
         if(message== null){
             throw  new ResponseStatusException(HttpStatus.NOT_FOUND,"Message is not found.");
@@ -112,7 +115,7 @@ public class MessageController {
     )
 
     @GetMapping("/chat/{userName}")
-    public List<Message> getChat(OAuth2Authentication auth,@PathVariable("userName") String userName){
+    public List<Message> getChat(OAuth2Authentication auth,@PathVariable("userName") String userName) throws MessageNotFound {
     	return messageService.findChatByUserName(auth.getName(),userName);
     }
 

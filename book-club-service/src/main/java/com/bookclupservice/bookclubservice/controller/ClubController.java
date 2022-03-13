@@ -9,7 +9,6 @@ import com.bookclupservice.bookclubservice.service.MemberService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.bouncycastle.cert.ocsp.Req;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +16,6 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.swing.plaf.metal.MetalMenuBarUI;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -166,7 +163,7 @@ public class ClubController {
     @PostMapping("/new-post")
     public ResponseEntity<?> sharePost(@RequestBody NewPostRequest newPostRequest,OAuth2Authentication auth){
         try {
-            clubService.savePost(newPostRequest,auth);
+            clubService.savePost(newPostRequest,(String) auth.getPrincipal());
         } catch (NotMemberExpection notMemberExpection) {
             return ResponseEntity.badRequest().body(new MessageResponse(notMemberExpection.getMessage()));
         }
