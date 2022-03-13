@@ -224,12 +224,13 @@ public class clubServiceTest {
     @Test
     void shouldNotSendInvitation(){
         InvitationRequest  invitationRequest = new InvitationRequest((long)1,"invitationMem");
-        Member member = new Member((long)1,"invitationMem");
+        Member member = new Member((long)1,"owner");
+        Member invitedPerson = new Member((long)2,"invitationMem");
         Club club = new Club((long)1,"","",member,true);
-        Invitation invitation = new Invitation((long)1,club,member);
-        given(memberRepository.findByUserName("invitationMem")).willReturn(member);
+        Invitation invitation = new Invitation((long)1,club,invitedPerson);
+        given(memberRepository.findByUserName("invitationMem")).willReturn(invitedPerson);
         given(clubRepository.findById((long)1)).willReturn(java.util.Optional.of(club));
-        given(invitationRepository.findByClubAndInvitedPerson(club,member)).willReturn(null);
+        given(invitationRepository.findByClubAndInvitedPerson(club,invitedPerson)).willReturn(null);
         given(invitationRepository.save(any(Invitation.class))).willReturn(invitation);
         Invitation expected =  clubService.invitePerson(invitationRequest);
         assertThat(expected).isNotNull();
