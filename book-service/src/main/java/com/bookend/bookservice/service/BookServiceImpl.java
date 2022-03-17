@@ -79,7 +79,7 @@ public class BookServiceImpl implements BookService {
             throw new MandatoryFieldException("Genre field cannot be empty.");
         }
         List<Book> books = bookRepository.findBookByBookName(bookRequest.getBookName());
-        if(books.size()!=0){
+        if(books.size()==0){
             List<Book> filteredbyAuthor = books.stream()
                     .filter(b -> b.getAuthorid().equals(bookRequest.getAuthorid()))
                     .collect(Collectors.toList());
