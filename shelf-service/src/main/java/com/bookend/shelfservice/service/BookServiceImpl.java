@@ -53,7 +53,7 @@ public class BookServiceImpl implements BookService {
             throw new NotFoundException("Shelf does not exist");
         }
         ShelfsBook shelfsBook = bookRepository.findByBookIDAndShelf(bookId,shelf);
-        if(shelfsBook == null){
+        if(shelfsBook != null){
             throw new NotFoundException("Shelf's book does not exist");
         }
 
