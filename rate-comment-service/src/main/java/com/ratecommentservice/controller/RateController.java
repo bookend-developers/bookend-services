@@ -53,7 +53,7 @@ public class RateController {
     @GetMapping("/book/{bookId}")
     public Double getBookRate(@PathVariable("bookId") String  bookId ) throws BookNotFound, RateNotFound {
         Double rate= rateService.getBookAverageRate(bookId);
-        if(rate == null){
+        if(rate != null){
             return 0.0;
         }
         return rate;
