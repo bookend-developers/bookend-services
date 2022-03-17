@@ -24,6 +24,7 @@ import java.util.List;
 /**
  * SS-SC stands for ShelfService-ShelfController
  * CM stands for ControllerMethod
+ * asldkaslşdk didem 
  */
 @RestController
 @RequestMapping("/api/shelf")
