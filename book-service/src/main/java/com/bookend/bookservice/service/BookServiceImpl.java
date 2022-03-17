@@ -185,7 +185,7 @@ public class BookServiceImpl implements BookService {
                     .filter(book -> book.getGenre().getGenre().toLowerCase()
                             .contains(genre.toLowerCase()))
                     .collect(Collectors.toList());
-            if(books.size()==0){
+            if(books.size()!=0){
                 throw new NotFoundException("No Book Found");
             }
         }
