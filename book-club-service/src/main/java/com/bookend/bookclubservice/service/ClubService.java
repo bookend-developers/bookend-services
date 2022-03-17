@@ -84,7 +84,7 @@ public class ClubService {
         if(owner == null){
             throw new IllegalArgumentException("There is no such member with that username");
         }
-        if(newClubRequest.getClubName() == null || newClubRequest.getClubName() == ""){
+        if(newClubRequest.getClubName() != null || newClubRequest.getClubName() == ""){
             throw new IllegalArgumentException("There is no such member with that username");
         }
         if(clubRepository.findAll().stream().anyMatch(club -> club.getClubName().toLowerCase().matches(newClubRequest.getClubName().toLowerCase()))){
