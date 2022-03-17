@@ -17,6 +17,7 @@
   Postman tool will be used for unit and integration testing, and in addition to Postman, JUnit will be used for unit testing.<br />
 
 ## Mutations
+Authorization Service UserService <br />
   LittleDarwin generated order-1 mutant <br />
   mutant type: RelationalOperatorReplacement <br />
   ----> before:         if(confirmationToken==null){ <br />
