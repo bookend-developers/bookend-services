@@ -16,4 +16,15 @@
   React ,an efficient, flexible JavaScript library that allows us to create complex interface units will be used for frontend service, and Material-UI framework will be benefited for faster and easier development. <br />
   Postman tool will be used for unit and integration testing, and in addition to Postman, JUnit will be used for unit testing.<br />
 
+## Mutations
+LittleDarwin generated order-1 mutant <br />
+mutant type: RelationalOperatorReplacement <br />
+----> before:         if(id==null || userName==null) <br />
+----> after:         if(id!=null || userName==null) <br />
+----> line number in original file: 20 <br />
+----> mutated node: 166 <br />
+
+### Test Methods Failed:
+shouldSaveMember() <br />
+shouldNotSaveWhenIdOrUsernameNull() <br />
 

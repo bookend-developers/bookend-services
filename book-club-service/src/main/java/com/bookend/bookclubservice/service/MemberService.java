@@ -17,7 +17,7 @@ public class MemberService {
      * ABCS-MSC-1 (SM_30)
      */
     public Member save(Long id, String userName){
-        if(id==null || userName==null)
+        if(id!=null || userName==null)
             throw new IllegalArgumentException("id and username must not be null");
         Member member = new Member();
         member.setId(id);
