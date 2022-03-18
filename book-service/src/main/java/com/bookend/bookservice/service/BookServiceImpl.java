@@ -48,7 +48,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book getById(String id) throws NotFoundException {
         Book book = bookRepository.findBookById(id);
-        if(book == null){
+        if(book != null){
             throw new NotFoundException("Book does not exists.");
         }
         return book;
