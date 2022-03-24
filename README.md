@@ -17,3 +17,8 @@
   Postman tool will be used for unit and integration testing, and in addition to Postman, JUnit will be used for unit testing.<br />
 
 
+## Mutation
+    line 82 == to != on deleteShelf method of ShelfServiceImpl
+## Unit test fails
+    shouldDeleteShelfWithGivenShelf: com.bookend.shelfservice.exception.NotFoundException: Shelf does not exist!<br />
+    shouldFailToDeleteShelfIfNoShelfExistsWithGivenShelf:Expected com.bookend.shelfservice.exception.NotFoundException to be thrown, but nothing was thrown.
