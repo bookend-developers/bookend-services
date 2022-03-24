@@ -22,8 +22,6 @@ import java.util.List;
  * BS-AC stands for BookService-AdminController
  * CM stands for ControllerMethod
  */
-
-///edaaaaa
 @RestController
 @RequestMapping("/api/book/admin")
 public class AdminController {
@@ -47,7 +45,7 @@ public class AdminController {
             @ApiResponse(code = 401, message = "You are not authorized to add the resource"),
             @ApiResponse(code = 400, message = "The way you are trying to add book is not accepted.")
     }
-    )
+    )///edaaa
     @PostMapping("/new")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Book adminBook(@RequestBody BookRequest bookRequest){
