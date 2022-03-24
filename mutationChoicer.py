@@ -23,4 +23,4 @@ shelf_service = Service("shelf", 12)
 
 list_of_services = [author_service, authorization_service, book_club_service, book_service, mail_service, message_service, rate_comment_service, shelf_service]
 
-get_random_service_and_function(list_of_services, 1)
+get_random_service_and_function(list_of_services, 24)
