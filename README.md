@@ -17,3 +17,8 @@
   Postman tool will be used for unit and integration testing, and in addition to Postman, JUnit will be used for unit testing.<br />
 
 
+## Mutation
+    line 87 deleteMessage in MessageServiceImpl
+## Unit Test fails
+    failToDeleteMessageIfMessageDoesNotExist: Expected com.bookend.messageservice.exception.MessageNotFound to be thrown, but nothing was thrown.<br />
+    deleteMessage: com.bookend.messageservice.exception.MessageNotFound: Message does not found..<br />
