@@ -22,8 +22,6 @@ import java.util.List;
  * BS-AC stands for BookService-AdminController
  * CM stands for ControllerMethod
  */
-
-///edaaaaa
 @RestController
 @RequestMapping("/api/book/admin")
 public class AdminController {
