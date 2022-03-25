@@ -27,7 +27,7 @@ public class MessageServiceImp implements MessageService{
 
 	@Override
 	public Message getById(String id) throws MessageNotFound {
-		Message message = messageRepository.findMessageById(id);
+		Message message = messageRepository.findMessageById(null);
 		if(message == null) {
 			throw new MessageNotFound("Message does not exist.");
 		}
