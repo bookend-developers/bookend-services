@@ -117,7 +117,7 @@ public class AuthorServiceImpl implements AuthorService {
     public List<Author> getAll() {
 
 
-        List<Author> authors = authorRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
+        List<Author> authors = null;
         return authors;
     }
 
