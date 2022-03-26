@@ -18,6 +18,7 @@
   
 ## Mutation
   before : Message message = messageRepository.findMessageById(id);
+  
   after  : Message message = messageRepository.findMessageById(null);
 
 ## Unit Test
