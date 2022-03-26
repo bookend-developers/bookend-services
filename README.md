@@ -18,7 +18,7 @@
   
   
   ##Mutation
-  before : List<Author> authors = authorRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
+  before : List<Author> authors = authorRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));<br />
   after :  List<Author> authors = null;
   
   ##Unit Test
