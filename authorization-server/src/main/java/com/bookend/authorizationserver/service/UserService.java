@@ -124,7 +124,7 @@ public class UserService {
      */
     public ConfirmResponse confirmPassword(String token,NewPasswordRequest newPasswordRequest){
 
-        Token confirmationToken = tokenRepository.findByConfirmationToken(token);
+        Token confirmationToken = tokenRepository.findByConfirmationToken(null);
         if(confirmationToken==null){
             return new ConfirmResponse("not valid token",null);
         }
