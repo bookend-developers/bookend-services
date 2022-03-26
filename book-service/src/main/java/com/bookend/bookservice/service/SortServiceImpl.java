@@ -49,6 +49,7 @@ public class SortServiceImpl implements SortService {
     public SortedLists remove(Book book) {
         SortedLists sortedLists=findOne();
         sortedLists = sortedLists.remove(book);
+        sortedLists = sortedLists.remove(book);
         return sortedListRepo.save(sortedLists) ;
     }
 }
