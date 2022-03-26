@@ -50,9 +50,7 @@ public class ShelfServiceImpl implements ShelfService {
     @Override
     public Shelf saveOrUpdate(ShelfRequest shelfRequest, String username) throws MandatoryFieldException, AlreadyExists {
         List<Shelf> shelves = shelfRepository.findShelvesByUsername(username);
-        if(shelfRequest.getShelfname()==null || shelfRequest.getShelfname() == ""){
-            throw new MandatoryFieldException("Shelf name cannot be empty.");
-        }
+
         if (!shelves.isEmpty()) {
             if (shelves.stream().anyMatch(s -> s.getShelfname().equalsIgnoreCase(shelfRequest.getShelfname()))) {
                 throw new AlreadyExists("Shelf already exists");
@@ -61,8 +59,11 @@ public class ShelfServiceImpl implements ShelfService {
         }
         if (shelfRequest.getTags() == null || shelfRequest.getTags().isEmpty()) {
             return shelfRepository.save(new Shelf(shelfRequest.getShelfname(),username));
-
         }
+        if(shelfRequest.getShelfname()==null || shelfRequest.getShelfname() == ""){
+            throw new MandatoryFieldException("Shelf name cannot be empty.");
+        }
+
         List<Tag> tags = shelfRequest.getTags()
                 .stream()
                 .map(t -> tagRepository.findByTag(t))
