@@ -15,5 +15,13 @@
   Kafka will be used for asynchronous communication between services so that our microservice application will be more loosely-coupled. <br />
   React ,an efficient, flexible JavaScript library that allows us to create complex interface units will be used for frontend service, and Material-UI framework will be benefited for faster and easier development. <br />
   Postman tool will be used for unit and integration testing, and in addition to Postman, JUnit will be used for unit testing.<br />
+  
+## Mutation
+  before : Message message = messageRepository.findMessageById(id);
+  after  : Message message = messageRepository.findMessageById(null);
+
+## Unit Test
+  failed test : com.bookend.messageservice.serviceTest.MessageServiceTest.shouldGetMessageWithGivenIdSuccesfully
+                com.bookend.messageservice.serviceTest.MessageServiceTest.failToGetMessageIfIdDoesNotMatch
 
 
