@@ -17,3 +17,7 @@
   Postman tool will be used for unit and integration testing, and in addition to Postman, JUnit will be used for unit testing.<br />
 
 
+## Muatation
+    mutation 10 injected to UserService class line 127 token => null
+## Unit Tests
+    2 unit tests failed in UserServiceTest class. (shouldNotConfirmPasswordIfTokenNotValid() and shouldConfirmPassword())
