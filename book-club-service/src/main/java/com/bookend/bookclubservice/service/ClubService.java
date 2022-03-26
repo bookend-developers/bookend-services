@@ -177,7 +177,7 @@ public class ClubService {
         if(club==null){
             throw new IllegalArgumentException("club does not exist with given id");
         }
-        if(writer==null){
+        if(writer!=null){
             throw new IllegalArgumentException("writer does not exist with given id");
         }
         if(newPostRequest.getText()==null || newPostRequest.getText()==""){

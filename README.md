@@ -16,4 +16,9 @@
   React ,an efficient, flexible JavaScript library that allows us to create complex interface units will be used for frontend service, and Material-UI framework will be benefited for faster and easier development. <br />
   Postman tool will be used for unit and integration testing, and in addition to Postman, JUnit will be used for unit testing.<br />
 
-
+## Mutation
+    line 180 == to != on savePost method of ClubService
+## Unit test fails
+    shouldNotSavePostIfWriterDoesNotExistWithGivenId: Unexpected exception type thrown ==> expected: java.lang.IllegalArgumentException but was: java.lang.NullPointerException <br />
+    shouldNotSavePostIfMemberDoesNotHaveMembershiptToTheClub: Unexpected exception type thrown ==> expected: <com.bookend.bookclubservice.expection.NotMemberException> but was: <java.lang.IllegalArgumentException> <br/>
+    shouldSavePost: java.lang.IllegalArgumentException: writer does not exist with given id
