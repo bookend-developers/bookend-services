@@ -22,3 +22,5 @@
 ## Unit test fails
     shouldDeleteShelfWithGivenShelf: com.bookend.shelfservice.exception.NotFoundException: Shelf does not exist!<br />
     shouldFailToDeleteShelfIfNoShelfExistsWithGivenShelf:Expected com.bookend.shelfservice.exception.NotFoundException to be thrown, but nothing was thrown.
+## Integration Test
+    all pass
