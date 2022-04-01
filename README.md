@@ -21,3 +21,5 @@
     line 23 removed on save method Member Service 
 ## Unit Tests
     no fail
+## Integration Tests
+    all pass
