@@ -23,4 +23,8 @@
   
 ## Unit Test
   failed test: com.bookend.authorservice.serviceTest.AuthorServiceTest.shouldReturnAllAuthor
-
+## Integration Tests
+    Abed Persona get all authors request failed as AssertionError: expected response to have status code 200 but got 500
+    NullPointerException: null
+    Craig Persona get all authors request failed as AssertionError: expected response to have status code 200 but got 500
+    
