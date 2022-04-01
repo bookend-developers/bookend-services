@@ -21,3 +21,5 @@
     mutation 10 injected to UserService class line 127 token => null
 ## Unit Tests
     2 unit tests failed in UserServiceTest class. (shouldNotConfirmPasswordIfTokenNotValid() and shouldConfirmPassword())
+## Integration test 
+     all pass
