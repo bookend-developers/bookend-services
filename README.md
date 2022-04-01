@@ -27,4 +27,5 @@
   
   com.bookend.messageservice.serviceTest.shouldDeleteMessageSuccessfully
 
-
+## Integration test
+     all pass
