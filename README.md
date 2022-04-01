@@ -21,4 +21,7 @@
 ## Unit Tests
     unit test failed. (clubServicerTest class - > shouldNotGetMyClubsIfUsernameDoesNotExist())
 
-
+## Integration Tests
+     Britta Persona: create new private club request failed as AssertionError: expected response to have status code 200 but got 500
+     send new post fow own club request failed as AssertionError: expected response to have status code 200 but got 500
+     get post according to a club request failed as AssertionError: expected response to have status code 200 but got 400
