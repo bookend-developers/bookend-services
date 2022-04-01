@@ -22,3 +22,11 @@
 ## Unit Test fails
     failToDeleteMessageIfMessageDoesNotExist: Expected com.bookend.messageservice.exception.MessageNotFound to be thrown, but nothing was thrown.<br />
     deleteMessage: com.bookend.messageservice.exception.MessageNotFound: Message does not found..<br />
+## Integration Test Fails
+    Britta Persona all pass
+    Shirley Persona all pass
+    Abed Nadir Persona all pass
+    Craig Persona all pass
+    Pierce Persona all pass
+    Annie Persona all pass
+    
