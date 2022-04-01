@@ -20,3 +20,5 @@
     duplicate the 51st line of code on remove method Sort Service 
 ## Unit Tests
     no fail
+## Integration Tests
+    all pass
