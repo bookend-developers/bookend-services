@@ -20,3 +20,5 @@
     AuthorServiceImpl bookService.save() deleted from line 47.
 ## Unit Tests
     no fail
+## Integration Tests
+    all pass
