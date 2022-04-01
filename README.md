@@ -22,3 +22,6 @@
     shouldNotSavePostIfWriterDoesNotExistWithGivenId: Unexpected exception type thrown ==> expected: java.lang.IllegalArgumentException but was: java.lang.NullPointerException <br />
     shouldNotSavePostIfMemberDoesNotHaveMembershiptToTheClub: Unexpected exception type thrown ==> expected: <com.bookend.bookclubservice.expection.NotMemberException> but was: <java.lang.IllegalArgumentException> <br/>
     shouldSavePost: java.lang.IllegalArgumentException: writer does not exist with given id
+## Integration Test 
+    Annie Persona: publish new post sucess request test failed as AssertionError: expected response to have status code 200 but got 400
+    Britta Persona: send new post for own club request test failed as AssertionError: expected response to have status code 200 but got 400
