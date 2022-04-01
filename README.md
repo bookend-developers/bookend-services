@@ -20,3 +20,5 @@
     line 53 (if condition) is moved to 63rd line on saveOrUpdate method of ShelfServiceImpl
 ## Unit test fails
     failToSaveShelfIfShelfNameIsEmpty: Expected com.bookend.shelfservice.exception.MandatoryFieldException to be thrown, but nothing was thrown.
+## Integration Tests
+    Pierce Persona add book to shelf request failed as AssertionError: expected response to have status code 400 but got 200
