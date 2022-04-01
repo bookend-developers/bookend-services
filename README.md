@@ -25,4 +25,5 @@
   failed test : com.bookend.messageservice.serviceTest.MessageServiceTest.shouldGetMessageWithGivenIdSuccesfully
                 com.bookend.messageservice.serviceTest.MessageServiceTest.failToGetMessageIfIdDoesNotMatch
 
-
+## Integration Tests
+    all pass
