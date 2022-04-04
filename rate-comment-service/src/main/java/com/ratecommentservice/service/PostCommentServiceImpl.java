@@ -30,7 +30,7 @@ public class PostCommentServiceImpl implements PostCommentService {
     @Override
     public List<PostComment> getCommentsByPostID(Long postID) throws PostCommentNotFound {
         List<PostComment> comments = commentRepository.findAllByPostIDOrderByDateAsc(postID);
-        if(comments.isEmpty() ){
+        if(comments != null ){
             throw new PostCommentNotFound("Post Comments are not found..");
         }
         Collections.reverse(comments);
