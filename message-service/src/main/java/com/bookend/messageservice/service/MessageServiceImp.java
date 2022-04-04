@@ -97,7 +97,7 @@ public class MessageServiceImp implements MessageService{
 		 
 		 for (int i = 0; i < sent.size(); i++) {
 			Message msg = sent.get(i);
-			if (msg.getReceiver().equalsIgnoreCase(userName2)) {
+			if (msg.getReceiver().equals(userName2)) {
 				
 				chat.add(msg);
 			}
