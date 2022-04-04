@@ -78,12 +78,6 @@ public class UserService {
     	}
     	Token token = new Token(user);
     	tokenRepository.save(token);
-    	messageProducer.sendResetPasswordMailRequest(new MailRequest(user.getEmail(),"Reset Password Confirmation Mail",
-        "Şifrenizi yenilemek için aktivasyon linkine tıklayınız.\n Aktivasyon linki: " +
-        "" + "localhost:9191/api/oauth/confirmPassword/"  + token.getConfirmationToken() +
-        "\n\n" +
-        "Click on the activation link to reset your password..\nActivation link: " +
-        "" + "localhost:9191/api/oauth/confirmPassword/"+ token.getConfirmationToken()));
     	
     	return new ResetPasswordResponse("need confirmation to reset passsword",token.getConfirmationToken());
     }
