@@ -73,7 +73,7 @@ public class AuthorServiceImpl implements AuthorService {
         }
 
         List<Author> authors = authorRepository.findByName(author.getName());
-        if(authors != null || authors.size()!=0){
+        if(authors != null && authors.size()!=0){
             List<Author> filteredByBirth = authors.stream()
                     .filter(a -> a.getBirthDate().isEqual(author.getBirthDate()))
                     .collect(Collectors.toList());
