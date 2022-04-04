@@ -29,9 +29,6 @@ public class TagServiceImpl implements TagService {
     @Override
     public Tag findByID(String id) throws TagNotFound {
         Tag tag = tagRepository.findTagById(id);
-        if(tag == null) {
-            throw new TagNotFound("Tag does not exist.");
-        }
         return tag;
     }
 
