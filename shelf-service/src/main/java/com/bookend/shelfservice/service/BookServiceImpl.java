@@ -63,7 +63,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public void deleteFromShelves(String bookid) throws NotFoundException {
         List<ShelfsBook> shelfsBooks = bookRepository.findShelfsBookByBookID(bookid);
-        if(shelfsBooks == null || shelfsBooks.isEmpty()){
+        if(shelfsBooks == null && shelfsBooks.isEmpty()){
             throw new NotFoundException("The list of shelfs books does not exist");
         }
         shelfsBooks.forEach(shelfsBook -> bookRepository.delete(shelfsBook));
