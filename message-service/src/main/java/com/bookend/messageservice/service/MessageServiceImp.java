@@ -93,7 +93,7 @@ public class MessageServiceImp implements MessageService{
 	public List<Message> findChatByUserName(String userName1,String userName2) throws MessageNotFound {
 		
 		 List<Message> sent =  this.findMessageBySender(userName1);
-		 List<Message> chat = new ArrayList<Message>();
+		 List<Message> chat = null;
 		 
 		 for (int i = 0; i < sent.size(); i++) {
 			Message msg = sent.get(i);
