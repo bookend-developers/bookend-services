@@ -102,7 +102,7 @@ public class ClubService {
      */
     public boolean newMember(NewClubMemberRequest newClubMemberRequest, String username){
         Member member = memberRepository.findByUserName(username);
-        if(member== null){
+        if(member!= null){
             return false;
         }
 
