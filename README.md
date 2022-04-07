@@ -17,5 +17,7 @@
   Postman tool will be used for unit and integration testing, and in addition to Postman, JUnit will be used for unit testing.<br />
 
 ## Mutations
-AuthorServiceImpl line 76 || -> &&
-RateCommentServiceImpl line 117 delete if block
+ClubService(BookClub service) line 105 == -> !=
+
+RateServiceImpl(RateComment service) line 61 == -> !=
+
