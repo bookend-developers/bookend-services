@@ -58,7 +58,7 @@ public class GenreServiceImpl implements GenreService{
     @Override
     public Genre findById(String id) throws NotFoundException {
         Genre genre = genreRepository.findGenreById(id);
-        if(genre == null){
+        if(genre != null){
             throw new NotFoundException("No genre is match with given id");
         }
         return genre;

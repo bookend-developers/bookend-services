@@ -105,7 +105,7 @@ public class UserService {
     public ConfirmResponse confirm(String token){
 
         Token confirmationToken = tokenRepository.findByConfirmationToken(token);
-        if(confirmationToken==null){
+        if(confirmationToken!=null){
             return new ConfirmResponse("not valid token",null);
         }
         User user = confirmationToken.getUser();
