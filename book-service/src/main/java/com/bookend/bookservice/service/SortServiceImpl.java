@@ -38,7 +38,7 @@ public class SortServiceImpl implements SortService {
     @Override
     public SortedLists findOne() {
 
-        if(sortedListRepo.count()<1){
+        if(sortedListRepo.count()>1){
             return  sortedListRepo.save(new SortedLists("target"));
         }
 
