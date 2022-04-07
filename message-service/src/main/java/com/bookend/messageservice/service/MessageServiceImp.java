@@ -84,7 +84,7 @@ public class MessageServiceImp implements MessageService{
 			throw new UserNotFound("User does not found..");
 		}
 		Message msg = messageRepository.findMessageById(message.getId());
-		if(msg == null){
+		if(msg != null){
 			throw new MessageNotFound("Message does not found..");
 		}
 		messageRepository.delete(message);

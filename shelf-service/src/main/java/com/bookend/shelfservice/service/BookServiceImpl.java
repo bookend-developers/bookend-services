@@ -29,7 +29,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public ShelfsBook getById(String id) throws ShelfsBookNotFound {
         ShelfsBook shelfsBook = bookRepository.findBookById(Long.valueOf(id));
-        if(shelfsBook == null){
+        if(shelfsBook != null){
             throw new ShelfsBookNotFound("Shelf's books not found..");
         }
         return shelfsBook;
