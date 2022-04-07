@@ -58,7 +58,7 @@ public class RateServiceImpl implements RateService {
     public Rate save(RateRequest rateRequest, String username) {
         Rate rate;
         Book book = bookRepository.findBookByBookId(rateRequest.getBookId());
-        if(book==null){
+        if(book!=null){
             book = new Book(rateRequest.getBookId(),rateRequest.getBookname());
             bookRepository.save(book);
 
