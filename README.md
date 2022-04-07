@@ -19,3 +19,8 @@
 ## Mutations
 AuthorServiceImpl line 76 || -> &&
 RateCommentServiceImpl line 117 delete if block
+
+
+## Mutations
+AuthorServiceImpl line 76 || -> &&
+RateCommentServiceImpl line 117 delete if block
