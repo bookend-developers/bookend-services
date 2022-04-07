@@ -22,10 +22,7 @@ import org.mockito.quality.Strictness;
 import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.filter;
@@ -61,7 +58,6 @@ public class AuthorServiceTest {
         assertThrows(NotFoundException.class,()->{
             authorService.getById(id);
         });
-
     }
     @Test
     void failToUpdateAuthorBooksIfAuthorIdDoesNotMatchAnyExistingAuthor(){
