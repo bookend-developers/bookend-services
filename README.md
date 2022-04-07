@@ -17,3 +17,17 @@
   Postman tool will be used for unit and integration testing, and in addition to Postman, JUnit will be used for unit testing.<br />
 
 
+## Mutations
+  Book club service -> ClubService line 57
+  before : if(member == null){
+  after :   if(member != null){
+
+  Author service -> AuthorServiceImpl line 126
+  before :   return authorRepository.findByNameContainingIgnoreCase(title);
+  after :    return authorRepository.findByNameContainingIgnoreCase(null);
+  
+## Unit Tests
+  failed:
+  com.bookend.bookclubservice.serviceTest.clubServiceTest#shouldGetMyInvitationsWithUsername
+  com.bookend.bookclubservice.serviceTest.clubServiceTest#shouldNotGetMyInvitationsIfUsernameDoesNotExist
+  com.bookend.authorservice.serviceTest.AuthorServiceTest#shouldReturnAllAuthorMatchesGivenTitle
