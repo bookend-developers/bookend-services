@@ -16,3 +16,22 @@
   React ,an efficient, flexible JavaScript library that allows us to create complex interface units will be used for frontend service, and Material-UI framework will be benefited for faster and easier development. <br />
   Postman tool will be used for unit and integration testing, and in addition to Postman, JUnit will be used for unit testing.<br />
 
+## Mutations
+  Authorization server -> UserService line 108
+  before :  if(confirmationToken==null){
+  after :   if(confirmationToken!=null){
+
+  Book service -> GenreServiceImpl line 61
+  before :    if(genre == null){
+  after :     if(genre != null){
+   
+## Unit Tests
+  failed:
+  com.bookend.bookservice.serviceTest.GenreServiceTest#shouldFailToUpdateGenreIfGenreNAmeEmptyString
+  com.bookend.bookservice.serviceTest.GenreServiceTest#shouldFindGenreIfGenreExistWithGivenID
+  com.bookend.bookservice.serviceTest.GenreServiceTest#shouldUpdateGenre
+  com.bookend.bookservice.serviceTest.GenreServiceTest#shouldFailToFindGenreIfNoGenreExistWithGivenID
+  com.bookend.bookservice.serviceTest.GenreServiceTest#shouldFailToUpdateGenreIfGenreNAmeNull
+
+  com.bookend.authorizationserver.serviceTest.UserServiceTest#shouldConfirm
+  com.bookend.authorizationserver.serviceTest.UserServiceTest#shouldNotConfirmIfTokenNotValid
