@@ -18,4 +18,5 @@
 
 ## Mutations
 BookServiceImpl(Shelf-Service) line 66 || -> &&
+
 PostCommentServiceImpl(Rate Comment Service) line 33 isEmpty() -> != null
