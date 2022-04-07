@@ -16,3 +16,21 @@
   React ,an efficient, flexible JavaScript library that allows us to create complex interface units will be used for frontend service, and Material-UI framework will be benefited for faster and easier development. <br />
   Postman tool will be used for unit and integration testing, and in addition to Postman, JUnit will be used for unit testing.<br />
 
+## Mutations
+  Book service -> BookServiceImpl line 50
+  before :  Book book = bookRepository.findBookById(id);
+  after :   Book book = bookRepository.findBookById(null);
+
+  Message service -> MessageServiceImpl line 96
+  before :   List<Message> chat = new ArrayList<Message>();
+	after : 	 List<Message> chat = null;
+  
+## Unit Tests
+  failed:
+  com.bookend.bookservice.serviceTest.BookServiceTest#shouldDeleteBookWithGivenId
+  com.bookend.bookservice.serviceTest.BookServiceTest#verifyBook
+  com.bookend.bookservice.serviceTest.BookServiceTest#shouldFailToReturnIfBookDoesNotExistWithGivenId
+  com.bookend.bookservice.serviceTest.BookServiceTest#failToVerifyWhenIDHaveNotMatch
+  com.bookend.bookservice.serviceTest.BookServiceTest#shouldFailToDeleteBookIfNoBookExistsWithGivenId
+  com.bookend.bookservice.serviceTest.BookServiceTest#shouldReturnBookWithGivenId
+  com.bookend.messageservice.serviceTest.MessageServiceTest#findChatByUserName
