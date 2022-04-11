@@ -20,3 +20,6 @@
 BookServiceImpl(Shelf service) line 66 || -> &&
 
 SortServiceImplBook(Shelf service) line 41 < -> >
+
+## Integration tests
+ all pass
