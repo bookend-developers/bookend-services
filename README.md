@@ -20,3 +20,6 @@
 AuthorServiceImpl(Author-Service) msg.get("bookRequest") -> line 46 msg.get("bookReqeust")
 
 TagServiceImpl(Shelf Service) line 32 if block remove
+
+## Integraition tests
+ all pass
