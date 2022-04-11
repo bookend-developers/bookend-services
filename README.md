@@ -21,3 +21,5 @@ ClubService(BookClub service) line 105 == -> !=
 
 RateServiceImpl(RateComment service) line 61 == -> !=
 
+## Integration tests
+Pierce persona delete comment request fails as expected response to have status code 200 but got 500
