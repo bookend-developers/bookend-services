@@ -20,3 +20,8 @@
 BookServiceImpl(Book Service) line 51 || -> &&
 
 MessageServiceImp(Message Service) line 109 equalsIgnoreCase() -> equals()
+
+## Integration tests 
+ britta persona get a book request fails Status code is 200 | AssertionError: expected response to have status code 200 but got 404
+ craig persona verify a book and delete a book reuqets fail as Status code is 200 | AssertionError: expected response to have status code 200 but got 404
+ pierce persona view a book request fails as AssertionError: expected response to have status code 200 but got 404
