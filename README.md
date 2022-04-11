@@ -20,3 +20,6 @@
 AuthorServiceImpl line 76 || -> &&
 
 RateCommentServiceImpl line 117 delete if block
+
+## Integration test
+ all pass
