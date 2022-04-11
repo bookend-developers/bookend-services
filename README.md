@@ -20,3 +20,6 @@
 UserService(Authorization-Service) messageProducer.sendResetPasswordMailRequest() removed
 
 ClubService(BookClub Service func no:1) line 46 if block remove
+
+## Integration tests
+ all pass
