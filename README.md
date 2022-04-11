@@ -20,3 +20,6 @@
 BookServiceImpl(Shelf-Service) line 66 || -> &&
 
 PostCommentServiceImpl(Rate Comment Service) line 33 isEmpty() -> != null
+
+## Integration Tests
+Pierce Persona get post's comments is failed Getting post's comment is succedd. Status code is 200 | AssertionError: expected response to have status code 200 but got 500
