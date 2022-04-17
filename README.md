@@ -17,6 +17,11 @@
   Postman tool will be used for unit and integration testing, and in addition to Postman, JUnit will be used for unit testing.<br />
 
 ## Mutations
-MessageServiceImp(Message service) line 70 if block removed
+Message Service: line 70 if block removed on saveOrUpdate() method of MessageServiceImpl. <br />
+Author Service: line 29 || -> && on save() method of BookServiceImpl. <br />
+ 
+## Unit test results
+1st mutation: com.bookend.messageservice.serviceTest.MessageServiceTest.failToSaveMessageIfDateIsEmpty -> AssertionFailedError: Expected com.bookend.messageservice.exception.MandatoryFieldException to be thrown, but nothing was thrown. <br />
+2nd mutation: com.bookend.authorservice.serviceTest.BookServiceTest.shouldFailSaveBookIfIDIsEmpty -> AssertionFailedError: Expected com.bookend.authorservice.exception.MandatoryFieldException to be thrown, but nothing was thrown. <br />
 
-BookServiceImpl(Author service) line 29 || -> &&
+## Integration tests
