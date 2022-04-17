@@ -17,9 +17,12 @@
   Postman tool will be used for unit and integration testing, and in addition to Postman, JUnit will be used for unit testing.<br />
 
 ## Mutations
-UserService(Authorization-Service) messageProducer.sendResetPasswordMailRequest() removed
+Authorization Service: messageProducer.sendResetPasswordMailRequest() removed on resetPassword method of UserService.<br />
+Book Club Service: line 46 if block remove on getMyClubs() method of ClubService.<br />
 
-ClubService(BookClub Service func no:1) line 46 if block remove
+##Unit test results
+1st mutation: All the unit tests in the authorization service have passed.<br />
+2nd mutation: com.bookend.bookclubservice.serviceTest.clubServiceTest.shouldNotGetMyClubsIfUsernameDoesNotExist: AssertionFailedError: Expected java.lang.IllegalArgumentException to be thrown, but nothing was thrown.<br />
 
 ## Integration tests
  all pass
