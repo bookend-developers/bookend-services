@@ -17,9 +17,12 @@
   Postman tool will be used for unit and integration testing, and in addition to Postman, JUnit will be used for unit testing.<br />
 
 ## Mutations
-BookServiceImpl(Shelf-Service) line 66 || -> &&
+Shelf Service: line 66 || -> && on deleteFromShelves() method of BookServiceImpl.<br />
+Rate Comment Service: line 33 isEmpty() -> != null on getCommentsByPostID() method of PostCommentServiceImpl.<br />
 
-PostCommentServiceImpl(Rate Comment Service) line 33 isEmpty() -> != null
+##Unit test results
+1st mutaion: com.bookend.shelfservice.serviceTest.BookServiceTest.failToDeleteBookFromAllShelvesIfBookDoesNotExistInShelves(): AssertionFailedError: Unexpected exception type thrown ==> expected: <com.bookend.shelfservice.exception.NotFoundException> but was: <java.lang.NullPointerException><br />
+2nd mutation: com.ratecommentservice.serviceTest.PostCommentServiceTest.getPostCommentIfPostIdHaveMatchSuccesfully: exception.PostCommentNotFound: Post Comments are not found.. <br />
 
 ## Integration Tests
 Pierce Persona get post's comments is failed Getting post's comment is succedd. Status code is 200 | AssertionError: expected response to have status code 200 but got 500
