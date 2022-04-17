@@ -17,9 +17,18 @@
   Postman tool will be used for unit and integration testing, and in addition to Postman, JUnit will be used for unit testing.<br />
 
 ## Mutations
-ClubService(BookClub service) line 105 == -> !=
+Book Club Service: line 105 == -> != on newMember() method of ClubService.<br />
+Rate Comment Service: line 61 == -> != on save() method of RateServiceImpl.<br />
 
-RateServiceImpl(RateComment service) line 61 == -> !=
+## Unit test results
+1st mutation: <br />
+- com.bookend.bookclubservice.serviceTest.clubServiceTest.shouldSaveNewMemberToClub -> Expected :true, Actual :false <br />
+- com.bookend.bookclubservice.serviceTest.clubServiceTest.shouldNotSaveNewMemberToClubIfUserIsOwnerOfClub -> org.mockito.exceptions.misusing.UnnecessaryStubbingException <br />
+- com.bookend.bookclubservice.serviceTest.clubServiceTest.shouldNotSaveNewMemberToClubIfUserAllreadMemberOfClub -> org.mockito.exceptions.misusing.UnnecessaryStubbingException <br />
+- com.bookend.bookclubservice.serviceTest.clubServiceTest.shouldNotSaveNewMemberToClubIfUserNotExists -> java.util.NoSuchElementException: No value present <br /><br />
+2nd mutation: <br />
+- com.ratecommentservice.serviceTest.RateServiceTest.shouldSaveNonExistingRateWhenBookDoesNotExist -> java.lang.NullPointerException<br />
+- com.ratecommentservice.serviceTest.RateServiceTest.shouldSaveGivenRateSuccessfully -> org.mockito.exceptions.misusing.PotentialStubbingProblem<br />
 
 ## Integration tests
 Pierce persona delete comment request fails as expected response to have status code 200 but got 500
