@@ -17,9 +17,17 @@
   Postman tool will be used for unit and integration testing, and in addition to Postman, JUnit will be used for unit testing.<br />
 
 ## Mutations
-BookServiceImpl(Book Service) line 51 || -> &&
+Book Service: line 51 || -> && on getById() method of BookServiceImpl.<br />
+Message Service: line 109 equalsIgnoreCase() -> equals() on findChatByUserName() method of MessageServiceImpl.<br />
 
-MessageServiceImp(Message Service) line 109 equalsIgnoreCase() -> equals()
+## Unit test results
+1st mutation: <br />
+- com.bookend.bookservice.serviceTest.BookServiceTest.shouldDeleteBookWithGivenId -> com.bookend.bookservice.exception.NotFoundException: Book does not exists.<br />
+- com.bookend.bookservice.serviceTest.BookServiceTest.verifyBook -> com.bookend.bookservice.exception.NotFoundException: Book does not exists.<br />
+- com.bookend.bookservice.serviceTest.BookServiceTest.failToVerifyWhenIDHaveNotMatch -> AssertionFailedError: Unexpected exception type thrown ==> expected: <com.bookend.bookservice.exception.NotFoundException> but was: <java.lang.NullPointerException> <br />
+- com.bookend.bookservice.serviceTest.BookServiceTest.shouldFailToDeleteBookIfNoBookExistsWithGivenId -> AssertionFailedError: Expected com.bookend.bookservice.exception.NotFoundException to be thrown, but nothing was thrown. <br />
+- com.bookend.bookservice.serviceTest.BookServiceTest.shouldReturnBookWithGivenId -> com.bookend.bookservice.exception.NotFoundException: Book does not exists. <br /><br />
+2nd mutation: All the unit tests in message service have passed.<br />
 
 ## Integration tests 
  britta persona get a book request fails Status code is 200 | AssertionError: expected response to have status code 200 but got 404
