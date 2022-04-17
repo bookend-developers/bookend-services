@@ -17,9 +17,12 @@
   Postman tool will be used for unit and integration testing, and in addition to Postman, JUnit will be used for unit testing.<br />
 
 ## Mutations
-AuthorServiceImpl line 76 || -> &&
+Author Service: line 76 || -> && on save() method of AuthorServiceImpl.<br />
+RateCommentService: line 117 delete if block on findRateByBookIdandUsername() method of RateServiceImpl.<br />
 
-RateCommentServiceImpl line 117 delete if block
+## Unit test results
+1st mutation: All the unit tests in the author service have passed.<br />
+2nd mutation: failToGetRateIfBookAndUsernameDoesNotMatch(): AssertionFailedError: Expected com.ratecommentservice.exception.RateNotFound to be thrown, but nothing was thrown.<br />
 
 ## Integration test
  all pass
