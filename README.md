@@ -17,9 +17,14 @@
   Postman tool will be used for unit and integration testing, and in addition to Postman, JUnit will be used for unit testing.<br />
 
 ## Mutations
-BookServiceImpl(Shelf service) line 66 || -> &&
+Shelf Service: line 66 || -> && on deleteFromShelves() method of BookServiceImpl.<br />
+Book Service: line 41 < -> > on findOne() method of SortServiceImpl.<br />
 
-SortServiceImplBook(Shelf service) line 41 < -> >
+## Unit test results 
+1st mutation: com.bookend.shelfservice.serviceTest.BookServiceTest.failToDeleteBookFromAllShelvesIfBookDoesNotExistInShelves -> AssertionFailedError: Unexpected exception type thrown ==> expected: <com.bookend.shelfservice.exception.NotFoundException> but was: <java.lang.NullPointerException> <br /><br />
+2nd mutation: <br />
+- com.bookend.bookservice.serviceTest.SortServiceTest.shouldFindOneThatIsNewCreatedIfNoSortedListExists -> java.lang.IndexOutOfBoundsException: Index: 0, Size: 0 <br />
+- com.bookend.bookservice.serviceTest.SortServiceTest.shouldNotSaveWhenFindOneCalledAndIfCountGreaterThenOne -> AssertionError: Expecting actual not to be null <br />
 
 ## Integration tests
  all pass
