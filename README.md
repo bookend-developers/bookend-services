@@ -17,9 +17,12 @@
   Postman tool will be used for unit and integration testing, and in addition to Postman, JUnit will be used for unit testing.<br />
 
 ## Mutations
-AuthorServiceImpl(Author-Service) msg.get("bookRequest") -> line 46 msg.get("bookReqeust")
+Author Service: msg.get("bookRequest") -> line 46 msg.get("bookReqeust") on update() method of AuthorServiceImpl. <br />
+Shelf Service: line 32 if block remove on findByID() method of TagServiceImpl.<br />
 
-TagServiceImpl(Shelf Service) line 32 if block remove
+##Unit test results
+1st mutation: All the unit tests in the author service have passed.<br />
+2nd mutation: com.bookend.shelfservice.serviceTest.TagServiceTest.failToGetShelfIfIdDoesNotMatch -> AssertionFailedError: Expected com.bookend.shelfservice.exception.TagNotFound to be thrown, but nothing was thrown.<br />
 
 ## Integraition tests
  all pass
