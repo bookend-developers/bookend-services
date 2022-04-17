@@ -22,7 +22,7 @@ RateCommentService: line 117 delete if block on findRateByBookIdandUsername() me
 
 ## Unit test results
 1st mutation: All the unit tests in the author service have passed.<br />
-2nd mutation: failToGetRateIfBookAndUsernameDoesNotMatch(): AssertionFailedError: Expected com.ratecommentservice.exception.RateNotFound to be thrown, but nothing was thrown.<br />
+2nd mutation: com.ratecommentservice.serviceTest.RateServiceTest.failToGetRateIfBookAndUsernameDoesNotMatch: AssertionFailedError: Expected com.ratecommentservice.exception.RateNotFound to be thrown, but nothing was thrown.<br />
 
 ## Integration test
  all pass
