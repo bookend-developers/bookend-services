@@ -20,7 +20,7 @@
 Authorization Service: messageProducer.sendResetPasswordMailRequest() removed on resetPassword method of UserService.<br />
 Book Club Service: line 46 if block remove on getMyClubs() method of ClubService.<br />
 
-##Unit test results
+## Unit test results
 1st mutation: All the unit tests in the authorization service have passed.<br />
 2nd mutation: com.bookend.bookclubservice.serviceTest.clubServiceTest.shouldNotGetMyClubsIfUsernameDoesNotExist: AssertionFailedError: Expected java.lang.IllegalArgumentException to be thrown, but nothing was thrown.<br />
 
