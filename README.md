@@ -35,3 +35,6 @@
 
   com.bookend.authorizationserver.serviceTest.UserServiceTest#shouldConfirm
   com.bookend.authorizationserver.serviceTest.UserServiceTest#shouldNotConfirmIfTokenNotValid
+
+## Integration Tests
+    craig persona fails at update a selected  genre request as AssertionError: expected response to have status code 200 but got 404
