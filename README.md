@@ -31,3 +31,5 @@
   com.bookend.bookclubservice.serviceTest.clubServiceTest#shouldGetMyInvitationsWithUsername
   com.bookend.bookclubservice.serviceTest.clubServiceTest#shouldNotGetMyInvitationsIfUsernameDoesNotExist
   com.bookend.authorservice.serviceTest.AuthorServiceTest#shouldReturnAllAuthorMatchesGivenTitle
+## Integration tests
+ all pass
