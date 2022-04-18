@@ -25,3 +25,4 @@ Author Service: line 29 || -> && on save() method of BookServiceImpl. <br />
 2nd mutation: com.bookend.authorservice.serviceTest.BookServiceTest.shouldFailSaveBookIfIDIsEmpty -> AssertionFailedError: Expected com.bookend.authorservice.exception.MandatoryFieldException to be thrown, but nothing was thrown. <br />
 
 ## Integration tests
+all pass
