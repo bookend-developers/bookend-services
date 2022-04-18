@@ -34,3 +34,8 @@
   com.bookend.bookservice.serviceTest.BookServiceTest#shouldFailToDeleteBookIfNoBookExistsWithGivenId
   com.bookend.bookservice.serviceTest.BookServiceTest#shouldReturnBookWithGivenId
   com.bookend.messageservice.serviceTest.MessageServiceTest#findChatByUserName
+
+## Integration test
+britta persona fails at get a book request as expected response to have status code 200 but got 404
+craig persona fails at verify a book and delete a book request as both expected response to have status code 200 but got 404
+pierce persona fails at view a book request as expected response to have status code 200 but got 404
