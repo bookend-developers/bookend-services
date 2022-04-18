@@ -32,3 +32,6 @@
   com.bookend.messageservice.serviceTest.MessageServiceTest#shouldDeleteMessageSuccessfully
   com.bookend.shelfservice.serviceTest.BookServiceTest#failToGetShelfsBooksIfIdDoesNotMatch
   com.bookend.shelfservice.serviceTest.BookServiceTest#getShelfsBookIfIdHaveMatchSuccessfully
+
+## Integration Test 
+all pass
