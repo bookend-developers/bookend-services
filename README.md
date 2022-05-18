@@ -18,17 +18,17 @@
 
 ## Mutations
 
-  1 - Message service -> MessageServiceImpl line 96 before : List chat = new ArrayList(); after : List chat = null;
+  1 - Message Service: MessageServiceImpl line 96 before : List chat = new ArrayList(); after : List chat = null;
 
-  2 - Book service -> BookServiceImpl line 50 before : Book book = bookRepository.findBookById(id); after : Book book = bookRepository.findBookById(null);
+  2 - Book Service: BookServiceImpl line 50 before : Book book = bookRepository.findBookById(id); after : Book book = bookRepository.findBookById(null);
 
-  3 - line 53 (if condition) is moved to 63rd line on saveOrUpdate method of ShelfServiceImpl
+  3 - Shelf Service: line 53 (if condition) is moved to 63rd line on saveOrUpdate method of ShelfServiceImpl
   
 ## Unit Test fails
 
-  1 - com.bookend.messageservice.serviceTest.MessageServiceTest#findChatByUserName
+  1 - unit test failed. (com.bookend.messageservice.serviceTest.MessageServiceTest#findChatByUserName)
 
-  2 - failed: com.bookend.bookservice.serviceTest.BookServiceTest#shouldDeleteBookWithGivenId       com.bookend.bookservice.serviceTest.BookServiceTest#verifyBook com.bookend.bookservice.serviceTest.BookServiceTest#shouldFailToReturnIfBookDoesNotExistWithGivenId com.bookend.bookservice.serviceTest.BookServiceTest#failToVerifyWhenIDHaveNotMatch com.bookend.bookservice.serviceTest.BookServiceTest#shouldFailToDeleteBookIfNoBookExistsWithGivenId com.bookend.bookservice.serviceTest.BookServiceTest#shouldReturnBookWithGivenId
+  2 - unit test failed: (com.bookend.bookservice.serviceTest.BookServiceTest#shouldDeleteBookWithGivenId       com.bookend.bookservice.serviceTest.BookServiceTest#verifyBook com.bookend.bookservice.serviceTest.BookServiceTest#shouldFailToReturnIfBookDoesNotExistWithGivenId com.bookend.bookservice.serviceTest.BookServiceTest#failToVerifyWhenIDHaveNotMatch com.bookend.bookservice.serviceTest.BookServiceTest#shouldFailToDeleteBookIfNoBookExistsWithGivenId com.bookend.bookservice.serviceTest.BookServiceTest#shouldReturnBookWithGivenId)
 
-  3 - failToSaveShelfIfShelfNameIsEmpty: Expected com.bookend.shelfservice.exception.MandatoryFieldException to be thrown, but nothing was thrown.
+  3 - unit test failed. (failToSaveShelfIfShelfNameIsEmpty: Expected com.bookend.shelfservice.exception.MandatoryFieldException to be thrown, but nothing was thrown.)
 
