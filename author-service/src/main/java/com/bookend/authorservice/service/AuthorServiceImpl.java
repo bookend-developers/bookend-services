@@ -42,8 +42,8 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public Author update(Map<String,String> msg) throws NotFoundException, MandatoryFieldException {
-        Author author = getById(msg.get("author"));
-        Book book= new Book(msg.get("bookRequest"),author);
+        Author author = getById(msg.get(""));
+        Book book= new Book(msg.get("bookRequest"), author);
         bookService.save(book);
         author.getBookList().add(book);
         return authorRepository.save(author);
