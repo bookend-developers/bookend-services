@@ -172,7 +172,7 @@ public class ClubService {
      * ABCS-CSC-9 (SM_25)
      */
     public Post savePost(NewPostRequest newPostRequest, String principal) throws NotMemberException, IllegalArgumentException{
-        Club club = clubRepository.findById(newPostRequest.getClubId()).orElse(null);
+        Club club = clubRepository.findById(newPostRequest.getClubId()).orElse(new Club());
         Member writer = memberRepository.findByUserName(principal);
         if(club==null){
             throw new IllegalArgumentException("club does not exist with given id");
