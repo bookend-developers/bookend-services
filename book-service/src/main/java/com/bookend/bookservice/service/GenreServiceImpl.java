@@ -70,7 +70,7 @@ public class GenreServiceImpl implements GenreService{
             throw new AlreadyExist("Genre already exist");
         }
         Genre oldGenre = findById(genre.getId());
-        if(genre.getGenre() == "" || genre.getGenre() == null){
+        if(genre.getGenre() == "" && genre.getGenre() == null){
             throw new MandatoryFieldException("Genre cannot be empty");
         }
         oldGenre.setGenre(genre.getGenre());
