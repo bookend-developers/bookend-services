@@ -16,3 +16,12 @@
   React ,an efficient, flexible JavaScript library that allows us to create complex interface units will be used for frontend service, and Material-UI framework will be benefited for faster and easier development. <br />
   Postman tool will be used for unit and integration testing, and in addition to Postman, JUnit will be used for unit testing.<br />
 
+## Mutations
+  1- Shelf Service: line 40-42 is deleted on save method of TagServiceImpl. <br />
+  2- Rate Comment Service: line 116 username -> null on findRateByBookIdandUsername method of RateServiceImpl. <br />
+  3- Book Service: line 73 || -> && on update method of GenreServiceImpl. <br /> 
+  
+## Unit Tests
+  1- failToUpdateTagWhenTagNameAlreadyExists(Expected AlreadyExists to be thrown, but nothing was thrown.) test is failed in TagServiceTest. <br />
+  2- failToGetRateIfBookAndUsernameDoesNotMatch(Expected: RateNotFound but was: <org.mockito.exceptions.misusing.PotentialStubbingProblem>) <br />
+  3- shouldFailToUpdateGenreIfGenreNAmeEmptyString(Expected MandatoryFieldException to be thrown, but nothing was thrown.)
