@@ -16,3 +16,18 @@
   React ,an efficient, flexible JavaScript library that allows us to create complex interface units will be used for frontend service, and Material-UI framework will be benefited for faster and easier development. <br />
   Postman tool will be used for unit and integration testing, and in addition to Postman, JUnit will be used for unit testing.<br />
 
+## Mutations
+
+  1 - Book Club Service: line 46 47 48 if block removed from ClubService class
+
+  2 - Rate Comment Service: line 33 isEmpty() -> != null on getCommentsByPostID() method of PostCommentServiceImpl.
+
+  3 - Author Service: line 29 || -> && on save() method of BookServiceImpl.
+  
+## Unit Test fails
+
+  1 - unit test failed. (clubServicerTest class - > shouldNotGetMyClubsIfUsernameDoesNotExist())
+
+  2 -  unit test failed. (com.ratecommentservice.serviceTest.PostCommentServiceTest.getPostCommentIfPostIdHaveMatchSuccesfully: exception.PostCommentNotFound: Post Comments are not found..)
+
+  3 - unit test failed. (com.bookend.authorservice.serviceTest.BookServiceTest.shouldFailSaveBookIfIDIsEmpty -> AssertionFailedError: Expected com.bookend.authorservice.exception.MandatoryFieldException to be thrown, but nothing was thrown.)
