@@ -16,3 +16,13 @@
   React ,an efficient, flexible JavaScript library that allows us to create complex interface units will be used for frontend service, and Material-UI framework will be benefited for faster and easier development. <br />
   Postman tool will be used for unit and integration testing, and in addition to Postman, JUnit will be used for unit testing.<br />
 
+## Mutations
+  1- Message Service: line 39 == -> != on findMessageByReceiver method of MessageServiceImp. <br />
+  2- Mail Service: line 49-50 are deleted on sendConfirmationMailRequestsMail method of EmailMailSender <br />
+  3- Book Club Service: line 175 null -> new Club() on savePost method of ClubService.
+
+## Unit tests 
+  1- failToGetMessageByReceiverIfReceiverDoesNotMatchAnyReceiver(Expected MessageNotFound to be thrown, but nothing was thrown.) and shouldGetMessagesByReceiverIfReceiverMatchAnyReceiver(MessageNotFound: Message does not exist.) tests are failed in MessageServiceTest. <br/>
+  2- No tests are failed.
+  3- No tests are failed.
+  
