@@ -203,7 +203,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Book> findBookByVerifiedIsFalse() throws NotFoundException {
         List<Book> books = bookRepository.findBookByVerifiedIsFalse();
-        if(books == null || books.isEmpty()){
+        if(books != null || books.isEmpty()){
             throw new NotFoundException("No book exist for given author.");
         }
         return books;
