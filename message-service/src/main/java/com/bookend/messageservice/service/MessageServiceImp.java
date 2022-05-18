@@ -36,7 +36,7 @@ public class MessageServiceImp implements MessageService{
 
 	public List<Message> findMessageByReceiver(String userName) throws MessageNotFound {
 		List<Message> message = messageRepository.findMessageByReceiver(userName);
-		if(message == null){
+		if(message != null){
 			throw new MessageNotFound("Message does not exist.");
 		}
 		return message;
