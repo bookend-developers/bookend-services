@@ -16,3 +16,19 @@
   React ,an efficient, flexible JavaScript library that allows us to create complex interface units will be used for frontend service, and Material-UI framework will be benefited for faster and easier development. <br />
   Postman tool will be used for unit and integration testing, and in addition to Postman, JUnit will be used for unit testing.<br />
 
+## Mutations
+
+  1 - Message service -> MessageServiceImpl line 96 before : List chat = new ArrayList(); after : List chat = null;
+
+  2 - Book service -> BookServiceImpl line 50 before : Book book = bookRepository.findBookById(id); after : Book book = bookRepository.findBookById(null);
+
+  3 - line 53 (if condition) is moved to 63rd line on saveOrUpdate method of ShelfServiceImpl
+  
+## Unit Test fails
+
+  1 - com.bookend.messageservice.serviceTest.MessageServiceTest#findChatByUserName
+
+  2 - failed: com.bookend.bookservice.serviceTest.BookServiceTest#shouldDeleteBookWithGivenId       com.bookend.bookservice.serviceTest.BookServiceTest#verifyBook com.bookend.bookservice.serviceTest.BookServiceTest#shouldFailToReturnIfBookDoesNotExistWithGivenId com.bookend.bookservice.serviceTest.BookServiceTest#failToVerifyWhenIDHaveNotMatch com.bookend.bookservice.serviceTest.BookServiceTest#shouldFailToDeleteBookIfNoBookExistsWithGivenId com.bookend.bookservice.serviceTest.BookServiceTest#shouldReturnBookWithGivenId
+
+  3 - failToSaveShelfIfShelfNameIsEmpty: Expected com.bookend.shelfservice.exception.MandatoryFieldException to be thrown, but nothing was thrown.
+
