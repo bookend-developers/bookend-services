@@ -43,9 +43,6 @@ public class ClubService {
      */
     public List<Club> getMyClubs(String username){
         Member member=memberRepository.findByUserName(username);
-        if(member == null){
-            throw new IllegalArgumentException("There is no such member with that username");
-        }
         return clubRepository.findByOwner(member);
 
     }
