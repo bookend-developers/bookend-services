@@ -113,7 +113,7 @@ public class RateServiceImpl implements RateService {
         if(book == null){
             throw new BookNotFound("Book is not found");
         }
-        Rate rate = rateRepository.findByBookAndUsername(book,username);
+        Rate rate = rateRepository.findByBookAndUsername(book,null);
         if(rate == null){
             throw new RateNotFound("Rate is not found");
         }
