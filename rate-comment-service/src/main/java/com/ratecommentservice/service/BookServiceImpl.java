@@ -29,10 +29,6 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book findBookByBookID(String bookid) throws BookNotFound {
         Book book = bookRepository.findBookByBookId(bookid);
-        if(book == null){
-            throw new BookNotFound("Book is not found..");
-        }
-
         return book;
     }
 
