@@ -37,9 +37,6 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Tag save(GenreMessage newGenre) throws AlreadyExists {
-        if(tagRepository.findByTag(newGenre.getGenre())!=null){
-            throw new AlreadyExists("Tag name already exist");
-        }
         Tag checkTag = tagRepository.findTagById(newGenre.getId());
         if(checkTag!=null){
             checkTag.setTag(newGenre.getGenre());
