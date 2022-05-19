@@ -32,3 +32,8 @@
 
   3 - unit test failed. (failToSaveShelfIfShelfNameIsEmpty: Expected com.bookend.shelfservice.exception.MandatoryFieldException to be thrown, but nothing was thrown.)
 
+## Integration Tests
+    Pierce Persona fails at 'view a book' request with message that says AssertionError: expected response to have status code 200 but got 404 </br>
+    Craig Persona fails at 'verify a book' and 'delete a book' request with messages that say AssertionError: expected response to have status code 200 but got 404 </br>
+    Britta Persona fails at 'get a book' request with message says AssertionError: expected response to have status code 200 but got 404 </br>
+    Abed Persona fails at 'add new book' request with message says AssertionError: expected response to have status code 200 but got 404 </br>
