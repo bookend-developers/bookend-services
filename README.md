@@ -25,4 +25,6 @@
   1- failToGetMessageByReceiverIfReceiverDoesNotMatchAnyReceiver(Expected MessageNotFound to be thrown, but nothing was thrown.) and shouldGetMessagesByReceiverIfReceiverMatchAnyReceiver(MessageNotFound: Message does not exist.) tests are failed in MessageServiceTest. <br/>
   2- No tests are failed.
   3- No tests are failed.
-  
+ 
+ ## Integration Tests
+ All Pass
