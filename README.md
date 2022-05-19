@@ -31,3 +31,6 @@
   2 -  unit test failed. (com.ratecommentservice.serviceTest.PostCommentServiceTest.getPostCommentIfPostIdHaveMatchSuccesfully: exception.PostCommentNotFound: Post Comments are not found..)
 
   3 - unit test failed. (com.bookend.authorservice.serviceTest.BookServiceTest.shouldFailSaveBookIfIDIsEmpty -> AssertionFailedError: Expected com.bookend.authorservice.exception.MandatoryFieldException to be thrown, but nothing was thrown.)
+
+## Integration tests
+    Pierce Persona fails at 'get post's comment' request with message says AssertionError: expected response to have status code 200 but got 500
