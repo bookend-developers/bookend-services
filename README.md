@@ -27,4 +27,4 @@
   3- No tests are failed.
  
  ## Integration Tests
- All Pass
+    Shirley Persona fails at 'view incoming messages' request with message says  AssertionError: expected response to have status code 200 but got 500
