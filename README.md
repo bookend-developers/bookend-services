@@ -25,3 +25,5 @@
   1- failToUpdateTagWhenTagNameAlreadyExists(Expected AlreadyExists to be thrown, but nothing was thrown.) test is failed in TagServiceTest. <br />
   2- failToGetRateIfBookAndUsernameDoesNotMatch(Expected: RateNotFound but was: <org.mockito.exceptions.misusing.PotentialStubbingProblem>) <br />
   3- shouldFailToUpdateGenreIfGenreNAmeEmptyString(Expected MandatoryFieldException to be thrown, but nothing was thrown.)
+ ## Integration Tests
+  All pass
