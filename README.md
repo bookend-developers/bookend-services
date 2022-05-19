@@ -25,3 +25,6 @@
   1- failToGetBookIfBookIdDoesNotMatch test failed in BookServiceTest. Expected BookNotFound to be thrown, but nothing was thrown.  <br />
   2- shouldReturnAllBookThatAreNotVerified(NotFoundException: No book exist for given author.) and shouldFailToReturnUnverifiedBooksIfNoBookisUnverified(Expected NotFoundException but thrown NullPointerException) tests are failed in BookServiceTest.  <br />
   3- failToUpdateAuthorBooksIfAuthorIdDoesNotMatchAnyExistingAuthor(Expected NotFoundException but was PotentialStubbingProblem) and shouldUpdateAuthorBooks(NotFoundException: Author does not exist.) tests are failed in AuthorServiceTest. <br />
+ 
+ ## Integration Tests
+    Craig Persona fails at 'get unverified Books' request with message says AssertionError: expected response to have status code 200 but got 404
