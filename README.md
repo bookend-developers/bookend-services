@@ -17,12 +17,12 @@
   Postman tool will be used for unit and integration testing, and in addition to Postman, JUnit will be used for unit testing.<br />
 
 ## Mutation
-  1- Message Service: getById method at line 30 findMessageById method parameter id changed to null.
-  2- Rate Comment Service: line 98 removed on deleteRateByBookId method of RateServiceImpl.
-  3- Authorization Service: line 112 setEnabled parameter changed to false of confirm method at UserDetailServiceImp.
+  1- Message Service: getById method at line 30 findMessageById method parameter id changed to null.<br />
+  2- Rate Comment Service: line 98 removed on deleteRateByBookId method of RateServiceImpl.<br />
+  3- Authorization Service: line 112 setEnabled parameter changed to false of confirm method at UserDetailServiceImp.<br />
 
 ## Unit Tests
 
-1 - At com.bookend.messageservice.serviceTest.MessageServiceTest shouldGetMessageWithGivenIdSuccesfully test failed as "Strict stubbing argument mismatch".
-2 - At com.bookend.messageservice.serviceTest.MessageServiceTest.failToGetMessageIfIdDoesNotMatch test failed as "AssertionFailedError: Unexpected exception type thrown."
-3 - At com.ratecommentservice.serviceTest.RateServiceTest.shouldDeleteRatesWithGivenBookId. Wanted but not invoked: rateRepository.delete( <any com.ratecommentservice.model.Rate>);
+1 - At com.bookend.messageservice.serviceTest.MessageServiceTest shouldGetMessageWithGivenIdSuccesfully test failed as "Strict stubbing argument mismatch".<br />
+2 - At com.bookend.messageservice.serviceTest.MessageServiceTest.failToGetMessageIfIdDoesNotMatch test failed as "AssertionFailedError: Unexpected exception type thrown."<br />
+3 - At com.ratecommentservice.serviceTest.RateServiceTest.shouldDeleteRatesWithGivenBookId. Wanted but not invoked: rateRepository.delete( <any com.ratecommentservice.model.Rate>);<br />
