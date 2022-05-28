@@ -16,3 +16,13 @@
   React ,an efficient, flexible JavaScript library that allows us to create complex interface units will be used for frontend service, and Material-UI framework will be benefited for faster and easier development. <br />
   Postman tool will be used for unit and integration testing, and in addition to Postman, JUnit will be used for unit testing.<br />
 
+## Mutation
+1- Authorization Service: added 'username = null' at line 100 findByUsername method at UserService.
+2- Author Service: line 29 || changed as && on save method of BookServiceImpl.
+3- Shelf Service: line 69 doubled deleteFromShelves method at BookServiceImpl.
+
+## Unit Tests
+1 - at com.bookend.authorizationserver.service.UserService.findByUsername test failed as "Strict stubbing argument mismatch".
+2 - at com.bookend.authorizationserver.service.UserService.findByUsername test failed as "Strict stubbing argument mismatch".
+3 - At com.bookend.authorservice.serviceTest.BookServiceTest.shouldFailSaveBookIfIDIsEmpty. AssertionFailedError: Expected com.bookend.authorservice.exception.MandatoryFieldException to be thrown
+4 - at com.bookend.shelfservice.serviceTest.BookServiceTest.shouldDeleteBookFromAllShelves test failed as org.mockito.exceptions.verification.TooManyActualInvocations: 

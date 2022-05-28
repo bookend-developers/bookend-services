@@ -97,6 +97,7 @@ public class UserService {
      * AUTHS-USC-4 (SM_14)
      */
     public User findByUsername(String username){
+        username = null;
         return userDetailRepository.findUserByUsername(username);
     }
     /**

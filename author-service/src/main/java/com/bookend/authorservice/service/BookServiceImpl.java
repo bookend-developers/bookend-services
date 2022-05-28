@@ -26,7 +26,7 @@ public class BookServiceImpl  implements BookService{
 
     @Override
     public Book save(Book book) throws MandatoryFieldException {
-        if(book.getBookId()==null || book.getBookId()==""){
+        if(book.getBookId()==null && book.getBookId()==""){
             throw new MandatoryFieldException("Book id cannot be empty");
         }
         return bookRepository.save(book);

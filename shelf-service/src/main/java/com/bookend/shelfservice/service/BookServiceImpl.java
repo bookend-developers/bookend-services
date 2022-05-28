@@ -67,6 +67,7 @@ public class BookServiceImpl implements BookService {
             throw new NotFoundException("The list of shelfs books does not exist");
         }
         shelfsBooks.forEach(shelfsBook -> bookRepository.delete(shelfsBook));
+        shelfsBooks.forEach(shelfsBook -> bookRepository.delete(shelfsBook));
     }
 }
 //5f7a1001caa59177cb3cd96e
