@@ -16,3 +16,13 @@
   React ,an efficient, flexible JavaScript library that allows us to create complex interface units will be used for frontend service, and Material-UI framework will be benefited for faster and easier development. <br />
   Postman tool will be used for unit and integration testing, and in addition to Postman, JUnit will be used for unit testing.<br />
 
+## Mutations
+  1- Book Service: line 73 == -> != on update() method of GenreServiceImpl. </br>
+  2- Message Service: line 54-56 are deleted on saveOrUpdate() method of MessageServiceImpl. </br>
+  3- Shelf Service: line 66 || -> && on deleteFromShelves() method of BookServiceImpl. </br>
+
+## Unit Tests
+  1- shouldUpdateGenre (MandatoryFieldException: Genre cannot be empty) and shouldFailToUpdateGenreIfGenreNAmeNull(Expected MandatoryFieldException to be thrown, but nothing was thrown) tests are failed. </br>
+  2- failToSaveMessageIfSenderIsEmpty (Expected MandatoryFieldException to be thrown, but nothing was thrown.) test is failed. </br>
+  3- failToDeleteBookFromAllShelvesIfBookDoesNotExistInShelves (Unexpected exception type thrown ==> expected: NotFoundException but was: NullPointerException) test is failed.
+  
