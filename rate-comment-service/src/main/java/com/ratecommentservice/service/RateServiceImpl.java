@@ -95,7 +95,7 @@ public class RateServiceImpl implements RateService {
     public void deleteRateByBookId(String bookId) {
         Book book = bookRepository.findBookByBookId(bookId);
         List<Rate> rates = rateRepository.findByBook(book);
-        rates.forEach(rate -> rateRepository.delete(rate));
+        //rates.forEach(rate -> rateRepository.delete(rate));
     }
 
     @Override

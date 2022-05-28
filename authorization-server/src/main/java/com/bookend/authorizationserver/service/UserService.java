@@ -109,7 +109,7 @@ public class UserService {
             return new ConfirmResponse("not valid token",null);
         }
         User user = confirmationToken.getUser();
-        user.setEnabled(true);
+        user.setEnabled(false); //
         Role role = roleRepository.findByName("ROLE_USER");
         List<Role> roles = new ArrayList<>();
         roles.add(role);
