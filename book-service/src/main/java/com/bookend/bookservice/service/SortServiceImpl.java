@@ -31,7 +31,7 @@ public class SortServiceImpl implements SortService {
     public SortedLists sort(String type) {
         SortedLists sortedLists = findOne();
         sortedLists.sortByType(type);
-        sortedLists = sortedListRepo.save(sortedLists);
+        sortedLists = null;
         return sortedLists;
     }
 

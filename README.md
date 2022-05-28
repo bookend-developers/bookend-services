@@ -16,3 +16,12 @@
   React ,an efficient, flexible JavaScript library that allows us to create complex interface units will be used for frontend service, and Material-UI framework will be benefited for faster and easier development. <br />
   Postman tool will be used for unit and integration testing, and in addition to Postman, JUnit will be used for unit testing.<br />
 
+## Mutation
+1- Rate Comment Service: at commentBook method  line 77 removed.
+2- Book Service: line 34 assignment changed as null on sort method of SortServiceImpl.
+3- Shelf Service: line 56 if condition ! is removed on saveOrUpdate method at ShelfServiceImpl.
+
+## Unit Tests
+1 - At com.bookend.bookservice.serviceTest.SortServiceTest.shouldSortSortedListWithGivenTypeRate test failed as "java.lang.NullPointerException".
+2 - At com.bookend.bookservice.serviceTest.SortServiceTest.shouldSortSortedListWithGivenTypeComment test failed as "java.lang.NullPointerException"
+3 - At com.bookend.shelfservice.serviceTest.ShelfServiceTest.failToSaveIfShelfNameAlreadyInUse. AssertionFailedError: Expected com.bookend.shelfservice.exception.AlreadyExists to be thrown

@@ -53,7 +53,7 @@ public class ShelfServiceImpl implements ShelfService {
         if(shelfRequest.getShelfname()==null || shelfRequest.getShelfname() == ""){
             throw new MandatoryFieldException("Shelf name cannot be empty.");
         }
-        if (!shelves.isEmpty()) {
+        if (shelves.isEmpty()) {
             if (shelves.stream().anyMatch(s -> s.getShelfname().equalsIgnoreCase(shelfRequest.getShelfname()))) {
                 throw new AlreadyExists("Shelf already exists");
             }

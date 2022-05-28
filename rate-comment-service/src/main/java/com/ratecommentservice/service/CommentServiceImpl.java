@@ -74,7 +74,7 @@ public class CommentServiceImpl implements CommentService {
 
         comment = commentRepository.save(comment);
         book.getComments().add(comment);
-        bookRepository.save(book);
+        //bookRepository.save(book);
 
         Map<String, String> message= new HashMap<String, String>();
         message.put("book",book.getBookid());
