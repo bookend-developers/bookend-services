@@ -51,9 +51,6 @@ public class MessageServiceImp implements MessageService{
 	}
 	
 	public Message saveOrUpdate(Message message) throws MandatoryFieldException {
-		if(message.getSender()==null || message.getSender() == ""){
-			throw new MandatoryFieldException("Sender's name cannot be empty.");
-		}
 		message.setSender(message.getSender());
 		if(message.getReceiver()==null || message.getReceiver()== ""){
 			throw new MandatoryFieldException("Receiver's name cannot be empty.");
