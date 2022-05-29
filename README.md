@@ -16,3 +16,12 @@
   React ,an efficient, flexible JavaScript library that allows us to create complex interface units will be used for frontend service, and Material-UI framework will be benefited for faster and easier development. <br />
   Postman tool will be used for unit and integration testing, and in addition to Postman, JUnit will be used for unit testing.<br />
 
+## Mutations
+  1- Author Service: line 126 title -> null on search() method of AuthorServiceImpl. </br>
+  2- Book Club Service: line 57-59 are deleted on getMemberInvitations() method of ClubService. </br>
+  3- Rate Comment Service: line 89 is duplicated on delete() method of CommentServiceImpl. </br>
+
+## Unit Tests
+  1- failToDeleteBookFromAllShelvesIfBookDoesNotExistInShelves (Expected NotFoundException but was NullPointerException) test is failed. </br>
+  2- shouldNotGetMyInvitationsIfUsernameDoesNotExist (Expected IllegalArgumentException to be thrown, but nothing was thrown.) test is failed. </br>
+  3- shouldDeleteCommentWithGivenComment (exceptions.verification.TooManyActualInvocations) test is failed. </br>
