@@ -79,11 +79,10 @@ public class ShelfServiceImpl implements ShelfService {
 
     @Override
     public void deleteShelf(Shelf shelf) throws NotFoundException {
+        shelfRepository.delete(shelf);
         if(shelfRepository.findShelfById(shelf.getId())==null){
             throw new NotFoundException("Shelf does not exist!");
         }
-        shelfRepository.delete(shelf);
-
     }
 
     @Override
