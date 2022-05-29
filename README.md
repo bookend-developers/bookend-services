@@ -16,3 +16,12 @@
   React ,an efficient, flexible JavaScript library that allows us to create complex interface units will be used for frontend service, and Material-UI framework will be benefited for faster and easier development. <br />
   Postman tool will be used for unit and integration testing, and in addition to Postman, JUnit will be used for unit testing.<br />
 
+## Mutations
+  1- Author Service: line 120 Sort.Direction.ASC -> Sort.Direction.DESC on getAll() method of AuthorServiceImpl. </br>
+  2- Shelf Service: line 85 is moved to 82 on deleteShelf method of ShelfServiceImpl. </br>
+  3- Book Club Service: line 157 ! added to if condition on replyInvitation() method of ClubService. </br>
+
+## Unit Tests
+  1- shouldReturnAllAuthor (exceptions.misusing.PotentialStubbingProblem) test is failed. </br>
+  2- No test is failed. </br>
+  3- shouldReplyInvitation (exceptions.misusing.UnnecessaryStubbingException) test is failed. </br>
