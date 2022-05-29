@@ -154,7 +154,7 @@ public class ClubService {
         }
         Club club = invitation.getClub();
         MailRequest mailRequest;
-        if(invitationReply.geteInvitationReply().equals(EInvitationReply.ACCEPT)){
+        if(!invitationReply.geteInvitationReply().equals(EInvitationReply.ACCEPT)){
             mailRequest = new MailRequest(club.getOwner().getId(),"Invitation Accepted",invitation.getInvitedPerson().getUserName() +"accepted your invite.");
             Member member = invitation.getInvitedPerson();
             member.getClubs().add(club);
