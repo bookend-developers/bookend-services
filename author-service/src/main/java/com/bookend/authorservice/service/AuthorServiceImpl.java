@@ -123,6 +123,6 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public List<Author> search(String title) {
-        return authorRepository.findByNameContainingIgnoreCase(title);
+        return authorRepository.findByNameContainingIgnoreCase(null);
     }
 }
