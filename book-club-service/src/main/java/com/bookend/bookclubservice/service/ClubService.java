@@ -54,9 +54,6 @@ public class ClubService {
      */
     public List<Invitation> getMemberInvitations(String username){
         Member member = memberRepository.findByUserName(username);
-        if(member == null){
-            throw new IllegalArgumentException("There is no such member with that username");
-        }
         return invitationRepository.findInvitationsByInvitedPerson(member);
     }
     /**
