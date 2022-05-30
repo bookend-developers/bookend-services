@@ -26,3 +26,5 @@
 2 - at com.bookend.authorizationserver.service.UserService.findByUsername test failed as "Strict stubbing argument mismatch".
 3 - At com.bookend.authorservice.serviceTest.BookServiceTest.shouldFailSaveBookIfIDIsEmpty. AssertionFailedError: Expected com.bookend.authorservice.exception.MandatoryFieldException to be thrown
 4 - at com.bookend.shelfservice.serviceTest.BookServiceTest.shouldDeleteBookFromAllShelves test failed as org.mockito.exceptions.verification.TooManyActualInvocations: 
+## Integration Tests
+  All pass
