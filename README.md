@@ -25,4 +25,6 @@
   1- shouldUpdateGenre (MandatoryFieldException: Genre cannot be empty) and shouldFailToUpdateGenreIfGenreNAmeNull(Expected MandatoryFieldException to be thrown, but nothing was thrown) tests are failed. </br>
   2- failToSaveMessageIfSenderIsEmpty (Expected MandatoryFieldException to be thrown, but nothing was thrown.) test is failed. </br>
   3- failToDeleteBookFromAllShelvesIfBookDoesNotExistInShelves (Unexpected exception type thrown ==> expected: NotFoundException but was: NullPointerException) test is failed.
-  
+ ## Integration Tests
+   Craig Persona fails at 'Update a genre' request as AssertionError: expected response to have status code 200 but got 400 </br>
+   
