@@ -25,3 +25,5 @@
 1 - At com.bookend.bookservice.serviceTest.SortServiceTest.shouldSortSortedListWithGivenTypeRate test failed as "java.lang.NullPointerException".
 2 - At com.bookend.bookservice.serviceTest.SortServiceTest.shouldSortSortedListWithGivenTypeComment test failed as "java.lang.NullPointerException"
 3 - At com.bookend.shelfservice.serviceTest.ShelfServiceTest.failToSaveIfShelfNameAlreadyInUse. AssertionFailedError: Expected com.bookend.shelfservice.exception.AlreadyExists to be thrown
+## Integration Tests
+  All pass
