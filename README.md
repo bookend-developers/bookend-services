@@ -25,3 +25,5 @@
   1- failToDeleteBookFromAllShelvesIfBookDoesNotExistInShelves (Expected NotFoundException but was NullPointerException) test is failed. </br>
   2- shouldNotGetMyInvitationsIfUsernameDoesNotExist (Expected IllegalArgumentException to be thrown, but nothing was thrown.) test is failed. </br>
   3- shouldDeleteCommentWithGivenComment (exceptions.verification.TooManyActualInvocations) test is failed. </br>
+ ## Integration Tests
+   All pass
