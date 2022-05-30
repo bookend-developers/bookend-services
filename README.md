@@ -26,3 +26,5 @@
 1 - At com.bookend.messageservice.serviceTest.MessageServiceTest shouldGetMessageWithGivenIdSuccesfully test failed as "Strict stubbing argument mismatch".<br />
 2 - At com.bookend.messageservice.serviceTest.MessageServiceTest.failToGetMessageIfIdDoesNotMatch test failed as "AssertionFailedError: Unexpected exception type thrown."<br />
 3 - At com.ratecommentservice.serviceTest.RateServiceTest.shouldDeleteRatesWithGivenBookId. Wanted but not invoked: rateRepository.delete( <any com.ratecommentservice.model.Rate>);<br />
+## Integration Tests
+  All pass
