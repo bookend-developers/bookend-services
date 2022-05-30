@@ -25,3 +25,6 @@
 - no failed test.        
 - unit test failed: (com.bookend.shelfservice.serviceTest.TagServiceTest.failToGetShelfIfIdDoesNotMatch -> AssertionFailedError: Expected com.bookend.shelfservice.exception.TagNotFound to be thrown, but nothing was thrown.)    
 - no failed test.
+## Integration tests
+    Britta Persona fails at get invitation for club request with messagge that AssertionError: expected response to have status code 200 but got 500 <br />
+    
