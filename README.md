@@ -25,3 +25,5 @@
   1- shouldReturnAllAuthor (exceptions.misusing.PotentialStubbingProblem) test is failed. </br>
   2- No test is failed. </br>
   3- shouldReplyInvitation (exceptions.misusing.UnnecessaryStubbingException) test is failed. </br>
+  ## Integration Tests
+ All pass   
